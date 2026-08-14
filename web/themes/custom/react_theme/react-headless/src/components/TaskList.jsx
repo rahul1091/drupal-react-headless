@@ -64,12 +64,15 @@ export default function TaskList() {
                     <span className="task-due-date">
                       📅 Due: {task.due_date}
                     </span>
-                    <span
-                      className={`badge severity-${(
-                        task.severity || ""
-                      ).toLowerCase()}`}
-                    >
-                      Severity: {task.severity}
+                    <span className="task-severity">
+                      Severity:{" "}
+                      <span
+                        className={`badge severity-${(
+                          task.severity || ""
+                        ).toLowerCase()}`}
+                      >
+                        {task.severity}
+                      </span>
                     </span>
                   </div>
                 </div>
