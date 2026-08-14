@@ -2,4 +2,4 @@ name: API Services
 type: module
 description: "A custom module to provide API endpoints for managing Project Task content. Consumed by the React SPA embedded in react_theme."
 package: Custom
-core_version_requirement: ^11
+core_version_requirement: ^10 || ^11

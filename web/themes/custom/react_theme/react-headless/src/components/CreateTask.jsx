@@ -41,14 +41,19 @@ export default function CreateTask() {
     <div className="create-task-container">
       <div className="create-task-card">
         <div className="create-task-header">
-          <h2>Create New Project Tracker Task</h2>
+          <div>
+            <h2>Create New Project Tracker Task</h2>
+            <p className="create-task-subtitle">
+              Fields marked <span className="required">*</span> are required.
+            </p>
+          </div>
           <button
             type="button"
-            className="btn-secondary"
+            className="btn-secondary btn-back"
             onClick={() => navigate("/dashboard")}
             disabled={isSubmitting}
           >
-            &larr; Back to Dashboard
+            <span aria-hidden="true">&larr;</span> Back to Dashboard
           </button>
         </div>
 
@@ -72,9 +77,14 @@ export default function CreateTask() {
 
           {/* Description */}
           <div className="form-group">
-            <label htmlFor="description">
-              Description <span className="required">*</span>
-            </label>
+            <div className="form-label-row">
+              <label htmlFor="description">
+                Description <span className="required">*</span>
+              </label>
+              <span className="char-count">
+                {formData.description.length} characters
+              </span>
+            </div>
             <textarea
               id="description"
               name="description"
@@ -87,60 +97,62 @@ export default function CreateTask() {
             />
           </div>
 
-          {/* Due Date */}
-          <div className="form-group">
-            <label htmlFor="due_date">
-              Due Date <span className="required">*</span>
-            </label>
-            <input
-              type="date"
-              id="due_date"
-              name="due_date"
-              value={formData.due_date}
-              onChange={handleInputChange}
-              required
-              disabled={isSubmitting}
-            />
-          </div>
+          {/* Due Date / Severity / Status - grouped together since they're
+              all short, single-value fields that together describe the
+              task's schedule and priority. */}
+          <div className="form-row form-row--3col">
+            <div className="form-group">
+              <label htmlFor="due_date">
+                Due Date <span className="required">*</span>
+              </label>
+              <input
+                type="date"
+                id="due_date"
+                name="due_date"
+                value={formData.due_date}
+                onChange={handleInputChange}
+                required
+                disabled={isSubmitting}
+              />
+            </div>
 
-          {/* Severity */}
-          <div className="form-group">
-            <label htmlFor="severity">
-              Severity <span className="required">*</span>
-            </label>
-            <select
-              id="severity"
-              name="severity"
-              value={formData.severity}
-              onChange={handleInputChange}
-              required
-              disabled={isSubmitting}
-            >
-              <option value="low">Low</option>
-              <option value="medium">Medium</option>
-              <option value="high">High</option>
-              <option value="critical">Critical</option>
-            </select>
-          </div>
+            <div className="form-group">
+              <label htmlFor="severity">
+                Severity <span className="required">*</span>
+              </label>
+              <select
+                id="severity"
+                name="severity"
+                value={formData.severity}
+                onChange={handleInputChange}
+                required
+                disabled={isSubmitting}
+              >
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+                <option value="critical">Critical</option>
+              </select>
+            </div>
 
-          {/* Status */}
-          <div className="form-group">
-            <label htmlFor="status">
-              Status <span className="required">*</span>
-            </label>
-            <select
-              id="status"
-              name="status"
-              value={formData.status}
-              onChange={handleInputChange}
-              required
-              disabled={isSubmitting}
-            >
-              <option value="open">Open</option>
-              <option value="in_progress">In Progress</option>
-              <option value="completed">Completed</option>
-              <option value="cancelled">Cancelled</option>
-            </select>
+            <div className="form-group">
+              <label htmlFor="status">
+                Status <span className="required">*</span>
+              </label>
+              <select
+                id="status"
+                name="status"
+                value={formData.status}
+                onChange={handleInputChange}
+                required
+                disabled={isSubmitting}
+              >
+                <option value="open">Open</option>
+                <option value="in_progress">In Progress</option>
+                <option value="completed">Completed</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+            </div>
           </div>
 
           {/* Form Actions */}

@@ -41,6 +41,27 @@
   background-color: #eff6ff;
 }
 
+/* "Go to Dashboard" - only shown to logged-in users on the home page.
+   Styled as its own pill (not a plain nav-link) so it reads as a clear
+   call-to-action rather than a passive nav item. */
+.nav-link--dashboard {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  color: #2563eb;
+  font-weight: 600;
+  border: 1px solid #bfdbfe;
+  background-color: #eff6ff;
+}
+
+.nav-link--dashboard:hover {
+  background-color: #dbeafe;
+  color: #1d4ed8;
+  border-color: #93c5fd;
+}
+
 .app-topbar__user {
   font-size: 0.875rem;
   font-weight: 500;
@@ -87,20 +108,81 @@
 .app-topbar__user-section {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
+  padding: 0.3rem 0.5rem 0.3rem 0.3rem;
+  border-radius: 999px;
+  background-color: #f8fafc;
+  border: 1px solid #eef0f3;
 }
 
 /* Circle Avatar Badge */
 .app-topbar__avatar {
-  width: 48px;
-  height: 48px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  background: #031634;
+  background: linear-gradient(135deg, #1d4ed8 0%, #031634 100%);
   color: #ffffff;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
   display: flex;
   align-items: center;
   justify-content: center;
   user-select: none;
+  box-shadow: 0 0 0 2px #ffffff, 0 0 0 3.5px #dbe4ff, 0 2px 4px rgba(3, 22, 52, 0.25);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.app-topbar__user-section:hover .app-topbar__avatar {
+  box-shadow: 0 0 0 2px #ffffff, 0 0 0 3.5px #2563eb, 0 2px 6px rgba(3, 22, 52, 0.3);
+  transform: translateY(-1px);
+}
+
+/* Logout Button - distinct from generic ghost buttons: neutral by default,
+   with a clear "destructive-ish" hover state so the action reads as final. */
+.logout-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.825rem;
+  font-weight: 600;
+  color: #4b5563;
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease,
+    transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.logout-btn__icon {
+  transition: transform 0.18s ease;
+}
+
+.logout-btn:hover:not(:disabled) {
+  background-color: #fef2f2;
+  color: #dc2626;
+  border-color: #fecaca;
+  box-shadow: 0 2px 6px rgba(220, 38, 38, 0.12);
+  transform: translateY(-1px);
+}
+
+.logout-btn:hover:not(:disabled) .logout-btn__icon {
+  transform: translateX(2px);
+}
+
+.logout-btn:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.logout-btn:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+.logout-btn:disabled {
+  color: #9ca3af;
+  cursor: not-allowed;
 }
