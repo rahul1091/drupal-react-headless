@@ -4,6 +4,7 @@ namespace Drupal\apiservices\Plugin\rest\resource;
 
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\node\Entity\Node;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -33,6 +34,13 @@ class TaskList extends ResourceBase
   protected $entityTypeManager;
 
   /**
+   * The current user session.
+   *
+   * @var \Drupal\Core\Session\AccountProxyInterface
+   */
+  protected $currentUser;
+
+  /**
    * Constructs a new TaskList instance.
    *
    * @param array $config
@@ -47,6 +55,8 @@ class TaskList extends ResourceBase
    *   A logger instance.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager service.
+   * @param \Drupal\Core\Session\AccountProxyInterface $current_user
+   *   The current user session.
    */
   public function __construct(
     array $config,
@@ -54,10 +64,12 @@ class TaskList extends ResourceBase
     $plugin_definition,
     array $serializer_formats,
     LoggerInterface $logger,
-    EntityTypeManagerInterface $entity_type_manager
+    EntityTypeManagerInterface $entity_type_manager,
+    AccountProxyInterface $current_user
   ) {
     parent::__construct($config, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->entityTypeManager = $entity_type_manager;
+    $this->currentUser = $current_user;
   }
 
   /**
@@ -71,7 +83,8 @@ class TaskList extends ResourceBase
       $plugin_definition,
       $container->getParameter('serializer.formats'),
       $container->get('logger.factory')->get('task_list_api'),
-      $container->get('entity_type.manager')
+      $container->get('entity_type.manager'),
+      $container->get('current_user')
     );
   }
 
@@ -124,6 +137,17 @@ class TaskList extends ResourceBase
 
   public function post(Request $request)
   {
+    // The React SPA only exposes "Create Task" to logged-in users, but that
+    // is a UI convenience, not access control. Enforce it here too, since
+    // the endpoint's Drupal REST permissions aren't captured in this repo
+    // (no config/sync export) and could be misconfigured to allow anonymous.
+    if ($this->currentUser->isAnonymous()) {
+      return new JsonResponse([
+        'status' => 'Error',
+        'message' => 'Authentication required to create tasks.',
+      ], 403);
+    }
+
     try {
       $content = $request->getContent();
       $data = json_decode($content, TRUE);
@@ -146,6 +170,7 @@ class TaskList extends ResourceBase
       $node = Node::create([
         'type' => 'project_tracker',
         'title' => $title,
+        'uid' => $this->currentUser->id(),
         'field_description' => $description,
         'field_due_date' => $dueDate,
         'field_severity' => $severity,

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getTasks } from "../api/drupalService";
+import { getTasks } from "../api/client";
 import "../css/tasklist.css";
 
 export default function TaskList() {

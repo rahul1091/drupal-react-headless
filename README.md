@@ -1,114 +1,78 @@
-# Drupal + React CMS
+# Drupal + React Headless CMS
 
-A monorepo: Drupal 10 backend with a React 18 SPA embedded inside the custom theme.  
-Two content types are exposed via Drupal REST Resources: **Article** and **Project Tracker**.
+A monorepo: a Drupal 11 backend exposing custom REST endpoints, consumed by a
+React 19 SPA that is embedded inside a custom Drupal theme (`react_theme`).
+
+> **Note on this README:** an earlier version of this file described a
+> different, more ambitious architecture (a `content_api` module with full
+> Articles + Project Tracker CRUD, a CORS event subscriber, exported
+> `config/sync/` permissions, etc.). None of that existed in the actual
+> codebase — the real module is `apiservices`, and it implements a smaller,
+> concrete set of endpoints. This version documents what is actually here.
 
 ---
 
 ## Repository Structure
 
 ```
-drupal-react-cms/
+drupal-react-headless/
 ├── composer.json
-├── scripts/setup.sh                         ← one-command bootstrapper
-├── config/sync/                             ← Drupal CMI exports
+├── scripts/setup.sh                          ← bootstrapper (Drupal install + npm build)
 └── web/
-    ├── modules/custom/content_api/          ← custom REST module
-    │   ├── content_api.info.yml
-    │   ├── content_api.install              ← creates project_tracker type + fields
-    │   ├── content_api.routing.yml          ← per-method routes with access rules
-    │   ├── content_api.services.yml
-    │   ├── config/install/
-    │   │   ├── rest.resource.content_api.articles.yml
-    │   │   └── rest.resource.content_api.project_trackers.yml
-    │   └── src/
-    │       ├── Controller/OptionsController.php    ← CORS preflight handler
-    │       ├── EventSubscriber/CorsSubscriber.php
-    │       └── Plugin/rest/resource/
-    │           ├── ArticlesResource.php            ← Article CRUD
-    │           └── ProjectTrackersResource.php     ← ProjectTracker CRUD
+    ├── modules/custom/apiservices/            ← custom REST module
+    │   ├── apiservices.info.yml
+    │   └── src/Plugin/rest/resource/
+    │       ├── TopicList.php                  ← GET  /api/topiclist        (landing_page nodes)
+    │       ├── TaskList.php                    ← GET  /api/task-list,
+    │       │                                     POST /api/add-task        (project_tracker nodes)
+    │       ├── UserLogin.php                   ← POST /api/user-login
+    │       └── UserRegistration.php            ← POST /api/user-registration
     └── themes/custom/react_theme/
-        └── react-app/src/
-            ├── api/
-            │   ├── client.js               ← Axios + _format=json + CSRF
-            │   ├── articles.js
-            │   └── projectTrackers.js      ← NEW
-            ├── hooks/
-            │   ├── useAuth.js
-            │   ├── useArticles.js
-            │   └── useProjectTrackers.js   ← NEW
-            ├── components/
-            │   ├── ProjectTrackerCard.jsx  ← NEW
-            │   ├── ProjectTrackerForm.jsx  ← NEW
-            │   └── … (shared: Modal, ConfirmDialog, Pagination, TopBar)
-            └── pages/
-                ├── ProjectTrackersPage.jsx     ← NEW (public)
-                ├── ProjectTrackerDetailPage.jsx ← NEW (public)
-                ├── ArticlesPage.jsx
-                └── …
+        ├── react_theme.info.yml
+        ├── react_theme.libraries.yml           ← attaches compiled js/app.js + css/app.css
+        ├── react_theme.theme                    ← injects drupalSettings.reactApp (baseUrl, csrfToken, currentUser)
+        ├── templates/page.html.twig             ← renders <div id="react-root">, React mounts there
+        ├── css/theme.css                        ← static theme chrome (header/footer)
+        └── react-headless/                      ← the React app's source (Vite + TS)
+            └── src/
+                ├── api/client.js                ← single Axios client: auth + topics + tasks
+                ├── hooks/useAuth.jsx
+                ├── components/ (TopBar, TopicList, TaskList, CreateTask)
+                └── pages/ (HomePage, LoginPage, RegisterPage, DashboardPage)
 ```
+
+There is no `config/sync/` in this repo — REST resource permissions, CORS,
+and the `project_tracker` / `landing_page` content types and their fields
+are assumed to already exist on the target Drupal site (created manually or
+via a config export that isn't checked in yet). See **Known Gaps** below.
+
+---
+
+## Content Types Used
+
+| Content type | Fields consumed by the API | Used by |
+|---|---|---|
+| `landing_page` | `field_sub_heading`, `field_description`, `field_trending` | `TopicList.php` → `/api/topiclist` |
+| `project_tracker` | `field_description`, `field_due_date`, `field_severity`, `field_status` | `TaskList.php` → `/api/task-list`, `/api/add-task` |
 
 ---
 
 ## REST API
 
-All endpoints require `?_format=json`.  
-Authentication via HTTP Basic Auth header or Drupal session cookie.  
-Mutating requests require `X-CSRF-Token` header (token from `GET /session/token`).
+All endpoints return JSON in the shape `{ status, message?, result }`.
 
-### Articles
+| Method | Path | Auth | Notes |
+|---|---|---|---|
+| GET | `/api/topiclist?_format=json` | Public | Landing page "topics" |
+| GET | `/api/task-list?_format=json` | Public | Project tracker tasks |
+| POST | `/api/add-task?_format=json` | **Authenticated** (enforced in code) | `{ title, description, due_date, severity, status }` |
+| POST | `/api/user-login?_format=json` | Public | `{ email, password }` → returns `current_user`, `csrf_token`, `logout_token` |
+| POST | `/api/user-registration?_format=json` | Public | `{ firstname, lastname, email, password }` |
 
-| Method | Path | Access |
-|--------|------|--------|
-| GET | `/api/articles?_format=json` | Public |
-| GET | `/api/articles/{id}?_format=json` | Public |
-| POST | `/api/articles?_format=json` | **Authenticated** |
-| PATCH | `/api/articles/{id}?_format=json` | **Authenticated** |
-| DELETE | `/api/articles/{id}?_format=json` | **Authenticated** |
-
-Request body (POST/PATCH):
-```json
-{ "title": "string", "body": "string", "summary": "string", "status": 1 }
-```
-
-### Project Trackers
-
-| Method | Path | Access |
-|--------|------|--------|
-| GET | `/api/project-trackers?_format=json` | **Public** |
-| GET | `/api/project-trackers/{id}?_format=json` | **Public** |
-| POST | `/api/project-trackers?_format=json` | **Authenticated** |
-| PATCH | `/api/project-trackers/{id}?_format=json` | **Authenticated** |
-| DELETE | `/api/project-trackers/{id}?_format=json` | **Authenticated** |
-
-Request body (POST/PATCH):
-```json
-{
-  "title":       "string (required on POST)",
-  "description": "string",
-  "status":      "open | in_progress | on_hold | completed | cancelled",
-  "severity":    "low | medium | high | critical",
-  "due_date":    "YYYY-MM-DD or null"
-}
-```
-
-Collection query params: `page`, `limit`, `status`, `severity`.
-
----
-
-## project_tracker Content Type
-
-Created programmatically by `content_api_install()`.
-
-| Field | Machine name | Drupal type | Values |
-|-------|-------------|-------------|--------|
-| Title | `title` | String | — |
-| Description | `field_pt_description` | Text (long, formatted) | — |
-| Status | `field_pt_status` | List (string) | open, in_progress, on_hold, completed, cancelled |
-| Severity | `field_pt_severity` | List (string) | low, medium, high, critical |
-| Due Date | `field_pt_due_date` | Datetime (date only) | YYYY-MM-DD |
-
-**Permissions:** authenticated users can create/edit/delete their own; anonymous can view.
+Mutating requests (`POST` here) must send the `X-CSRF-Token` header, using
+the token returned by login (or `GET /session/token`). The SPA's Axios
+client (`src/api/client.js`) attaches this automatically once a token is in
+`sessionStorage` or `drupalSettings`.
 
 ---
 
@@ -116,22 +80,52 @@ Created programmatically by `content_api_install()`.
 
 ```bash
 chmod +x scripts/setup.sh
-./scripts/setup.sh            # installs Drupal, enables module+theme, builds React
+./scripts/setup.sh                 # composer install, Drupal install, enable module+theme
 
-# React dev server
-cd web/themes/custom/react_theme/react-app
-cp .env.example .env          # set VITE_DRUPAL_BASE_URL=http://localhost:8888
-npm run dev                   # http://localhost:5173
+# Build the React app into the theme (production):
+cd web/themes/custom/react_theme/react-headless
+npm install
+npm run build                      # outputs js/app.js + css/app.css into ../{js,css}
+                                    # (see vite.config.ts) — required before
+                                    # react_theme is usable, since the theme
+                                    # does not ship pre-built assets.
+
+# OR, for frontend development with hot reload against a running Drupal:
+cp .env.example .env               # set VITE_DRUPAL_API_URL to your Drupal base URL
+npm run dev                        # http://localhost:5173
 ```
+
+The standalone dev server (`npm run dev`) and the theme-embedded build read
+the API base URL differently: the embedded build reads
+`window.drupalSettings.reactApp.baseUrl` (same-origin, injected by
+`react_theme.theme`); the standalone dev server falls back to
+`VITE_DRUPAL_API_URL` from `.env`, and needs CORS enabled on Drupal since
+it's cross-origin (see **Known Gaps**).
 
 ---
 
-## React Routes
+## Known Gaps / Recommended Next Steps
 
-| Path | Access | Description |
-|------|--------|-------------|
-| `/project-trackers` | Public | List all trackers; auth users see create/edit/delete |
-| `/project-trackers/:id` | Public | Tracker detail |
-| `/articles` | Auth required | Article list (full CRUD) |
-| `/articles/:id` | Auth required | Article detail |
-| `/login` | Public | Drupal session login |
+This is an honest list of things that are *not* handled by the current
+code, so they aren't discovered by surprise in review or production:
+
+1. **CORS is not configured anywhere in this repo.** Running the SPA via
+   `npm run dev` (a different origin/port from Drupal) will fail on
+   mutating requests until CORS is enabled — e.g. via `cors.config` in
+   `services.yml`, which isn't checked in here (correctly — it belongs in
+   an untracked, environment-specific `sites/*/services.yml`, not in git).
+   Document your CORS settings for your environment rather than assuming
+   the defaults work.
+2. **REST resource permissions aren't exported.** Which roles can call
+   which endpoint depends on the site's REST/RESTUI config, which isn't in
+   `config/sync/` here. `TaskList::post()` now enforces authentication in
+   code as a defense-in-depth measure, but the other endpoints rely
+   entirely on whatever permissions exist on the target site — export and
+   commit that config once it's finalized.
+3. **No automated tests** (PHPUnit for the module, or a JS test runner for
+   the SPA). Given the auth and content-creation flows involved, this is
+   the highest-leverage next addition.
+4. **Password policy is duplicated** (regex in `UserRegistration.php` and
+   again in `RegisterPage.jsx`). Fine for now, but drifting the two apart
+   silently is an easy future bug — consider having the frontend surface
+   the *backend's* rejection message rather than re-implementing the rule.

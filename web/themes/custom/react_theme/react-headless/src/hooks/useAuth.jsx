@@ -1,6 +1,5 @@
 import { useState, useEffect, createContext, useContext } from "react";
-import { drupalLogin, drupalLogout } from "../api/client";
-import { userLogin } from "../api/drupalService";
+import { loginUser, logoutUser } from "../api/client";
 
 const AuthContext = createContext(null);
 
@@ -9,7 +8,8 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // If embedded in Drupal, bootstrap from drupalSettings
+    // If embedded in Drupal (react_theme.theme -> drupalSettings.reactApp),
+    // bootstrap the session from there instead of forcing another login.
     const ds = window.drupalSettings?.reactApp?.currentUser;
     if (ds && !ds.isAnonymous) {
       setUser({
@@ -23,20 +23,21 @@ export function AuthProvider({ children }) {
   }, []);
 
   const login = async (email, password) => {
-    const drupalUser = await userLogin(email, password);
+    // loginUser() already unwraps the `result` envelope and returns
+    // `current_user` directly - do not re-nest it here.
+    const currentUser = await loginUser(email, password);
     setUser({
-      id: drupalUser.result.current_user.uid,
-      name: drupalUser.result.current_user.username,
-      email: drupalUser.result.current_user.email,
-      firstname: drupalUser.result.current_user.firstname,
-      lastname: drupalUser.result.current_user.lastname,
-      role: drupalUser.result.current_user.role,
+      id: currentUser.uid,
+      name: currentUser.username,
+      email: currentUser.email,
+      firstname: currentUser.firstname,
+      lastname: currentUser.lastname,
+      role: currentUser.role,
     });
   };
 
   const logout = async () => {
-    const token = sessionStorage.getItem("csrf_token");
-    await drupalLogout(token);
+    await logoutUser();
     setUser(null);
   };
 

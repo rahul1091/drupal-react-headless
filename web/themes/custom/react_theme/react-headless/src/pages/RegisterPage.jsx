@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { registerUser } from "../api/drupalService";
+import { registerUser } from "../api/client";
 import "../css/register.css";
 
 export default function RegisterPage() {

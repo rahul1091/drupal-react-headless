@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { addTask } from "../api/drupalService";
+import { addTask } from "../api/client";
 import "../css/tasklist.css";
 
 export default function CreateTask() {
