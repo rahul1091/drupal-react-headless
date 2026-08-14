@@ -1,0 +1,17 @@
+name: React Theme
+type: theme
+description: "Custom Drupal theme that embeds a React 18 SPA for content management. The React app lives in react-app/ and is compiled into js/app.js."
+package: Custom
+core_version_requirement: ^10 || ^11
+base theme: false
+
+libraries:
+  - react_theme/global
+  - react_theme/react-headless
+
+regions:
+  header: Header
+  content: Content
+  sidebar_first: Left Sidebar
+  sidebar_second: Right Sidebar
+  footer: Footer

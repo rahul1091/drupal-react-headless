@@ -1,0 +1,48 @@
+<?php
+
+/**
+ * @file
+ * react_theme.theme
+ *
+ * Passes Drupal context (base URL, CSRF token, current user) to the React app
+ * via drupalSettings, which Vite reads at runtime from window.drupalSettings.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_page_attachments_alter().
+ *
+ * Injects runtime config into drupalSettings so React can:
+ *   - Know the Drupal base URL (for API calls)
+ *   - Use the current user's session credentials
+ *   - Read the CSRF token for mutating requests
+ */
+function react_theme_page_attachments_alter(array &$attachments): void {
+  /** @var \Drupal\Core\Session\AccountProxyInterface $current_user */
+  $current_user = \Drupal::currentUser();
+
+  /** @var \Drupal\Core\Csrf\CsrfTokenGenerator $csrf */
+  $csrf = \Drupal::service('csrf_token');
+
+  $attachments['#attached']['drupalSettings']['reactApp'] = [
+    'baseUrl'     => \Drupal::request()->getSchemeAndHttpHost(),
+    'apiPrefix'   => '/api',
+    'csrfToken'   => $csrf->get('rest'),
+    'currentUser' => [
+      'id'          => (int) $current_user->id(),
+      'name'        => $current_user->getDisplayName(),
+      'isAnonymous' => $current_user->isAnonymous(),
+      'roles'       => $current_user->getRoles(),
+    ],
+  ];
+}
+
+/**
+ * Implements hook_preprocess_page().
+ *
+ * Adds a data attribute to the body so React knows it is embedded in Drupal.
+ */
+function react_theme_preprocess_page(array &$variables): void {
+  $variables['attributes']['data-drupal-embedded'] = 'true';
+}

@@ -1,0 +1,63 @@
+{#
+/**
+ * @file page.html.twig
+ *
+ * Default page template for the react_theme.
+ * The React app mounts onto #react-root.
+ * Everything outside that div is server-rendered Drupal HTML (header/footer).
+ */
+#}
+<!DOCTYPE html>
+<html{{ html_attributes }}>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{ head_title | safe_join(' | ') }}</title>
+  {{ head }}
+  {{ styles }}
+</head>
+
+<body{{ attributes }}>
+  {{ page_top }}
+
+  <header class="site-header" role="banner">
+    <div class="site-header__inner">
+      {% if page.header %}
+        {{ page.header }}
+      {% else %}
+        <a class="site-logo" href="{{ path('<front>') }}" rel="home">
+          {{ 'Drupal React CMS' | t }}
+        </a>
+      {% endif %}
+    </div>
+  </header>
+
+  <main id="main-content" class="site-main" role="main" tabindex="-1">
+    {#
+      React mounts here. The compiled bundle (js/app.js) calls
+      ReactDOM.createRoot(document.getElementById('react-root')).render(...)
+    #}
+    <div id="react-root" class="react-root"></div>
+
+    {# Fallback server-rendered content (shown before React hydrates) #}
+    {% if page.content %}
+      <noscript class="drupal-content-fallback">
+        {{ page.content }}
+      </noscript>
+    {% endif %}
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="site-footer__inner">
+      {% if page.footer %}
+        {{ page.footer }}
+      {% else %}
+        <p>{{ 'Powered by Drupal + React' | t }}</p>
+      {% endif %}
+    </div>
+  </footer>
+
+  {{ page_bottom }}
+  {{ scripts }}
+</body>
+</html>
