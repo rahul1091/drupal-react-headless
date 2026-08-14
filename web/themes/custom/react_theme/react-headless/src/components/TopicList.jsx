@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getTopics } from "../api/drupalService";
+import { getTopics } from "../api/client";
 import "../css/topiclist.css";
 
 // Helper to strip HTML tags for accurate character counting

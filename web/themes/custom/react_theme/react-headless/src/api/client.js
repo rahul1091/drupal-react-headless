@@ -1,26 +1,33 @@
 import axios from "axios";
 
-// Helper function to resolve dynamic base URL
+// ---------------------------------------------------------------------------
+// Single Axios client for all Drupal REST calls made by this SPA.
+//
+// This file used to be split across `api/client.js` and `api/drupalService.js`,
+// each with its own Axios instance, its own CSRF interceptor, and its own
+// (slightly different) idea of where the session/CSRF tokens were stored.
+// That duplication was a bug risk (e.g. a token refreshed via one instance
+// was invisible to the other). Everything now lives here.
+// ---------------------------------------------------------------------------
+
+/** Resolve the Drupal base URL: prefer drupalSettings (theme-embedded mode),
+ *  fall back to the Vite env var (standalone dev-server mode). */
 function getBaseUrl() {
-  if (
-    typeof window !== "undefined" &&
-    window.drupalSettings?.reactApp?.baseUrl
-  ) {
+  if (typeof window !== "undefined" && window.drupalSettings?.reactApp?.baseUrl) {
     return window.drupalSettings.reactApp.baseUrl;
   }
   return import.meta.env.VITE_DRUPAL_API_URL || "";
 }
 
-// Instantiate Axios client instance
 const API_URL = axios.create({
   baseURL: getBaseUrl(),
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials: true, // Required to send/receive cookies cross-origin
+  withCredentials: true, // send/receive the Drupal session cookie cross-origin
 });
 
-/** Attach CSRF token to every mutating request */
+/** Attach the CSRF token to every mutating request. */
 API_URL.interceptors.request.use((config) => {
   const method = config.method?.toUpperCase();
   if (["POST", "PATCH", "PUT", "DELETE"].includes(method)) {
@@ -32,13 +39,15 @@ API_URL.interceptors.request.use((config) => {
   return config;
 });
 
-/** Unwrap Drupal REST error shapes into plain Error objects */
+/** Unwrap Drupal's REST error shapes into plain Error objects so callers
+ *  can just read `err.message`. */
 API_URL.interceptors.response.use(
   (res) => res,
   (err) => {
     const body = err.response?.data;
     const message =
       (typeof body === "string" ? body : null) ||
+      body?.result ||
       body?.message ||
       body?.error ||
       err.message ||
@@ -48,31 +57,28 @@ API_URL.interceptors.response.use(
 );
 
 // ---------------------------------------------------------------------------
-// Exported API Methods
+// Auth
 // ---------------------------------------------------------------------------
 
-export const drupalLogin = async (email, password) => {
-  // Using custom UserLogin endpoint payload
-  const response = await API_URL.post("/api/user-login", {
+/** Logs in via the custom /api/user-login resource and persists the CSRF /
+ *  logout tokens Drupal returns so subsequent mutating requests can use them. */
+export const loginUser = async (email, password) => {
+  const response = await API_URL.post("/api/user-login?_format=json", {
     email,
     password,
   });
 
   const result = response.data?.result || response.data;
 
-  // Store both CSRF and Logout tokens returned by Drupal
-  if (result?.csrf_token) {
-    sessionStorage.setItem("csrf_token", result.csrf_token);
-  }
-  if (result?.logout_token) {
-    sessionStorage.setItem("logout_token", result.logout_token);
-  }
+  if (result?.csrf_token) sessionStorage.setItem("csrf_token", result.csrf_token);
+  if (result?.logout_token) sessionStorage.setItem("logout_token", result.logout_token);
 
   return result?.current_user || result;
 };
 
-export const drupalLogout = async (token) => {
-  // Prefer logout_token, fall back to passed token or csrf_token
+/** Logs out both server-side (invalidate the Drupal session) and client-side
+ *  (clear any cached tokens), even if the network call fails. */
+export const logoutUser = async (token) => {
   const logoutToken =
     token ||
     sessionStorage.getItem("logout_token") ||
@@ -81,21 +87,49 @@ export const drupalLogout = async (token) => {
 
   try {
     if (logoutToken) {
-      await API_URL.post(
-        `/user/logout?_format=json&token=${encodeURIComponent(logoutToken)}`,
-      );
+      await API_URL.post(`/user/logout?_format=json&token=${encodeURIComponent(logoutToken)}`);
     }
   } catch (error) {
-    console.warn(
-      "Server logout request failed, clearing local session.",
-      error,
-    );
+    console.warn("Server logout request failed, clearing local session anyway.", error);
   } finally {
-    // Always purge local storage items on logout
     sessionStorage.removeItem("csrf_token");
     sessionStorage.removeItem("logout_token");
     sessionStorage.removeItem("user");
   }
+};
+
+/** Registers a new Drupal user via /api/user-registration. */
+export const registerUser = async (userData) => {
+  const payload = {
+    firstname: userData.firstname,
+    lastname: userData.lastname,
+    email: userData.email,
+    password: userData.password,
+  };
+  return API_URL.post("/api/user-registration?_format=json", payload);
+};
+
+// ---------------------------------------------------------------------------
+// Topics (landing_page content)
+// ---------------------------------------------------------------------------
+
+export const getTopics = async () => API_URL.get("/api/topiclist?_format=json");
+
+// ---------------------------------------------------------------------------
+// Project Tracker tasks
+// ---------------------------------------------------------------------------
+
+export const getTasks = async () => API_URL.get("/api/task-list?_format=json");
+
+export const addTask = async (taskData) => {
+  const payload = {
+    title: taskData.title,
+    description: taskData.description,
+    due_date: taskData.due_date,
+    severity: taskData.severity,
+    status: taskData.status,
+  };
+  return API_URL.post("/api/add-task?_format=json", payload);
 };
 
 export default API_URL;

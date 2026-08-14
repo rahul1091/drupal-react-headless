@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../hooks/useAuth";
-import { getTopics } from "../api/drupalService";
+import { getTopics } from "../api/client";
 import "../css/dashboard.css";
 import TaskList from "../components/TaskList";
 

@@ -4,10 +4,17 @@ global:
     theme:
       css/theme.css: {}
 
+# Compiled by `npm run build` inside react-headless/ (see vite.config.ts,
+# which is configured to output here as js/app.js + css/app.css with fixed
+# names). Run the build before enabling this theme in production - the
+# js/ and css/ folders are gitignored build artifacts, not source.
 react-headless:
   version: 1.0
   header: true
-  # js:
-  #   js/app.js: { minified: true, preprocess: false }
+  js:
+    js/app.js: { minified: true, preprocess: false }
+  css:
+    theme:
+      css/app.css: {}
   dependencies:
     - core/drupalSettings
