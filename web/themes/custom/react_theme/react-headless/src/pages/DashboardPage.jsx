@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { getTopics } from "../api/client";
 import "../css/dashboard.css";
@@ -6,6 +7,7 @@ import TaskList from "../components/TaskList";
 
 export default function DashboardPage() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [topics, setTopics] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -93,6 +95,15 @@ export default function DashboardPage() {
           <div className="topics-card">
             <div className="card-header">
               <h2>Trending Topics ({topics.length})</h2>
+              {user?.isAdmin && (
+                <button
+                  type="button"
+                  className="add-topic-btn"
+                  onClick={() => navigate("/add-topic")}
+                >
+                  + Add Topic
+                </button>
+              )}
             </div>
 
             {error ? (

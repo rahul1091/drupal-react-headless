@@ -115,11 +115,40 @@ export const registerUser = async (userData) => {
 
 export const getTopics = async () => API_URL.get("/api/topiclist?_format=json");
 
+export const addTopic = async (topicData) => {
+  const payload = {
+    title: topicData.title,
+    subheading: topicData.subheading,
+    description: topicData.description,
+    trending: topicData.trending,
+  };
+  return API_URL.post("/api/add-topic?_format=json", payload);
+};
+
+// ---------------------------------------------------------------------------
+// Users (for task assignment)
+// ---------------------------------------------------------------------------
+
+export const getUsers = async () => API_URL.get("/api/user-list?_format=json");
+
 // ---------------------------------------------------------------------------
 // Project Tracker tasks
 // ---------------------------------------------------------------------------
 
 export const getTasks = async () => API_URL.get("/api/task-list?_format=json");
+
+export const getTaskById = async (id) => API_URL.get(`/api/task/${id}?_format=json`);
+
+export const updateTask = async (id, taskData) => {
+  const payload = {
+    title: taskData.title,
+    description: taskData.description,
+    due_date: taskData.due_date,
+    severity: taskData.severity,
+    status: taskData.status,
+  };
+  return API_URL.post(`/api/task/${id}?_format=json`, payload);
+};
 
 export const addTask = async (taskData) => {
   const payload = {
@@ -128,6 +157,7 @@ export const addTask = async (taskData) => {
     due_date: taskData.due_date,
     severity: taskData.severity,
     status: taskData.status,
+    assigned_to: taskData.assigned_to,
   };
   return API_URL.post("/api/add-task?_format=json", payload);
 };

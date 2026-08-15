@@ -1,0 +1,5 @@
+services:
+  apiservices.cross_origin_session_cookie_subscriber:
+    class: Drupal\apiservices\EventSubscriber\CrossOriginSessionCookieSubscriber
+    tags:
+      - { name: event_subscriber }

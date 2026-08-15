@@ -33,6 +33,7 @@ export function AuthProvider({ children }) {
       firstname: currentUser.firstname,
       lastname: currentUser.lastname,
       role: currentUser.role,
+      isAdmin: !!currentUser.isAdmin,
     });
   };
 
