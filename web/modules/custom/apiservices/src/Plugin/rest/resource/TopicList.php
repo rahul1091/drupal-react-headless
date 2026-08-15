@@ -127,7 +127,7 @@ class TopicList extends ResourceBase
       $title = trim($data['title'] ?? '');
       $subheading = trim($data['subheading'] ?? '');
       $description = trim($data['description'] ?? '');
-      $trending = $data['trending'] ?? 'No';
+      $trending = strtolower(trim((string) ($data['trending'] ?? 'no'))) === 'yes' ? 'yes' : 'no';
 
       if (empty($title) || empty($description)) {
         return new JsonResponse([

@@ -16,3 +16,4 @@ web/themes/custom/react_theme/react-headless/dist-ssr
 
 # macOS system files
 .DS_Store
+web/themes/custom/react_theme/react-headless/.env
