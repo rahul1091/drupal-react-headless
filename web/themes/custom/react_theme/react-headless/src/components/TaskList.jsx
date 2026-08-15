@@ -60,6 +60,11 @@ export default function TaskList() {
                     </span>
                   </div>
                   <p className="task-description">{task.description}</p>
+                  {task.created_by?.name && (
+                    <p className="task-meta">
+                      Created by <strong>{task.created_by.name}</strong>
+                    </p>
+                  )}
                   <div className="task-card-footer">
                     <span className="task-due-date">
                       📅 Due: {task.due_date}
@@ -75,6 +80,15 @@ export default function TaskList() {
                       </span>
                     </span>
                   </div>
+                  <button
+                    type="button"
+                    className="task-edit-btn"
+                    onClick={() =>
+                      navigate(`/edit-task/${task.id}`, { state: { task } })
+                    }
+                  >
+                    Edit Task
+                  </button>
                 </div>
               ))}
             </div>

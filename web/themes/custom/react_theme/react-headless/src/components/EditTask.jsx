@@ -1,35 +1,62 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { addTask, getUsers } from "../api/client";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { getTaskById, updateTask } from "../api/client";
 import "../css/tasklist.css";
 
-export default function CreateTask() {
+export default function EditTask() {
   const navigate = useNavigate();
+  const { id } = useParams();
+  const location = useLocation();
+
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(!location.state?.task);
+  const [loadError, setLoadError] = useState(null);
+  const [assignedTo, setAssignedTo] = useState(null);
+
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     due_date: "",
     severity: "low",
     status: "open",
-    assigned_to: "",
   });
 
-  const [users, setUsers] = useState([]);
-  const [usersLoading, setUsersLoading] = useState(true);
-  const [usersError, setUsersError] = useState(null);
+  const applyTask = (task) => {
+    setFormData({
+      title: task.title || "",
+      description: task.description || "",
+      due_date: task.due_date || "",
+      severity: (task.severity || "low").toLowerCase(),
+      status: (task.status || "open").toLowerCase().replace(/\s+/g, "_"),
+    });
+    setAssignedTo(task.assigned_to || null);
+  };
 
   useEffect(() => {
-    getUsers()
+    // A card navigates here with the task already in hand (router state),
+    // so we can render instantly. Falling back to a fetch covers a direct
+    // link/refresh, where that state is gone.
+    if (location.state?.task) {
+      applyTask(location.state.task);
+      setIsLoading(false);
+      return;
+    }
+
+    getTaskById(id)
       .then((response) => {
-        setUsers(response.data?.result || []);
+        const task = response.data?.result;
+        if (!task) throw new Error("Task not found.");
+        applyTask(task);
       })
       .catch((err) => {
-        console.error("Failed to load users:", err);
-        setUsersError("Couldn't load the list of users to assign this task to.");
+        console.error("Failed to load task:", err);
+        setLoadError(
+          err.message || "Couldn't load this task. It may not be assigned to you.",
+        );
       })
-      .finally(() => setUsersLoading(false));
-  }, []);
+      .finally(() => setIsLoading(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -44,24 +71,59 @@ export default function CreateTask() {
     setIsSubmitting(true);
 
     try {
-      await addTask(formData);
+      await updateTask(id, formData);
       navigate("/dashboard");
     } catch (err) {
-      console.error("Failed to create task:", err);
-      alert("Failed to save task. Please check network or authentication.");
+      console.error("Failed to update task:", err);
+      alert(err.message || "Failed to save changes. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="create-task-container">
+        <div className="create-task-card">
+          <p className="tasklist-loading">Loading task...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (loadError) {
+    return (
+      <div className="create-task-container">
+        <div className="create-task-card">
+          <div className="tasklist-error">{loadError}</div>
+          <div className="form-actions">
+            <button
+              type="button"
+              className="btn-secondary"
+              onClick={() => navigate("/dashboard")}
+            >
+              Back to Dashboard
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="create-task-container">
       <div className="create-task-card">
         <div className="create-task-header">
           <div>
-            <h2>Create New Project Tracker Task</h2>
+            <h2>Edit Task</h2>
             <p className="create-task-subtitle">
               Fields marked <span className="required">*</span> are required.
+              {assignedTo?.name && (
+                <>
+                  {" "}
+                  Assigned to <strong>{assignedTo.name}</strong>.
+                </>
+              )}
             </p>
           </div>
           <button
@@ -92,31 +154,6 @@ export default function CreateTask() {
             />
           </div>
 
-          {/* Assign To */}
-          <div className="form-group">
-            <label htmlFor="assigned_to">
-              Assign To <span className="required">*</span>
-            </label>
-            <select
-              id="assigned_to"
-              name="assigned_to"
-              value={formData.assigned_to}
-              onChange={handleInputChange}
-              required
-              disabled={isSubmitting || usersLoading || !!usersError}
-            >
-              <option value="" disabled>
-                {usersLoading ? "Loading users..." : "Select a user"}
-              </option>
-              {users.map((u) => (
-                <option key={u.uid} value={u.uid}>
-                  {u.name}
-                </option>
-              ))}
-            </select>
-            {usersError && <p className="field-error">{usersError}</p>}
-          </div>
-
           {/* Description */}
           <div className="form-group">
             <div className="form-label-row">
@@ -139,9 +176,7 @@ export default function CreateTask() {
             />
           </div>
 
-          {/* Due Date / Severity / Status - grouped together since they're
-              all short, single-value fields that together describe the
-              task's schedule and priority. */}
+          {/* Due Date / Severity / Status */}
           <div className="form-row form-row--3col">
             <div className="form-group">
               <label htmlFor="due_date">
@@ -212,7 +247,7 @@ export default function CreateTask() {
               className="btn-primary"
               disabled={isSubmitting}
             >
-              {isSubmitting ? "Saving..." : "Save Task"}
+              {isSubmitting ? "Saving..." : "Save Changes"}
             </button>
           </div>
         </form>

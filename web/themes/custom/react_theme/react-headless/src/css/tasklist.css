@@ -137,6 +137,17 @@
   white-space: pre-line;
 }
 
+.task-meta {
+  margin: -0.5rem 0 1rem;
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
+.task-meta strong {
+  color: #6b7280;
+  font-weight: 600;
+}
+
 .task-card-footer {
   display: flex;
   flex-wrap: wrap;
@@ -158,6 +169,26 @@
   align-items: center;
   gap: 0.35rem;
   white-space: nowrap;
+}
+
+.task-edit-btn {
+  margin-top: 0.9rem;
+  align-self: flex-start;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #2563eb;
+  background-color: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+
+.task-edit-btn:hover {
+  background-color: #dbeafe;
+  border-color: #93c5fd;
+  transform: translateY(-1px);
 }
 
 /* Badges */
@@ -285,6 +316,12 @@
 }
 
 .required {
+  color: #dc2626;
+}
+
+.field-error {
+  margin: 0.25rem 0 0;
+  font-size: 0.8rem;
   color: #dc2626;
 }
 

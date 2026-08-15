@@ -19,6 +19,7 @@ use Drupal\user\Entity\User;
  *   label = @Translation("Topiclist API"),
  *   uri_paths = {
  *     "canonical" = "/api/topiclist",
+ *     "create" = "/api/add-topic"
  *   }
  * )
  */
@@ -100,6 +101,63 @@ class TopicList extends ResourceBase
         "result" => $project_list_data
       );
       return new JsonResponse($final_api_reponse);
+    } catch (\Exception $exception) {
+      return $this->exception_error_msg($exception->getMessage());
+    }
+  }
+
+  /**
+   * Creates a new landing_page "topic" node. Admin-only: this isn't
+   * content any assigned user should be able to publish, unlike task
+   * creation (which any authenticated user can do for themselves).
+   * Route: POST /api/add-topic?_format=json
+   */
+  public function post(Request $request)
+  {
+    if ($this->loggedUser->isAnonymous() || !in_array('administrator', $this->loggedUser->getRoles(), TRUE)) {
+      return new JsonResponse([
+        'status' => 'Error',
+        'message' => 'Administrator access required to create topics.',
+      ], 403);
+    }
+
+    try {
+      $data = json_decode($request->getContent(), TRUE) ?: [];
+
+      $title = trim($data['title'] ?? '');
+      $subheading = trim($data['subheading'] ?? '');
+      $description = trim($data['description'] ?? '');
+      $trending = $data['trending'] ?? 'No';
+
+      if (empty($title) || empty($description)) {
+        return new JsonResponse([
+          'status' => 'Error',
+          'message' => 'Missing required fields: Title and Description are mandatory.',
+        ], 400);
+      }
+
+      $node = Node::create([
+        'type' => 'landing_page',
+        'title' => $title,
+        'field_sub_heading' => $subheading,
+        'field_description' => $description,
+        'field_trending' => $trending,
+        'status' => 1,
+      ]);
+
+      $node->save();
+
+      return new JsonResponse([
+        'status' => 'Success',
+        'message' => 'Topic created successfully.',
+        'result' => [
+          'id' => $node->id(),
+          'title' => $node->getTitle(),
+          'subheading' => $subheading,
+          'description' => $description,
+          'trending' => $trending,
+        ],
+      ], 201);
     } catch (\Exception $exception) {
       return $this->exception_error_msg($exception->getMessage());
     }

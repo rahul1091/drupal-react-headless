@@ -10,6 +10,8 @@ import DashboardPage from "./pages/DashboardPage";
 // 1. Import your new Task components
 import TaskList from "./components/TaskList";
 import CreateTask from "./components/CreateTask";
+import EditTask from "./components/EditTask";
+import AddTopic from "./components/AddTopic";
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
@@ -20,6 +22,22 @@ function ProtectedRoute({ children }) {
       </div>
     );
   if (!user) return <Navigate to="/login" replace />;
+  return children;
+}
+
+function AdminRoute({ children }) {
+  const { user, loading } = useAuth();
+  if (loading)
+    return (
+      <div className="loading-center">
+        <span className="spinner spinner-lg" />
+      </div>
+    );
+  if (!user) return <Navigate to="/login" replace />;
+  // Topic creation is admin-only - anyone else who lands here (e.g. via a
+  // stale bookmark) is bounced back to their dashboard rather than shown
+  // a form that will just 403 on submit.
+  if (!user.isAdmin) return <Navigate to="/dashboard" replace />;
   return children;
 }
 
@@ -56,6 +74,22 @@ function AppLayout() {
               <ProtectedRoute>
                 <CreateTask />
               </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/edit-task/:id"
+            element={
+              <ProtectedRoute>
+                <EditTask />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/add-topic"
+            element={
+              <AdminRoute>
+                <AddTopic />
+              </AdminRoute>
             }
           />
         </Routes>

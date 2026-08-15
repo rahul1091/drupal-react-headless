@@ -166,6 +166,7 @@ class UserLogin extends ResourceBase
         $this->userLoginFinalize($user);
 
         $roles = $user->getRoles();
+        $isAdmin = in_array('administrator', $roles, TRUE);
         // Remove "authenticated".
         $roles = array_diff($roles, ['authenticated']);
 
@@ -181,6 +182,9 @@ class UserLogin extends ResourceBase
             'firstname' => $user->hasField('field_firstname') ? $user->get('field_firstname')->value : '',
             'lastname' => $user->hasField('field_lastname') ? $user->get('field_lastname')->value : '',
             'role' => ucfirst($user_role),
+            // Explicit boolean, checked against the machine name - do not
+            // derive admin-gated UI from the 'role' display string above.
+            'isAdmin' => $isAdmin,
           ],
           'csrf_token' => $this->csrfToken->get('rest'),
         ];

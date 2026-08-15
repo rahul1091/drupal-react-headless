@@ -97,11 +97,23 @@ class TaskList extends ResourceBase
    */
   public function get()
   {
+    // Task assignment is per-user, so an anonymous caller has no
+    // meaningful "my tasks" to return.
+    if ($this->currentUser->isAnonymous()) {
+      return new JsonResponse([
+        'status' => 'Error',
+        'message' => 'Authentication required to view tasks.',
+      ], 403);
+    }
+
     try {
       $nodeStorage = $this->entityTypeManager->getStorage('node');
       $nids = $nodeStorage->getQuery()
         ->condition('type', 'project_tracker')
         ->condition('status', 1)
+        // Only tasks assigned to the logged-in user - not everything,
+        // and not just the ones they created.
+        ->condition('field_assigned_to', $this->currentUser->id())
         ->sort('created', 'DESC')
         ->accessCheck(FALSE)
         ->execute();
@@ -118,6 +130,8 @@ class TaskList extends ResourceBase
           'due_date' => $node->hasField('field_due_date') ? $node->get('field_due_date')->value : '',
           'severity' => $node->hasField('field_severity') ? $node->get('field_severity')->value : '',
           'status' => $node->hasField('field_status') ? $node->get('field_status')->value : '',
+          'assigned_to' => $this->userSummary($node->hasField('field_assigned_to') ? $node->get('field_assigned_to')->entity : NULL),
+          'created_by' => $this->userSummary($node->getOwner()),
         ];
       }
 
@@ -133,6 +147,25 @@ class TaskList extends ResourceBase
         'error' => $exception->getMessage(),
       ], 500);
     }
+  }
+
+  /**
+   * Reduces a user entity to the small shape the SPA needs to render it.
+   *
+   * @param \Drupal\user\UserInterface|null $user
+   *   The user entity, or NULL if there's no owner/assignee loaded.
+   *
+   * @return array|null
+   */
+  private function userSummary($user)
+  {
+    if (!$user) {
+      return NULL;
+    }
+    return [
+      'uid' => (int) $user->id(),
+      'name' => $user->getDisplayName(),
+    ];
   }
 
   public function post(Request $request)
@@ -157,6 +190,7 @@ class TaskList extends ResourceBase
       $dueDate = trim($data['due_date'] ?? '');
       $severity = trim($data['severity'] ?? 'Low');
       $status = trim($data['status'] ?? 'Open');
+      $assignedTo = isset($data['assigned_to']) ? (int) $data['assigned_to'] : 0;
 
       // Validation check for required fields
       if (empty($title) || empty($description) || empty($dueDate)) {
@@ -166,15 +200,34 @@ class TaskList extends ResourceBase
         ], 400);
       }
 
+      if (empty($assignedTo)) {
+        return new JsonResponse([
+          'status' => 'Error',
+          'message' => 'Missing required field: assigned_to (uid of the user to assign this task to).',
+        ], 400);
+      }
+
+      $assignedUser = $this->entityTypeManager->getStorage('user')->load($assignedTo);
+      if (!$assignedUser || !$assignedUser->isActive()) {
+        return new JsonResponse([
+          'status' => 'Error',
+          'message' => 'The selected assignee is not a valid, active user.',
+        ], 400);
+      }
+
       // Create new Project Tracker node programmatically
       $node = Node::create([
         'type' => 'project_tracker',
         'title' => $title,
+        // 'uid' is the node's author/owner - i.e. whoever is logged in
+        // and submitted this request. This is what "created by" means
+        // below, distinct from field_assigned_to (who the task is for).
         'uid' => $this->currentUser->id(),
         'field_description' => $description,
         'field_due_date' => $dueDate,
         'field_severity' => $severity,
         'field_status' => $status,
+        'field_assigned_to' => ['target_id' => $assignedTo],
         'status' => 1, // Published
       ]);
 
@@ -190,6 +243,8 @@ class TaskList extends ResourceBase
           'field_due_date' => $dueDate,
           'field_severity' => $severity,
           'field_status' => $status,
+          'assigned_to' => $this->userSummary($assignedUser),
+          'created_by' => $this->userSummary($this->entityTypeManager->getStorage('user')->load($this->currentUser->id())),
         ],
       ], 201);
     } catch (\Exception $exception) {
