@@ -10,7 +10,7 @@ export default function AddTopic() {
     title: "",
     subheading: "",
     description: "",
-    trending: "No",
+    trending: "no",
   });
 
   const handleInputChange = (e) => {
