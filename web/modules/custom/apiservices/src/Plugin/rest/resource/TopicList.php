@@ -77,7 +77,7 @@ class TopicList extends ResourceBase
     try {
       $project_nids = \Drupal::entityQuery('node')
         ->accessCheck(TRUE)
-        ->condition('type', 'landing_page')
+        ->condition('type', 'topic_list')
         ->condition('status', 1)
         ->execute();
 
@@ -107,7 +107,7 @@ class TopicList extends ResourceBase
   }
 
   /**
-   * Creates a new landing_page "topic" node. Admin-only: this isn't
+   * Creates a new topic_list "topic" node. Admin-only: this isn't
    * content any assigned user should be able to publish, unlike task
    * creation (which any authenticated user can do for themselves).
    * Route: POST /api/add-topic?_format=json
@@ -137,7 +137,7 @@ class TopicList extends ResourceBase
       }
 
       $node = Node::create([
-        'type' => 'landing_page',
+        'type' => 'topic_list',
         'title' => $title,
         'field_sub_heading' => $subheading,
         'field_description' => $description,

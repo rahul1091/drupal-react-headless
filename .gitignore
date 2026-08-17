@@ -10,6 +10,8 @@ web/sites/*/*services*.yml
 web/sites/*/files
 web/sites/*/private
 
+.htaccess
+
 web/themes/custom/react_theme/react-headless/node_modules
 web/themes/custom/react_theme/react-headless/dist
 web/themes/custom/react_theme/react-headless/dist-ssr
@@ -17,3 +19,4 @@ web/themes/custom/react_theme/react-headless/dist-ssr
 # macOS system files
 .DS_Store
 web/themes/custom/react_theme/react-headless/.env
+web/themes/custom/react_theme/react-headless/.env.example
