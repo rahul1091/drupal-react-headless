@@ -132,6 +132,7 @@ class TaskList extends ResourceBase
           'status' => $node->hasField('field_status') ? $node->get('field_status')->value : '',
           'assigned_to' => $this->userSummary($node->hasField('field_assigned_to') ? $node->get('field_assigned_to')->entity : NULL),
           'created_by' => $this->userSummary($node->getOwner()),
+          'full_name' => trim($node->getOwner()->get('field_firstname')->value . ' ' . $node->getOwner()->get('field_lastname')->value),
         ];
       }
 

@@ -46,3 +46,57 @@ function apiservices_update_9001() {
     ])->save();
   }
 }
+
+/**
+ * Enables POST on the taskdetail_rest resource in Drupal's REST config.
+ *
+ * Why this is needed:
+ * Drupal's REST module generates routes only for the HTTP methods that are
+ * explicitly enabled in each resource's REST config entity
+ * (rest.resource.taskdetail_rest). Until POST is listed there, the REST
+ * router only generates a GET route for /api/task/{id} — a POST request
+ * hits the GET route and Drupal responds with "405 Method Not Allowed
+ * (Allow: GET, HEAD)". The REST UI at /admin/config/services/rest lets you
+ * toggle methods interactively, but since this repo has no config/sync
+ * export, that change would be lost on every fresh install. This update
+ * hook makes the same change programmatically and durably.
+ *
+ * Run with: drush updb
+ */
+function apiservices_update_9002() {
+  $config = \Drupal::configFactory()->getEditable('rest.resource.taskdetail_rest');
+
+  if ($config->isNew()) {
+    // The resource hasn't been enabled in REST UI yet at all — create the
+    // full config from scratch with both GET and POST allowed.
+    $config->setData([
+      'id' => 'taskdetail_rest',
+      'plugin_id' => 'taskdetail_rest',
+      'granularity' => 'method',
+      'configuration' => [
+        'GET' => [
+          'supported_formats' => ['json'],
+          'supported_auth' => ['cookie'],
+        ],
+        'POST' => [
+          'supported_formats' => ['json'],
+          'supported_auth' => ['cookie'],
+        ],
+      ],
+    ])->save();
+    return t('taskdetail_rest REST resource created with GET and POST enabled.');
+  }
+
+  // The resource exists - just ensure POST is listed.
+  $configuration = $config->get('configuration') ?? [];
+  if (empty($configuration['POST'])) {
+    $configuration['POST'] = [
+      'supported_formats' => ['json'],
+      'supported_auth' => ['cookie'],
+    ];
+    $config->set('configuration', $configuration)->save();
+    return t('POST method enabled on taskdetail_rest REST resource.');
+  }
+
+  return t('taskdetail_rest REST resource already has POST enabled — no change made.');
+}

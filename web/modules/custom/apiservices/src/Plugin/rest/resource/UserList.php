@@ -103,6 +103,7 @@ class UserList extends ResourceBase
           'uid' => (int) $user->id(),
           'name' => $user->getDisplayName(),
           'email' => $user->getEmail(),
+          'fullname' => $user->get('field_firstname')->value . ' ' . $user->get('field_lastname')->value,
         ];
       }
 

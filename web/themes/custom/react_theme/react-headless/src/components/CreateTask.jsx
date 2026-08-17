@@ -110,7 +110,7 @@ export default function CreateTask() {
               </option>
               {users.map((u) => (
                 <option key={u.uid} value={u.uid}>
-                  {u.name}
+                  {u.fullname}
                 </option>
               ))}
             </select>
