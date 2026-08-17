@@ -182,9 +182,8 @@ class UserLogin extends ResourceBase
             'firstname' => $user->hasField('field_firstname') ? $user->get('field_firstname')->value : '',
             'lastname' => $user->hasField('field_lastname') ? $user->get('field_lastname')->value : '',
             'role' => ucfirst($user_role),
-            // Explicit boolean, checked against the machine name - do not
-            // derive admin-gated UI from the 'role' display string above.
             'isAdmin' => $isAdmin,
+            'created' => date('d-m-Y', $user->getCreatedTime()),
           ],
           'csrf_token' => $this->csrfToken->get('rest'),
         ];
