@@ -89,44 +89,95 @@
   color: #dc2626;
 }
 
-/* Task Cards Grid */
-.task-grid {
+/* 4-Column Kanban Board */
+.task-board {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: 1.25rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .task-board {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .task-board {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Column */
+.task-column {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  min-height: 120px;
+}
+
+/* Subtle left-border accent per status for quick visual scanning */
+.task-column--open        { border-top: 3px solid #2563eb; }
+.task-column--in_progress { border-top: 3px solid #d97706; }
+.task-column--completed   { border-top: 3px solid #059669; }
+.task-column--cancelled   { border-top: 3px solid #9ca3af; }
+
+.task-column__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.task-column__count {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #6b7280;
+  background: #e5e7eb;
+  border-radius: 9999px;
+  padding: 0.1rem 0.5rem;
+  min-width: 1.4rem;
+  text-align: center;
+}
+
+.task-column__cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.task-column__empty {
+  text-align: center;
+  color: #9ca3af;
+  font-size: 0.825rem;
+  padding: 1.25rem 0;
 }
 
 .task-card {
   background: #ffffff;
   border: 1px solid #e5e7eb;
   border-radius: 0.5rem;
-  padding: 1.25rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
 }
 
 .task-card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 0.75rem;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.6rem;
 }
 
 .task-card-header h3 {
   margin: 0;
-  font-size: 1.1rem;
+  font-size: 0.975rem;
   line-height: 1.35;
   color: #111827;
-  /* Let the title wrap, but never push/shrink the status badge next to it. */
-  flex: 1 1 auto;
-  min-width: 0;
-}
-
-.task-card-header .badge {
-  flex-shrink: 0;
 }
 
 .task-description {
@@ -221,6 +272,11 @@
 .status-completed {
   background: #d1fae5;
   color: #065f46;
+}
+
+.status-cancelled {
+  background: #f3f4f6;
+  color: #6b7280;
 }
 
 .severity-low {

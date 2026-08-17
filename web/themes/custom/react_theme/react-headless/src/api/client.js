@@ -147,7 +147,7 @@ export const updateTask = async (id, taskData) => {
     severity: taskData.severity,
     status: taskData.status,
   };
-  return API_URL.post(`/api/task/${id}?_format=json`, payload);
+  return API_URL.post(`/api/task/${id}/update?_format=json`, payload);
 };
 
 export const addTask = async (taskData) => {

@@ -23,7 +23,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  *   id = "taskdetail_rest",
  *   label = @Translation("Task Detail API"),
  *   uri_paths = {
- *     "canonical" = "/api/task/{id}"
+ *     "canonical" = "/api/task/{id}",
+ *     "create" = "/api/task/{id}/update"
  *   }
  * )
  */
