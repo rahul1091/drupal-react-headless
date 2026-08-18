@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./hooks/useAuth";
 
 import TopBar from "./components/TopBar";
+import Footer from "./components/Footer";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
@@ -92,6 +93,7 @@ function AppLayout() {
           />
         </Routes>
       </main>
+      <Footer />
     </div>
   );
 }

@@ -2,7 +2,7 @@
 .topic-list-container {
   max-width: 1920px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 48px;
   font-family: var(--font-family);
 }
 
@@ -26,10 +26,8 @@
   border-radius: 8px;
   padding: 20px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  /* Fluid cards: grow to fill available space but never exceed ~475px,
-     and shrink gracefully on narrow screens instead of overflowing. */
   flex: 1 1 400px;
-  max-width: 475px;
+  max-width: 420px;
   box-sizing: border-box;
 }
 
@@ -40,6 +38,42 @@
   margin: 0 0 4px 0;
 }
 
+/* Trending card — amber/gold scheme to visually separate trending topics.
+   Replaces the default teal (#EBF7F8) background with a warm tone so
+   trending items are immediately scannable without needing to read the
+   modal's "Trending: Yes" label. */
+.topic-card--trending {
+  background-color: #fffbeb;
+  border-color: #fcd34d;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(251, 191, 36, 0.3);
+  position: relative;
+}
+
+.topic-card--trending::before {
+  content: "🔥 Trending";
+  position: absolute;
+  top: -1px;
+  right: 14px;
+  background-color: #f59e0b;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 3px 10px;
+  border-radius: 0 0 6px 6px;
+  line-height: 1.4;
+}
+
+.topic-card--trending .topic-title { color: #78350f; }
+
+.topic-card--trending .topic-subheading { color: #92400e; }
+
+.topic-card--trending .topic-description-text { color: #92400e; }
+
+.topic-card--trending .read-more-btn { color: #b45309; }
+
+.topic-card--trending .read-more-btn:hover { color: #d97706; }
+
 .topic-subheading {
   font-size: 15px;
   font-weight: 600;
@@ -47,9 +81,7 @@
   margin: 0 0 12px 0;
 }
 
-.topic-body {
-  margin-top: 8px;
-}
+.topic-body { margin-top: 8px; }
 
 .topic-description-text {
   font-size: 14px;
@@ -74,7 +106,7 @@
   text-decoration: underline;
 }
 
-/* Modal Overlay & Card */
+/* Modal */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -114,9 +146,7 @@
   line-height: 1;
 }
 
-.modal-close-btn:hover {
-  color: #374151;
-}
+.modal-close-btn:hover { color: #374151; }
 
 .modal-title {
   font-size: 22px;
@@ -139,7 +169,6 @@
   margin: 16px 0;
 }
 
-/* Handles HTML Content Rendered inside Modal */
 .modal-body {
   overflow-y: auto;
   font-size: 15px;
@@ -148,30 +177,8 @@
   padding-right: 8px;
 }
 
-.modal-body p {
-  margin: 0 0 12px 0;
-}
-
-.modal-body p:last-child {
-  margin-bottom: 0;
-}
-
-.modal-trending {
-  margin-top: 12px;
-}
-
-.modal-trending p {
-  font-size: 14px;
-  font-weight: 600;
-  color: #1f2937;
-  margin: 0;
-}
-
-.modal-trending span {
-  color: #490A3D;
-  font-weight: 700;
-  text-transform: uppercase;
-}
+.modal-body p { margin: 0 0 12px 0; }
+.modal-body p:last-child { margin-bottom: 0; }
 
 .modal-footer {
   display: flex;
@@ -190,11 +197,9 @@
   cursor: pointer;
 }
 
-.modal-action-btn:hover {
-  background-color: #d1d5db;
-}
+.modal-action-btn:hover { background-color: #d1d5db; }
 
-/* Skeleton & No Topics States */
+/* Skeleton & Empty */
 .no-topics {
   text-align: center;
   padding: 40px;
@@ -221,55 +226,40 @@
 }
 
 @keyframes pulse {
-  0% {
-    opacity: 1;
-  }
-
-  50% {
-    opacity: 0.5;
-  }
-
-  100% {
-    opacity: 1;
-  }
+  0%   { opacity: 1; }
+  50%  { opacity: 0.5; }
+  100% { opacity: 1; }
 }
+
 /* ── Responsive ────────────────────────────────────── */
 
-/* Tablet (≤768px): full-width cards, tighter heading */
+@media (max-width: 1100px) {
+  .topic-list-container {
+    padding: 32px;
+  }
+}
+
 @media (max-width: 768px) {
   .topic-list-container {
-    padding: 16px;
+    padding: 24px;
   }
-
   .topic-list-heading {
     font-size: 24px;
     margin-bottom: 20px;
   }
-
   .topic-card {
     flex: 1 1 100%;
     max-width: 100%;
   }
 }
 
-/* Mobile (≤480px) */
 @media (max-width: 480px) {
   .topic-list-container {
-    padding: 12px;
+    padding: 24px;
   }
-
-  .topic-list-heading {
-    font-size: 20px;
-  }
-
-  .topic-card {
-    padding: 14px;
-  }
-
-  .topic-title {
-    font-size: 17px;
-  }
-
+  .topic-list-heading { font-size: 20px; }
+  .topic-card { padding: 14px; }
+  .topic-title { font-size: 17px; }
   .modal-content {
     padding: 16px;
     max-height: 92vh;
