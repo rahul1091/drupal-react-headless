@@ -15,9 +15,9 @@
         }
     ],
     "scripts": {
-        "dev": "npm --prefix web/themes/custom/react_theme/react-app run dev",
-        "build": "npm --prefix web/themes/custom/react_theme/react-app run build",
-        "watch": "npm --prefix web/themes/custom/react_theme/react-app run watch"
+        "dev": "npm --prefix web/themes/custom/react_theme/react-headless run dev",
+        "build": "npm --prefix web/themes/custom/react_theme/react-headless run build",
+        "watch": "npm --prefix web/themes/custom/react_theme/react-headless run watch"
     },
     "require": {
         "composer/installers": "^2.3",

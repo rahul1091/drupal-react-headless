@@ -44,7 +44,8 @@
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  gap: 32px;
+  justify-content: space-evenly;
+  gap: 16px;
   width: 100%;
 }
 
@@ -54,7 +55,7 @@
   border: 1px solid #e5e7eb;
   padding: 24px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  min-width: 375px;
+  width: 25%;
 }
 
 .card-header {
@@ -92,7 +93,7 @@
 }
 
 .topics-card {
-  width: 100%;
+  width: 65%;
   background-color: #ffffff;
   border-radius: 8px;
   border: 1px solid #e5e7eb;
@@ -117,7 +118,9 @@
   transition: background-color 0.2s;
 }
 
-.dashboard-topic-card:hover { background-color: #031634; }
+.dashboard-topic-card:hover {
+  background-color: #031634;
+}
 
 .dashboard-topic-card h3 {
   font-size: 20px;
@@ -155,10 +158,14 @@
   font-weight: 500;
 }
 
-.link-action:hover { text-decoration: underline; }
+.link-action:hover {
+  text-decoration: underline;
+}
 
 /* Table Styling */
-.table-responsive { overflow-x: auto; }
+.table-responsive {
+  overflow-x: auto;
+}
 
 .dashboard-table {
   width: 100%;
@@ -180,8 +187,14 @@
   color: #374151;
 }
 
-.font-medium { font-weight: 500; color: #111827; }
-.text-muted { color: #6b7280; }
+.font-medium {
+  font-weight: 500;
+  color: #111827;
+}
+
+.text-muted {
+  color: #6b7280;
+}
 
 /* Badges */
 .badge {
@@ -192,8 +205,15 @@
   border-radius: 9999px;
 }
 
-.badge-success { background-color: #d1fae5; color: #065f46; }
-.badge-warning { background-color: #fef3c7; color: #92400e; }
+.badge-success {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.badge-warning {
+  background-color: #fef3c7;
+  color: #92400e;
+}
 
 /* User Info & Quick Links */
 .user-info-body {
@@ -210,10 +230,18 @@
   border-bottom: 1px solid #f9fafb;
 }
 
-.info-label { color: #6b7280; }
-.info-value { font-weight: 600; color: #111827; }
+.info-label {
+  color: #6b7280;
+}
 
-.quick-links { margin-top: 16px; }
+.info-value {
+  font-weight: 600;
+  color: #111827;
+}
+
+.quick-links {
+  margin-top: 16px;
+}
 
 .quick-links h3 {
   font-size: 14px;
@@ -235,7 +263,9 @@
   transition: background-color 0.2s;
 }
 
-.quick-link-item:hover { background-color: #eff6ff; }
+.quick-link-item:hover {
+  background-color: #eff6ff;
+}
 
 /* Shared Buttons & Spinners */
 .btn {
@@ -252,11 +282,29 @@
   transition: background-color 0.2s;
 }
 
-.btn-primary { background-color: #2563eb; color: #ffffff; }
-.btn-primary:hover { background-color: #1d4ed8; }
-.btn-ghost { background-color: transparent; color: #4b5563; }
-.btn-ghost:hover { background-color: #f3f4f6; color: #111827; }
-.btn-xs { padding: 4px 8px; font-size: 12px; }
+.btn-primary {
+  background-color: #2563eb;
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background-color: #1d4ed8;
+}
+
+.btn-ghost {
+  background-color: transparent;
+  color: #4b5563;
+}
+
+.btn-ghost:hover {
+  background-color: #f3f4f6;
+  color: #111827;
+}
+
+.btn-xs {
+  padding: 4px 8px;
+  font-size: 12px;
+}
 
 .spinner {
   width: 20px;
@@ -267,9 +315,16 @@
   animation: spin 0.8s linear infinite;
 }
 
-.spinner-lg { width: 40px; height: 40px; }
+.spinner-lg {
+  width: 40px;
+  height: 40px;
+}
 
-@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 
 /* Project Tracker nav card */
 .dashboard-tasks-nav {
@@ -305,12 +360,18 @@
   .dashboard-container {
     padding: 32px;
   }
-  .userinfo-topics-wrapper {
+
+  .dashboard-content-grid .userinfo-topics-wrapper {
     flex-direction: column;
   }
+
   .userinfo-card {
-    min-width: unset;
-    width: 100%;
+    width: auto;
+    min-width: 375px;
+  }
+
+  .topics-card {
+    width: calc(100vw - 112px);
   }
 }
 
@@ -318,17 +379,23 @@
   .dashboard-container {
     padding: 24px;
   }
-  .dashboard-header h1 { font-size: 22px; }
+
+  .dashboard-header h1 {
+    font-size: 22px;
+  }
+
   .dashboard-tasks-nav {
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
     padding: 16px;
   }
+
   .dashboard-tasks-nav .add-topic-btn {
     width: 100%;
     text-align: center;
   }
+
   .card-header {
     flex-wrap: wrap;
     gap: 8px;
@@ -339,15 +406,24 @@
   .dashboard-container {
     padding: 24px;
   }
-  .dashboard-header h1 { font-size: 20px; }
+
+  .dashboard-header h1 {
+    font-size: 20px;
+  }
+
   .userinfo-card,
   .topics-card {
     padding: 16px;
+    min-width: calc(100vw - 80px);
   }
+
   .dashboard-topic-card {
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
   }
-  .dashboard-topic-card h3 { font-size: 17px; }
+
+  .dashboard-topic-card h3 {
+    font-size: 17px;
+  }
 }

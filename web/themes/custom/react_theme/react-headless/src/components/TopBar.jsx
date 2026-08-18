@@ -93,8 +93,8 @@ export default function TopBar() {
               </button>
             </div>
           ) : (
-            <Link to="/login" className="btn btn-primary btn-sm">
-              Log in
+            <Link to="/login" className="btn-login">
+              Sign In
             </Link>
           )}
         </nav>
