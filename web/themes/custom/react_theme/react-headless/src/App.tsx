@@ -6,8 +6,6 @@ import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import DashboardPage from "./pages/DashboardPage";
-
-// 1. Import your new Task components
 import TaskList from "./components/TaskList";
 import CreateTask from "./components/CreateTask";
 import EditTask from "./components/EditTask";
@@ -59,7 +57,7 @@ function AppLayout() {
             }
           />
 
-          {/* 2. Add Task List and Create Task protected routes */}
+          {/* Task List page - full standalone view */}
           <Route
             path="/tasks"
             element={

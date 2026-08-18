@@ -34,7 +34,7 @@ export function AuthProvider({ children }) {
       lastname: currentUser.lastname,
       role: currentUser.role,
       isAdmin: !!currentUser.isAdmin,
-      created: currentUser.created,
+      isSuperAdmin: !!currentUser.isSuperAdmin,
     });
   };
 

@@ -51,52 +51,54 @@ export default function TopBar() {
 
   return (
     <header className="app-topbar">
-      <Link to="/" className="app-topbar__brand">
-        🗂 Drupal React CMS
-      </Link>
+      <div className="app-topbar__inner">
+        <Link to="/" className="app-topbar__brand">
+          🗂 Drupal React CMS
+        </Link>
 
-      <nav className="app-topbar__nav">
-        {user && isHomePage && (
-          <Link to="/dashboard" className="nav-link nav-link--dashboard">
-            Go to Dashboard
-          </Link>
-        )}
+        <nav className="app-topbar__nav">
+          {user && isHomePage && (
+            <Link to="/dashboard" className="nav-link nav-link--dashboard">
+              Go to Dashboard
+            </Link>
+          )}
 
-        {user ? (
-          <div className="app-topbar__user-section">
-            <div className="app-topbar__avatar" title={displayName}>
-              {getInitials()}
-            </div>
-            <button
-              className="logout-btn"
-              onClick={handleLogout}
-              disabled={isLoggingOut}
-            >
-              <svg
-                className="logout-btn__icon"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
+          {user ? (
+            <div className="app-topbar__user-section">
+              <div className="app-topbar__avatar" title={displayName}>
+                {getInitials()}
+              </div>
+              <button
+                className="logout-btn"
+                onClick={handleLogout}
+                disabled={isLoggingOut}
               >
-                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                <polyline points="16 17 21 12 16 7" />
-                <line x1="21" y1="12" x2="9" y2="12" />
-              </svg>
-              {isLoggingOut ? "Logging out..." : "Log out"}
-            </button>
-          </div>
-        ) : (
-          <Link to="/login" className="btn btn-primary btn-sm">
-            Log in
-          </Link>
-        )}
-      </nav>
+                <svg
+                  className="logout-btn__icon"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                  <polyline points="16 17 21 12 16 7" />
+                  <line x1="21" y1="12" x2="9" y2="12" />
+                </svg>
+                {isLoggingOut ? "Logging out..." : "Log out"}
+              </button>
+            </div>
+          ) : (
+            <Link to="/login" className="btn btn-primary btn-sm">
+              Log in
+            </Link>
+          )}
+        </nav>
+      </div>
     </header>
   );
 }

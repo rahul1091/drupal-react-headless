@@ -1,6 +1,6 @@
 /* Container & List Layout */
 .topic-list-container {
-  max-width: 1600px;
+  max-width: 1920px;
   margin: 0 auto;
   padding: 20px;
   font-family: var(--font-family);
@@ -26,8 +26,11 @@
   border-radius: 8px;
   padding: 20px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  /* Fluid cards: grow to fill available space but never exceed ~475px,
+     and shrink gracefully on narrow screens instead of overflowing. */
+  flex: 1 1 400px;
   max-width: 475px;
-  min-width: 425px;
+  box-sizing: border-box;
 }
 
 .topic-title {
@@ -228,5 +231,47 @@
 
   100% {
     opacity: 1;
+  }
+}
+/* ── Responsive ────────────────────────────────────── */
+
+/* Tablet (≤768px): full-width cards, tighter heading */
+@media (max-width: 768px) {
+  .topic-list-container {
+    padding: 16px;
+  }
+
+  .topic-list-heading {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  .topic-card {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+}
+
+/* Mobile (≤480px) */
+@media (max-width: 480px) {
+  .topic-list-container {
+    padding: 12px;
+  }
+
+  .topic-list-heading {
+    font-size: 20px;
+  }
+
+  .topic-card {
+    padding: 14px;
+  }
+
+  .topic-title {
+    font-size: 17px;
+  }
+
+  .modal-content {
+    padding: 16px;
+    max-height: 92vh;
   }
 }
