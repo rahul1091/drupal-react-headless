@@ -146,3 +146,20 @@
     transform: rotate(360deg);
   }
 }
+/* ── Responsive ────────────────────────────────────── */
+
+@media (max-width: 480px) {
+  .login-wrapper {
+    padding: 16px;
+    align-items: flex-start;
+    padding-top: 32px;
+  }
+
+  .login-card {
+    padding: 24px 20px;
+  }
+
+  .login-card h1 {
+    font-size: 20px;
+  }
+}

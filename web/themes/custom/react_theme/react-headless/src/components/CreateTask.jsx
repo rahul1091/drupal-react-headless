@@ -45,7 +45,7 @@ export default function CreateTask() {
 
     try {
       await addTask(formData);
-      navigate("/dashboard");
+      navigate("/tasks");
     } catch (err) {
       console.error("Failed to create task:", err);
       alert("Failed to save task. Please check network or authentication.");
@@ -67,10 +67,10 @@ export default function CreateTask() {
           <button
             type="button"
             className="btn-secondary btn-back"
-            onClick={() => navigate("/dashboard")}
+            onClick={() => navigate("/tasks")}
             disabled={isSubmitting}
           >
-            <span aria-hidden="true">&larr;</span> Back to Dashboard
+            <span aria-hidden="true">&larr;</span> Back to Tasks
           </button>
         </div>
 
@@ -110,7 +110,7 @@ export default function CreateTask() {
               </option>
               {users.map((u) => (
                 <option key={u.uid} value={u.uid}>
-                  {u.fullname}
+                  {u.fullname || u.name}
                 </option>
               ))}
             </select>
@@ -202,7 +202,7 @@ export default function CreateTask() {
             <button
               type="button"
               className="btn-secondary"
-              onClick={() => navigate("/dashboard")}
+              onClick={() => navigate("/tasks")}
               disabled={isSubmitting}
             >
               Cancel

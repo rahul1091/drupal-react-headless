@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { getTopics } from "../api/client";
 import "../css/dashboard.css";
-import TaskList from "../components/TaskList";
 
 export default function DashboardPage() {
   const { user } = useAuth();
@@ -88,10 +87,6 @@ export default function DashboardPage() {
                 <span className="info-label">User Role:</span>
                 <span className="info-value">{user?.role || "N/A"}</span>
               </div>
-              <div className="info-row">
-                <span className="info-label">Account Created:</span>
-                <span className="info-value">{user?.created || "N/A"}</span>
-              </div>
             </div>
           </div>
 
@@ -136,7 +131,23 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <TaskList />
+      <div className="dashboard-tasks-nav">
+        <div className="tasks-nav-info">
+          <h2>Project Tracker</h2>
+          <p>
+            {user?.isSuperAdmin
+              ? "View and manage all tasks across all users."
+              : "View and manage tasks assigned to you."}
+          </p>
+        </div>
+        <button
+          type="button"
+          className="add-topic-btn"
+          onClick={() => navigate("/tasks")}
+        >
+          View Task List →
+        </button>
+      </div>
 
       {/* Detail Modal */}
       {selectedTopic && (

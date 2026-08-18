@@ -72,7 +72,7 @@ export default function EditTask() {
 
     try {
       await updateTask(id, formData);
-      navigate("/dashboard");
+      navigate("/tasks");
     } catch (err) {
       console.error("Failed to update task:", err);
       alert(err.message || "Failed to save changes. Please try again.");
@@ -100,9 +100,9 @@ export default function EditTask() {
             <button
               type="button"
               className="btn-secondary"
-              onClick={() => navigate("/dashboard")}
+              onClick={() => navigate("/tasks")}
             >
-              Back to Dashboard
+              Back to Tasks
             </button>
           </div>
         </div>
@@ -129,10 +129,10 @@ export default function EditTask() {
           <button
             type="button"
             className="btn-secondary btn-back"
-            onClick={() => navigate("/dashboard")}
+            onClick={() => navigate("/tasks")}
             disabled={isSubmitting}
           >
-            <span aria-hidden="true">&larr;</span> Back to Dashboard
+            <span aria-hidden="true">&larr;</span> Back to Tasks
           </button>
         </div>
 
@@ -237,7 +237,7 @@ export default function EditTask() {
             <button
               type="button"
               className="btn-secondary"
-              onClick={() => navigate("/dashboard")}
+              onClick={() => navigate("/tasks")}
               disabled={isSubmitting}
             >
               Cancel
