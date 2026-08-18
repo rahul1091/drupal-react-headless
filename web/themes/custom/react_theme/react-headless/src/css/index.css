@@ -67,7 +67,7 @@ body {
   text-align: center;
   line-height: 1;
   margin-top: 0;
-  margin-bottom: 24px;
+  margin-bottom: 8px;
 }
 
 /* ── Responsive ────────────────────────────────────── */
@@ -76,6 +76,7 @@ body {
   .home-page {
     padding: 24px;
   }
+
   .home-page-title {
     font-size: 36px;
   }
@@ -85,6 +86,7 @@ body {
   .home-page {
     padding: 24px;
   }
+
   .home-page-title {
     font-size: 28px;
   }
