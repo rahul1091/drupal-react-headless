@@ -52,7 +52,10 @@ function TopicList() {
             : plainText;
 
           return (
-            <div key={topic.id || index} className="topic-card">
+            <div
+              key={topic.id || index}
+              className={`topic-card${topic.trending === "yes" ? " topic-card--trending" : ""}`}
+            >
               <h3 className="topic-title">{topic.title}</h3>
               {topic.subheading && (
                 <h4 className="topic-subheading">{topic.subheading}</h4>
@@ -65,7 +68,7 @@ function TopicList() {
                       onClick={() => setSelectedTopic(topic)}
                       className="read-more-btn"
                     >
-                      Read More
+                      Read More...
                     </button>
                   )}
                 </div>
@@ -98,13 +101,6 @@ function TopicList() {
               className="modal-body"
               dangerouslySetInnerHTML={{ __html: selectedTopic.description }}
             />
-            <div className="modal-trending">
-              {selectedTopic.trending && (
-                <p>
-                  Trending Status: <span>{selectedTopic.trending}</span>
-                </p>
-              )}
-            </div>
             <div className="modal-footer">
               <button
                 onClick={() => setSelectedTopic(null)}

@@ -2,7 +2,7 @@
 .dashboard-container {
   max-width: 1920px;
   margin: 0 auto;
-  padding: 2rem 1.5rem;
+  padding: 48px;
 }
 
 .dashboard-loading {
@@ -17,21 +17,21 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 2rem;
+  margin-bottom: 32px;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 16px;
 }
 
 .dashboard-header h1 {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.75rem;
+  margin: 0 0 8px 0;
+  font-size: 28px;
   font-weight: 700;
   color: #111827;
 }
 
 .dashboard-header p {
   margin: 0;
-  font-size: 0.95rem;
+  font-size: 15px;
   color: #6b7280;
 }
 
@@ -50,7 +50,7 @@
 
 .userinfo-card {
   background-color: #ffffff;
-  border-radius: 0.5rem;
+  border-radius: 8px;
   border: 1px solid #e5e7eb;
   padding: 24px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
@@ -61,13 +61,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.25rem;
-  padding-bottom: 0.75rem;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
   border-bottom: 1px solid #f3f4f6;
 }
 
 .card-header h2 {
-  font-size: 1.125rem;
+  font-size: 18px;
   font-weight: 600;
   margin: 0;
   color: #111827;
@@ -77,9 +77,9 @@
   background-color: #2563eb;
   color: #ffffff;
   border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 0.375rem;
-  font-size: 0.85rem;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.15s ease;
@@ -94,7 +94,7 @@
 .topics-card {
   width: 100%;
   background-color: #ffffff;
-  border-radius: 0.5rem;
+  border-radius: 8px;
   border: 1px solid #e5e7eb;
   padding: 24px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
@@ -112,14 +112,12 @@
   align-items: center;
   justify-content: space-between;
   background-color: #668284;
-  border-radius: 0.5rem;
+  border-radius: 8px;
   padding: 16px;
   transition: background-color 0.2s;
 }
 
-.dashboard-topic-card:hover {
-  background-color: #031634;
-}
+.dashboard-topic-card:hover { background-color: #031634; }
 
 .dashboard-topic-card h3 {
   font-size: 20px;
@@ -151,271 +149,205 @@
 }
 
 .link-action {
-  font-size: 0.875rem;
+  font-size: 14px;
   color: #2563eb;
   text-decoration: none;
   font-weight: 500;
 }
 
-.link-action:hover {
-  text-decoration: underline;
-}
+.link-action:hover { text-decoration: underline; }
 
 /* Table Styling */
-.table-responsive {
-  overflow-x: auto;
-}
+.table-responsive { overflow-x: auto; }
 
 .dashboard-table {
   width: 100%;
   border-collapse: collapse;
   text-align: left;
-  font-size: 0.875rem;
+  font-size: 14px;
 }
 
 .dashboard-table th {
-  padding: 0.75rem 0.5rem;
+  padding: 12px 8px;
   color: #6b7280;
   font-weight: 500;
   border-bottom: 1px solid #e5e7eb;
 }
 
 .dashboard-table td {
-  padding: 0.875rem 0.5rem;
+  padding: 14px 8px;
   border-bottom: 1px solid #f3f4f6;
   color: #374151;
 }
 
-.font-medium {
-  font-weight: 500;
-  color: #111827;
-}
-
-.text-muted {
-  color: #6b7280;
-}
+.font-medium { font-weight: 500; color: #111827; }
+.text-muted { color: #6b7280; }
 
 /* Badges */
 .badge {
   display: inline-block;
-  padding: 0.25rem 0.625rem;
-  font-size: 0.75rem;
+  padding: 4px 10px;
+  font-size: 12px;
   font-weight: 600;
   border-radius: 9999px;
 }
 
-.badge-success {
-  background-color: #d1fae5;
-  color: #065f46;
-}
-
-.badge-warning {
-  background-color: #fef3c7;
-  color: #92400e;
-}
+.badge-success { background-color: #d1fae5; color: #065f46; }
+.badge-warning { background-color: #fef3c7; color: #92400e; }
 
 /* User Info & Quick Links */
 .user-info-body {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 16px;
 }
 
 .info-row {
   display: flex;
   justify-content: space-between;
-  font-size: 0.875rem;
-  padding-bottom: 0.5rem;
+  font-size: 14px;
+  padding-bottom: 8px;
   border-bottom: 1px solid #f9fafb;
 }
 
-.info-label {
-  color: #6b7280;
-}
+.info-label { color: #6b7280; }
+.info-value { font-weight: 600; color: #111827; }
 
-.info-value {
-  font-weight: 600;
-  color: #111827;
-}
-
-.quick-links {
-  margin-top: 1rem;
-}
+.quick-links { margin-top: 16px; }
 
 .quick-links h3 {
-  font-size: 0.875rem;
+  font-size: 14px;
   font-weight: 600;
   color: #374151;
-  margin-bottom: 0.75rem;
+  margin-bottom: 12px;
 }
 
 .quick-link-item {
   display: block;
-  padding: 0.625rem 0.75rem;
-  margin-bottom: 0.5rem;
+  padding: 10px 12px;
+  margin-bottom: 8px;
   background-color: #f9fafb;
-  border-radius: 0.375rem;
+  border-radius: 6px;
   color: #2563eb;
-  font-size: 0.875rem;
+  font-size: 14px;
   text-decoration: none;
   font-weight: 500;
   transition: background-color 0.2s;
 }
 
-.quick-link-item:hover {
-  background-color: #eff6ff;
-}
+.quick-link-item:hover { background-color: #eff6ff; }
 
 /* Shared Buttons & Spinners */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.5rem 1rem;
-  font-size: 0.875rem;
+  padding: 8px 16px;
+  font-size: 14px;
   font-weight: 500;
-  border-radius: 0.375rem;
+  border-radius: 6px;
   text-decoration: none;
   cursor: pointer;
   border: none;
   transition: background-color 0.2s;
 }
 
-.btn-primary {
-  background-color: #2563eb;
-  color: #ffffff;
-}
-
-.btn-primary:hover {
-  background-color: #1d4ed8;
-}
-
-.btn-ghost {
-  background-color: transparent;
-  color: #4b5563;
-}
-
-.btn-ghost:hover {
-  background-color: #f3f4f6;
-  color: #111827;
-}
-
-.btn-xs {
-  padding: 0.25rem 0.5rem;
-  font-size: 0.75rem;
-}
+.btn-primary { background-color: #2563eb; color: #ffffff; }
+.btn-primary:hover { background-color: #1d4ed8; }
+.btn-ghost { background-color: transparent; color: #4b5563; }
+.btn-ghost:hover { background-color: #f3f4f6; color: #111827; }
+.btn-xs { padding: 4px 8px; font-size: 12px; }
 
 .spinner {
-  width: 1.25rem;
-  height: 1.25rem;
+  width: 20px;
+  height: 20px;
   border: 2px solid rgba(37, 99, 235, 0.2);
   border-top-color: #2563eb;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
 
-.spinner-lg {
-  width: 2.5rem;
-  height: 2.5rem;
-}
+.spinner-lg { width: 40px; height: 40px; }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-/* Project Tracker nav card on the dashboard */
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Project Tracker nav card */
 .dashboard-tasks-nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
-  margin-top: 1.5rem;
-  padding: 1.25rem 1.5rem;
+  gap: 16px;
+  margin-top: 24px;
+  padding: 20px 24px;
   background: #ffffff;
   border: 1px solid #e5e7eb;
   border-left: 4px solid #2563eb;
-  border-radius: 0.5rem;
+  border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
 .tasks-nav-info h2 {
-  margin: 0 0 0.2rem;
-  font-size: 1rem;
+  margin: 0 0 3px;
+  font-size: 16px;
   font-weight: 600;
   color: #111827;
 }
 
 .tasks-nav-info p {
   margin: 0;
-  font-size: 0.825rem;
+  font-size: 13px;
   color: #6b7280;
 }
 
 /* ── Responsive ────────────────────────────────────── */
 
-/* Large tablet (≤1100px): stack userinfo above topics */
 @media (max-width: 1100px) {
+  .dashboard-container {
+    padding: 32px;
+  }
   .userinfo-topics-wrapper {
     flex-direction: column;
   }
-
   .userinfo-card {
     min-width: unset;
     width: 100%;
   }
 }
 
-/* Tablet (≤768px): tighten container padding and heading size */
 @media (max-width: 768px) {
   .dashboard-container {
-    padding: 1.25rem 1rem;
+    padding: 24px;
   }
-
-  .dashboard-header h1 {
-    font-size: 1.4rem;
-  }
-
+  .dashboard-header h1 { font-size: 22px; }
   .dashboard-tasks-nav {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.75rem;
-    padding: 1rem;
+    gap: 12px;
+    padding: 16px;
   }
-
   .dashboard-tasks-nav .add-topic-btn {
     width: 100%;
     text-align: center;
   }
-
   .card-header {
     flex-wrap: wrap;
-    gap: 0.5rem;
+    gap: 8px;
   }
 }
 
-/* Mobile (≤480px): full-width cards, reduce padding */
 @media (max-width: 480px) {
   .dashboard-container {
-    padding: 1rem 0.75rem;
+    padding: 24px;
   }
-
-  .dashboard-header h1 {
-    font-size: 1.2rem;
-  }
-
+  .dashboard-header h1 { font-size: 20px; }
   .userinfo-card,
   .topics-card {
     padding: 16px;
   }
-
   .dashboard-topic-card {
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
   }
-
-  .dashboard-topic-card h3 {
-    font-size: 17px;
-  }
+  .dashboard-topic-card h3 { font-size: 17px; }
 }
