@@ -193,6 +193,7 @@ class UserLogin extends ResourceBase
 						// derive admin-gated UI from the 'role' display string above.
 						'isAdmin' => $isAdmin,
 						'isSuperAdmin' => $isSuperAdmin,
+						'created' => date('d-M-Y', $user->getCreatedTime()),
 					],
 					'csrf_token' => $this->csrfToken->get('rest'),
 				];

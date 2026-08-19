@@ -87,6 +87,10 @@ export default function DashboardPage() {
                 <span className="info-label">User Role:</span>
                 <span className="info-value">{user?.role || "N/A"}</span>
               </div>
+							<div className="info-row">
+                <span className="info-label">Account Created:</span>
+                <span className="info-value">{user?.created || "N/A"}</span>
+              </div>
             </div>
           </div>
 
