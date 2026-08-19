@@ -35,7 +35,7 @@ export default function LoginPage() {
   return (
     <div className="login-wrapper">
       <div className="login-card">
-        <h1>Sign in</h1>
+        <h1>Sign In</h1>
         <p>Use your Drupal account to manage Project Tracker</p>
 
         {error && <div className="alert alert-error">{error}</div>}
@@ -72,10 +72,10 @@ export default function LoginPage() {
 
           <button
             type="submit"
-            className="btn btn-primary login-btn"
+            className="btn-login btn-sign-in"
             disabled={loading}
           >
-            {loading ? <span className="spinner" /> : "Sign in"}
+            {loading ? <span className="spinner" /> : "Sign In"}
           </button>
         </form>
 
@@ -86,7 +86,7 @@ export default function LoginPage() {
 
         <button
           type="button"
-          className="btn btn-secondary register-btn"
+          className="btn-login btn-login-register"
           onClick={() => navigate("/register")}
         >
           Create New Account

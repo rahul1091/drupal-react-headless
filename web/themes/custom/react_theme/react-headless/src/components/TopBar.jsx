@@ -88,7 +88,9 @@ export default function TopBar() {
                   {/* Identity row */}
                   <div className="avatar-dropdown__header">
                     <span className="avatar-dropdown__name">{displayName}</span>
-                    <span className="avatar-dropdown__role">{user?.role || "User"}</span>
+                    <span className="avatar-dropdown__role">
+                      {user?.role || "User"}
+                    </span>
                   </div>
 
                   <div className="avatar-dropdown__divider" />
@@ -100,9 +102,17 @@ export default function TopBar() {
                     role="menuitem"
                     onClick={() => setDropdownOpen(false)}
                   >
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
-                      stroke="currentColor" strokeWidth="2" strokeLinecap="round"
-                      strokeLinejoin="round" aria-hidden="true">
+                    <svg
+                      width="15"
+                      height="15"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden="true"
+                    >
                       <rect x="3" y="3" width="7" height="7" />
                       <rect x="14" y="3" width="7" height="7" />
                       <rect x="14" y="14" width="7" height="7" />
@@ -120,21 +130,29 @@ export default function TopBar() {
                     onClick={handleLogout}
                     disabled={isLoggingOut}
                   >
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
-                      stroke="currentColor" strokeWidth="2" strokeLinecap="round"
-                      strokeLinejoin="round" aria-hidden="true">
+                    <svg
+                      width="15"
+                      height="15"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden="true"
+                    >
                       <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
                       <polyline points="16 17 21 12 16 7" />
                       <line x1="21" y1="12" x2="9" y2="12" />
                     </svg>
-                    {isLoggingOut ? "Logging out..." : "Log out"}
+                    {isLoggingOut ? "Logging out..." : "Log Out"}
                   </button>
                 </div>
               )}
             </div>
           ) : (
-            <Link to="/login" className="btn btn-primary">
-              Log in
+            <Link to="/login" className="btn-login">
+              Sign In
             </Link>
           )}
         </nav>
