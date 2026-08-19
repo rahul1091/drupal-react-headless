@@ -158,11 +158,7 @@ export default function RegisterPage() {
           </div>
 
           {/* Submit Button */}
-          <button
-            type="submit"
-            className="btn btn-primary register-btn"
-            disabled={loading}
-          >
+          <button type="submit" className="btn-register" disabled={loading}>
             {loading ? <span className="spinner" /> : "Register"}
           </button>
         </form>

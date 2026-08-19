@@ -59,7 +59,7 @@ export default function DashboardPage() {
       <div className="dashboard-header">
         <div>
           <h1>Welcome back {displayName}! 👋</h1>
-          <p>Manage your account and explore active topics.</p>
+          <p>Manage your account and explore active topics & current tasks.</p>
         </div>
       </div>
 
@@ -87,7 +87,7 @@ export default function DashboardPage() {
                 <span className="info-label">User Role:</span>
                 <span className="info-value">{user?.role || "N/A"}</span>
               </div>
-							<div className="info-row">
+              <div className="info-row">
                 <span className="info-label">Account Created:</span>
                 <span className="info-value">{user?.created || "N/A"}</span>
               </div>
