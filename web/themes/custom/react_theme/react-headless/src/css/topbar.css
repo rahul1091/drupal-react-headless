@@ -17,7 +17,6 @@
 	gap: 16px;
 }
 
-/* Brand — white on dark blue */
 .app-topbar__brand {
 	font-size: 18px;
 	font-weight: 700;
@@ -37,59 +36,7 @@
 	gap: 16px;
 }
 
-/* Generic nav link — muted-blue text on dark bar */
-.nav-link {
-	font-size: 14px;
-	font-weight: 500;
-	color: #bfdbfe;
-	text-decoration: none;
-	padding: 6px 12px;
-	border-radius: 6px;
-	transition: background-color 0.2s, color 0.2s;
-	white-space: nowrap;
-	align-self: center;
-	width: auto;
-}
-
-.nav-link:hover {
-	background-color: rgba(255, 255, 255, 0.1);
-	color: #ffffff;
-}
-
-.nav-link.active {
-	color: #ffffff;
-	font-weight: 600;
-	background-color: rgba(255, 255, 255, 0.15);
-}
-
-/* "Go to Dashboard" pill — inverted white pill so it pops on the dark bar */
-.nav-link--dashboard {
-	display: inline-flex;
-	align-items: center;
-	gap: 6px;
-	padding: 6px 14px;
-	border-radius: 999px;
-	color: #0f2d5e;
-	font-weight: 700;
-	border: none;
-	background-color: #ffffff;
-	white-space: nowrap;
-	transition: background-color 0.2s ease, transform 0.15s ease;
-}
-
-.nav-link--dashboard:hover {
-	background-color: #dbeafe;
-	color: #1e40af;
-	transform: translateY(-1px);
-}
-
-.app-topbar__user {
-	font-size: 14px;
-	font-weight: 500;
-	color: #bfdbfe;
-}
-
-/* "Log in" — white fill on dark bar so it reads as a clear CTA */
+/* "Log in" / "Sign In" button */
 .btn-login {
 	background-color: #F7FFF7;
 	color: #0f2d5e;
@@ -124,11 +71,6 @@
 		padding: 10px 24px;
 		gap: 12px;
 	}
-
-	.nav-link--dashboard {
-		padding: 5px 11px;
-		font-size: 13px;
-	}
 }
 
 @media (max-width: 480px) {
@@ -148,7 +90,6 @@
 	position: relative;
 }
 
-/* Avatar is now a button — keep the same visual but add cursor + focus */
 .app-topbar__avatar {
 	width: 40px;
 	height: 40px;
@@ -180,7 +121,6 @@
 	outline-offset: 3px;
 }
 
-/* Dropdown panel */
 .avatar-dropdown {
 	position: absolute;
 	top: calc(100% + 10px);
@@ -191,24 +131,15 @@
 	border-radius: 10px;
 	box-shadow: 0 10px 24px rgba(0, 0, 0, 0.14), 0 2px 6px rgba(0, 0, 0, 0.08);
 	overflow: hidden;
-	/* Animate in */
 	animation: dropdown-in 0.14s ease;
 	z-index: 200;
 }
 
 @keyframes dropdown-in {
-	from {
-		opacity: 0;
-		transform: translateY(-6px);
-	}
-
-	to {
-		opacity: 1;
-		transform: translateY(0);
-	}
+	from { opacity: 0; transform: translateY(-6px); }
+	to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Identity row at the top of the dropdown */
 .avatar-dropdown__header {
 	padding: 14px 16px 12px;
 	display: flex;
@@ -236,7 +167,6 @@
 	margin: 0;
 }
 
-/* Menu items — shared base */
 .avatar-dropdown__item {
 	display: flex;
 	align-items: center;
@@ -261,7 +191,6 @@
 	color: #111827;
 }
 
-/* Danger variant for Logout */
 .avatar-dropdown__item--danger {
 	color: #dc2626;
 }
@@ -276,7 +205,6 @@
 	cursor: not-allowed;
 }
 
-/* Responsive — dropdown stays right-aligned on all screen sizes */
 @media (max-width: 480px) {
 	.avatar-dropdown {
 		min-width: 180px;
