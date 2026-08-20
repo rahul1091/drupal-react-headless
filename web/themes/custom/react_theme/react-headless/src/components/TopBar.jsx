@@ -11,8 +11,6 @@ export default function TopBar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
-  const isHomePage = location.pathname === "/";
-
   const displayName =
     [user?.firstname, user?.lastname].filter(Boolean).join(" ") ||
     user?.name ||

@@ -58,16 +58,6 @@
 	box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
-.alert-error {
-	background-color: #fef2f2;
-	border: 1px solid #fecaca;
-	color: #dc2626;
-	padding: 10px 14px;
-	border-radius: 6px;
-	font-size: 14px;
-	margin-bottom: 20px;
-}
-
 /* Buttons */
 .btn-login {
 	width: 100%;
@@ -123,28 +113,11 @@
 	font-weight: 500;
 }
 
-.spinner {
-	display: inline-block;
-	width: 16px;
-	height: 16px;
-	border: 2px solid rgba(255, 255, 255, 0.3);
-	border-radius: 50%;
-	border-top-color: #ffffff;
-	animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin {
-	to {
-		transform: rotate(360deg);
-	}
-}
-
 /* ── Responsive ────────────────────────────────────── */
 
 @media (max-width: 768px) {
 	.login-wrapper {
 		padding: 24px;
-		align-items: flex-start;
 		padding-top: 40px;
 	}
 }
