@@ -13,7 +13,10 @@ import axios from "axios";
 /** Resolve the Drupal base URL: prefer drupalSettings (theme-embedded mode),
  *  fall back to the Vite env var (standalone dev-server mode). */
 function getBaseUrl() {
-  if (typeof window !== "undefined" && window.drupalSettings?.reactApp?.baseUrl) {
+  if (
+    typeof window !== "undefined" &&
+    window.drupalSettings?.reactApp?.baseUrl
+  ) {
     return window.drupalSettings.reactApp.baseUrl;
   }
   return import.meta.env.VITE_DRUPAL_API_URL || "";
@@ -29,6 +32,10 @@ const API_URL = axios.create({
 
 /** Attach the CSRF token to every mutating request. */
 API_URL.interceptors.request.use((config) => {
+	// config.params = {
+	// 	...config.params,
+	// 	langcode: localStorage.getItem("langcode") || "en",
+	// };
   const method = config.method?.toUpperCase();
   if (["POST", "PATCH", "PUT", "DELETE"].includes(method)) {
     const drupalToken = window.drupalSettings?.reactApp?.csrfToken;
@@ -70,8 +77,10 @@ export const loginUser = async (email, password) => {
 
   const result = response.data?.result || response.data;
 
-  if (result?.csrf_token) sessionStorage.setItem("csrf_token", result.csrf_token);
-  if (result?.logout_token) sessionStorage.setItem("logout_token", result.logout_token);
+  if (result?.csrf_token)
+    sessionStorage.setItem("csrf_token", result.csrf_token);
+  if (result?.logout_token)
+    sessionStorage.setItem("logout_token", result.logout_token);
 
   return result?.current_user || result;
 };
@@ -87,10 +96,15 @@ export const logoutUser = async (token) => {
 
   try {
     if (logoutToken) {
-      await API_URL.post(`/user/logout?_format=json&token=${encodeURIComponent(logoutToken)}`);
+      await API_URL.post(
+        `/user/logout?_format=json&token=${encodeURIComponent(logoutToken)}`,
+      );
     }
   } catch (error) {
-    console.warn("Server logout request failed, clearing local session anyway.", error);
+    console.warn(
+      "Server logout request failed, clearing local session anyway.",
+      error,
+    );
   } finally {
     sessionStorage.removeItem("csrf_token");
     sessionStorage.removeItem("logout_token");
@@ -113,7 +127,15 @@ export const registerUser = async (userData) => {
 // Topics (landing_page content)
 // ---------------------------------------------------------------------------
 
-export const getTopics = async () => API_URL.get("/api/topiclist?_format=json");
+// export const getTopics = async () => API_URL.get("/api/topiclist?_format=json");
+
+export const getTopics = async (langcode = "en") =>
+  API_URL.get("/api/topiclist", {
+    params: {
+      _format: "json",
+      langcode,
+    },
+  });
 
 export const addTopic = async (topicData) => {
   const payload = {
@@ -137,7 +159,8 @@ export const getUsers = async () => API_URL.get("/api/user-list?_format=json");
 
 export const getTasks = async () => API_URL.get("/api/task-list?_format=json");
 
-export const getTaskById = async (id) => API_URL.get(`/api/task/${id}?_format=json`);
+export const getTaskById = async (id) =>
+  API_URL.get(`/api/task/${id}?_format=json`);
 
 export const updateTask = async (id, taskData) => {
   const payload = {

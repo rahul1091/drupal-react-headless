@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { getTopics } from "../api/client";
 import "../css/dashboard.css";
+import { useTranslation } from "react-i18next";
 
 export default function DashboardPage() {
   const { user } = useAuth();
@@ -11,12 +12,13 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedTopic, setSelectedTopic] = useState(null);
+	const { t, i18n } = useTranslation();
 
   const displayName =
     [user?.firstname, user?.lastname].filter(Boolean).join(" ") || "User";
 
   useEffect(() => {
-    getTopics()
+    getTopics(i18n.language)
       .then((response) => {
         const rawData = response.data.result || [];
 
@@ -39,7 +41,7 @@ export default function DashboardPage() {
         setError("Failed to load trending topics.");
       })
       .finally(() => setLoading(false));
-  }, []);
+  }, [i18n.language]);
 
   if (loading) {
     return (
@@ -58,8 +60,8 @@ export default function DashboardPage() {
       {/* Welcome Banner */}
       <div className="dashboard-header">
         <div>
-          <h1>Welcome back {displayName}! 👋</h1>
-          <p>Manage your account and explore active topics & current tasks.</p>
+          <h1>{t("app.welcomeBack")} {displayName}! 👋</h1>
+          <p>{t("dashboard.description")}</p>
         </div>
       </div>
 
@@ -68,27 +70,27 @@ export default function DashboardPage() {
           {/* User Information Panel */}
           <div className="userinfo-card">
             <div className="card-header">
-              <h2>User Account Information</h2>
+              <h2>{t("user.userInformation")}</h2>
             </div>
             <div className="user-info-body">
               <div className="info-row">
-                <span className="info-label">User ID:</span>
+                <span className="info-label">{t("user.userId")}:</span>
                 <span className="info-value">{user?.id || "N/A"}</span>
               </div>
               <div className="info-row">
-                <span className="info-label">Username:</span>
+                <span className="info-label">{t("user.username")}:</span>
                 <span className="info-value">{user?.name || "N/A"}</span>
               </div>
               <div className="info-row">
-                <span className="info-label">Email:</span>
+                <span className="info-label">{t("user.email")}:</span>
                 <span className="info-value">{user?.email || "N/A"}</span>
               </div>
               <div className="info-row">
-                <span className="info-label">User Role:</span>
+                <span className="info-label">{t("user.role")}:</span>
                 <span className="info-value">{user?.role || "N/A"}</span>
               </div>
               <div className="info-row">
-                <span className="info-label">Account Created:</span>
+                <span className="info-label">{t("user.accountCreated")}:</span>
                 <span className="info-value">{user?.created || "N/A"}</span>
               </div>
             </div>
@@ -97,14 +99,14 @@ export default function DashboardPage() {
           {/* Trending Topics Section */}
           <div className="topics-card">
             <div className="card-header">
-              <h2>Trending Topics ({topics.length})</h2>
+              <h2>{t("dashboard.trendingTopics")} ({topics.length})</h2>
               {user?.isAdmin && (
                 <button
                   type="button"
                   className="add-topic-btn"
                   onClick={() => navigate("/add-topic")}
                 >
-                  + Add Topic
+                  + {t("topic.addTopic")}
                 </button>
               )}
             </div>
@@ -112,7 +114,7 @@ export default function DashboardPage() {
             {error ? (
               <div className="alert alert-error">{error}</div>
             ) : topics.length === 0 ? (
-              <div className="no-topics">No trending topics found.</div>
+              <div className="no-topics">{t("dashboard.noTopicsFound")}</div>
             ) : (
               <div className="dashboard-topic-grid">
                 {topics.map((topic, index) => (
@@ -125,7 +127,7 @@ export default function DashboardPage() {
                       <h4>{topic.subheading}</h4>
                     </div>
                     <button onClick={() => setSelectedTopic(topic)}>
-                      Read More...
+                      {t("dashboard.readMore")}
                     </button>
                   </div>
                 ))}
@@ -137,11 +139,11 @@ export default function DashboardPage() {
 
       <div className="dashboard-tasks-nav">
         <div className="tasks-nav-info">
-          <h2>Project Tracker</h2>
+          <h2>{t("dashboard.projectTracker")}</h2>
           <p>
             {user?.isSuperAdmin
-              ? "View and manage all tasks across all users."
-              : "View and manage tasks assigned to you."}
+              ? t("dashboard.projectTrackerDescription")
+              : t("dashboard.description")}
           </p>
         </div>
         <button
@@ -149,7 +151,7 @@ export default function DashboardPage() {
           className="add-topic-btn"
           onClick={() => navigate("/tasks")}
         >
-          View Task List →
+          {t("dashboard.viewTaskList")}
         </button>
       </div>
 
@@ -183,7 +185,7 @@ export default function DashboardPage() {
                 onClick={() => setSelectedTopic(null)}
                 className="modal-action-btn"
               >
-                Close
+                {t("common.close")}
               </button>
             </div>
           </div>

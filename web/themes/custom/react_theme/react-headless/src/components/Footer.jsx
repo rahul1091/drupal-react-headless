@@ -1,8 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "../css/footer.css";
+import { useTranslation } from "react-i18next";
 
 export default function Footer() {
+  const { t } = useTranslation();
   const year = new Date().getFullYear();
 
   return (
@@ -12,33 +14,33 @@ export default function Footer() {
           <span className="app-footer__logo">🗂</span>
           <span className="app-footer__name">Drupal React CMS</span>
           <p className="app-footer__tagline">
-            A headless CMS built on Drupal&nbsp;11 and React&nbsp;19.
+            {t("footer.description")}
           </p>
         </div>
 
         <div className="app-footer__links">
           <div className="app-footer__col">
-            <h4>Navigation</h4>
+            <h4>{t("navigation.navigation")}</h4>
             <ul>
               <li>
-                <Link to="/">Home</Link>
+                <Link to="/"> {t("navigation.home")} </Link>
               </li>
               <li>
-                <Link to="/dashboard">Dashboard</Link>
+                <Link to="/dashboard"> {t("navigation.dashboard")} </Link>
               </li>
               <li>
-                <Link to="/tasks">Task List</Link>
+                <Link to="/tasks"> {t("navigation.tasks")} </Link>
               </li>
             </ul>
           </div>
           <div className="app-footer__col">
-            <h4>Account</h4>
+            <h4>{t("account")}</h4>
             <ul>
               <li>
-                <Link to="/login">Log In</Link>
+                <Link to="/login"> {t("navigation.login")} </Link>
               </li>
               <li>
-                <Link to="/register">Register</Link>
+                <Link to="/register"> {t("navigation.register")} </Link>
               </li>
             </ul>
           </div>
@@ -47,7 +49,7 @@ export default function Footer() {
 
       <div className="app-footer__bottom">
         <p>
-          &copy; {year} Rahul Khan. Built with{" "}
+          &copy; {year} Rahul Khan. {t("footer.builtWith")}{" "}
           <a href="https://www.drupal.org" target="_blank" rel="noreferrer">
             Drupal
           </a>{" "}

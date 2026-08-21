@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { registerUser } from "../api/client";
 import "../css/register.css";
+import { useTranslation } from "react-i18next";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
+	const { t } = useTranslation();
 
   // Form State
   const [formData, setFormData] = useState({
@@ -82,8 +84,8 @@ export default function RegisterPage() {
   return (
     <div className="register-wrapper">
       <div className="register-card">
-        <h1>Create Account</h1>
-        <p>Register a new user account for Project Tracker</p>
+        <h1>{t("authentication.createAccount")}</h1>
+        <p>{t("authentication.registerDescription")}</p>
 
         {error && <div className="alert alert-error">{error}</div>}
         {success && <div className="alert alert-success">{success}</div>}
@@ -92,7 +94,7 @@ export default function RegisterPage() {
           {/* First & Last Name Grid */}
           <div className="form-group">
             <label className="form-label" htmlFor="firstname">
-              First Name
+              {t("common.firstName")}
             </label>
             <input
               id="firstname"
@@ -108,7 +110,7 @@ export default function RegisterPage() {
 
           <div className="form-group">
             <label className="form-label" htmlFor="lastname">
-              Last Name
+              {t("common.lastName")}
             </label>
             <input
               id="lastname"
@@ -123,7 +125,7 @@ export default function RegisterPage() {
           {/* Email */}
           <div className="form-group">
             <label className="form-label" htmlFor="email">
-              Email Address
+              {t("common.emailAddress")}
             </label>
             <input
               id="email"
@@ -140,7 +142,7 @@ export default function RegisterPage() {
           {/* Password */}
           <div className="form-group">
             <label className="form-label" htmlFor="password">
-              Password
+              {t("common.password")}
             </label>
             <input
               id="password"
@@ -153,21 +155,21 @@ export default function RegisterPage() {
               disabled={loading}
             />
             <small className="form-hint">
-              Must be 8+ chars with uppercase, lowercase, and a number.
+              {t("authentication.passwordRequirement")}
             </small>
           </div>
 
           {/* Submit Button */}
           <button type="submit" className="btn-register" disabled={loading}>
-            {loading ? <span className="spinner" /> : "Register"}
+            {loading ? <span className="spinner" /> : t("authentication.register")}
           </button>
         </form>
 
         {/* Back to Login Link */}
         <div className="auth-footer">
-          <span>Already have an account? </span>
+          <span>{t("authentication.alreadyHaveAccount")}</span>
           <Link to="/login" className="auth-link">
-            Sign in
+            {t("authentication.signIn")}
           </Link>
         </div>
       </div>

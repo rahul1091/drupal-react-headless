@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { addTopic } from "../api/client";
 import "../css/tasklist.css";
+import { useTranslation } from "react-i18next";
 
 export default function AddTopic() {
+	const { t } = useTranslation();
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
@@ -41,10 +43,9 @@ export default function AddTopic() {
       <div className="create-task-card">
         <div className="create-task-header">
           <div>
-            <h2>Add New Topic</h2>
+            <h2>{t("topic.addNewTopic")}</h2>
             <p className="create-task-subtitle">
-              Fields marked <span className="required">*</span> are required.
-              Visible to everyone once saved.
+              <span className="required">*</span> {t("common.requiredFields")}
             </p>
           </div>
           <button
@@ -53,7 +54,7 @@ export default function AddTopic() {
             onClick={() => navigate("/dashboard")}
             disabled={isSubmitting}
           >
-            <span aria-hidden="true">&larr;</span> Back to Dashboard
+            <span aria-hidden="true">&larr;</span> {t("common.backToDashboard")}
           </button>
         </div>
 
@@ -61,7 +62,7 @@ export default function AddTopic() {
           {/* Title */}
           <div className="form-group">
             <label htmlFor="title">
-              Title <span className="required">*</span>
+              {t("common.title")} <span className="required">*</span>
             </label>
             <input
               type="text"
@@ -70,21 +71,21 @@ export default function AddTopic() {
               value={formData.title}
               onChange={handleInputChange}
               required
-              placeholder="Enter topic title"
+              placeholder={t("topic.enterTitle")}
               disabled={isSubmitting}
             />
           </div>
 
           {/* Sub Heading */}
           <div className="form-group">
-            <label htmlFor="subheading">Sub Heading</label>
+            <label htmlFor="subheading">{t("topic.subHeading")}</label>
             <input
               type="text"
               id="subheading"
               name="subheading"
               value={formData.subheading}
               onChange={handleInputChange}
-              placeholder="Enter a short sub heading"
+              placeholder={t("topic.enterSubHeading")}
               disabled={isSubmitting}
             />
           </div>
@@ -93,7 +94,7 @@ export default function AddTopic() {
           <div className="form-group">
             <div className="form-label-row">
               <label htmlFor="description">
-                Description <span className="required">*</span>
+                {t("topic.description")} <span className="required">*</span>
               </label>
               <span className="char-count">
                 {formData.description.length} characters
@@ -106,7 +107,7 @@ export default function AddTopic() {
               onChange={handleInputChange}
               rows="4"
               required
-              placeholder="Enter topic description"
+              placeholder={t("topic.enterDescription")}
               disabled={isSubmitting}
             />
           </div>
@@ -114,7 +115,7 @@ export default function AddTopic() {
           {/* Trending */}
           <div className="form-group">
             <label htmlFor="trending">
-              Trending <span className="required">*</span>
+              {t("topic.trending")} <span className="required">*</span>
             </label>
             <select
               id="trending"
@@ -124,8 +125,8 @@ export default function AddTopic() {
               required
               disabled={isSubmitting}
             >
-              <option value="yes">Yes</option>
-              <option value="no">No</option>
+              <option value="yes">{t("topic.yes")}</option>
+              <option value="no">{t("topic.no")}</option>
             </select>
           </div>
 
@@ -137,14 +138,14 @@ export default function AddTopic() {
               onClick={() => navigate("/dashboard")}
               disabled={isSubmitting}
             >
-              Cancel
+              {t("common.cancel")}
             </button>
             <button
               type="submit"
               className="btn-primary"
               disabled={isSubmitting}
             >
-              {isSubmitting ? "Saving..." : "Save Topic"}
+              {isSubmitting ? t("common.saving") : t("topic.saveTopic")}
             </button>
           </div>
         </form>

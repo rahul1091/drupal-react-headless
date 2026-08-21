@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import "../css/topbar.css";
+import { useTranslation } from "react-i18next";
 
 export default function TopBar() {
   const { user, logout } = useAuth() || {};
@@ -10,6 +11,7 @@ export default function TopBar() {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+	const { i18n, t } = useTranslation();
 
   const displayName =
     [user?.firstname, user?.lastname].filter(Boolean).join(" ") ||
@@ -43,6 +45,12 @@ export default function TopBar() {
     }
   };
 
+	const handleLanguageChange = (e) => {
+		const lang = e.target.value;
+		i18n.changeLanguage(lang);
+		localStorage.setItem("langcode", lang);
+	};
+
   // Close the dropdown when the user clicks outside of it
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -66,94 +74,107 @@ export default function TopBar() {
           🗂 Drupal React CMS
         </Link>
 
-        <nav className="app-topbar__nav">
-          {user ? (
-            /* Avatar dropdown — the only visible element for logged-in users.
+        <div className="app-topbar__actions">
+          <nav className="app-topbar__nav">
+            {user ? (
+              /* Avatar dropdown — the only visible element for logged-in users.
                Dashboard + Logout both live inside the dropdown menu. */
-            <div className="avatar-menu" ref={dropdownRef}>
-              <button
-                className={`app-topbar__avatar${dropdownOpen ? " app-topbar__avatar--open" : ""}`}
-                title={displayName}
-                aria-haspopup="true"
-                aria-expanded={dropdownOpen}
-                onClick={() => setDropdownOpen((prev) => !prev)}
-              >
-                {getInitials()}
-              </button>
+              <div className="avatar-menu" ref={dropdownRef}>
+                <button
+                  className={`app-topbar__avatar${dropdownOpen ? " app-topbar__avatar--open" : ""}`}
+                  title={displayName}
+                  aria-haspopup="true"
+                  aria-expanded={dropdownOpen}
+                  onClick={() => setDropdownOpen((prev) => !prev)}
+                >
+                  {getInitials()}
+                </button>
 
-              {dropdownOpen && (
-                <div className="avatar-dropdown" role="menu">
-                  {/* Identity row */}
-                  <div className="avatar-dropdown__header">
-                    <span className="avatar-dropdown__name">{displayName}</span>
-                    <span className="avatar-dropdown__role">
-                      {user?.role || "User"}
-                    </span>
+                {dropdownOpen && (
+                  <div className="avatar-dropdown" role="menu">
+                    {/* Identity row */}
+                    <div className="avatar-dropdown__header">
+                      <span className="avatar-dropdown__name">
+                        {displayName}
+                      </span>
+                      <span className="avatar-dropdown__role">
+                        {user?.role || "User"}
+                      </span>
+                    </div>
+
+                    <div className="avatar-dropdown__divider" />
+
+                    {/* Dashboard link — shown on all pages so it's always reachable */}
+                    <Link
+                      to="/dashboard"
+                      className="avatar-dropdown__item"
+                      role="menuitem"
+                      onClick={() => setDropdownOpen(false)}
+                    >
+                      <svg
+                        width="15"
+                        height="15"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        aria-hidden="true"
+                      >
+                        <rect x="3" y="3" width="7" height="7" />
+                        <rect x="14" y="3" width="7" height="7" />
+                        <rect x="14" y="14" width="7" height="7" />
+                        <rect x="3" y="14" width="7" height="7" />
+                      </svg>
+                      Dashboard
+                    </Link>
+
+                    <div className="avatar-dropdown__divider" />
+
+                    {/* Logout */}
+                    <button
+                      className="avatar-dropdown__item avatar-dropdown__item--danger"
+                      role="menuitem"
+                      onClick={handleLogout}
+                      disabled={isLoggingOut}
+                    >
+                      <svg
+                        width="15"
+                        height="15"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                        <polyline points="16 17 21 12 16 7" />
+                        <line x1="21" y1="12" x2="9" y2="12" />
+                      </svg>
+                      {isLoggingOut ? t("authentication.loggingOut") : t("authentication.logOut")}
+                    </button>
                   </div>
+                )}
+              </div>
+            ) : (
+              <Link to="/login" className="btn-login">
+                {t("authentication.signIn")}
+              </Link>
+            )}
+          </nav>
 
-                  <div className="avatar-dropdown__divider" />
-
-                  {/* Dashboard link — shown on all pages so it's always reachable */}
-                  <Link
-                    to="/dashboard"
-                    className="avatar-dropdown__item"
-                    role="menuitem"
-                    onClick={() => setDropdownOpen(false)}
-                  >
-                    <svg
-                      width="15"
-                      height="15"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      aria-hidden="true"
-                    >
-                      <rect x="3" y="3" width="7" height="7" />
-                      <rect x="14" y="3" width="7" height="7" />
-                      <rect x="14" y="14" width="7" height="7" />
-                      <rect x="3" y="14" width="7" height="7" />
-                    </svg>
-                    Dashboard
-                  </Link>
-
-                  <div className="avatar-dropdown__divider" />
-
-                  {/* Logout */}
-                  <button
-                    className="avatar-dropdown__item avatar-dropdown__item--danger"
-                    role="menuitem"
-                    onClick={handleLogout}
-                    disabled={isLoggingOut}
-                  >
-                    <svg
-                      width="15"
-                      height="15"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      aria-hidden="true"
-                    >
-                      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                      <polyline points="16 17 21 12 16 7" />
-                      <line x1="21" y1="12" x2="9" y2="12" />
-                    </svg>
-                    {isLoggingOut ? "Logging out..." : "Log Out"}
-                  </button>
-                </div>
-              )}
-            </div>
-          ) : (
-            <Link to="/login" className="btn-login">
-              Sign In
-            </Link>
-          )}
-        </nav>
+					<select
+						className="language-switcher"
+						value={i18n.language}
+						onChange={handleLanguageChange}
+					>
+						<option value="en">EN</option>
+						<option value="de">DE</option>
+					</select>
+        </div>
       </div>
     </header>
   );

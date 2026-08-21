@@ -1,0 +1,125 @@
+{
+  "_comment": "Deutsche Übersetzungen",
+
+  "app": {
+    "siteTitle": "Drupal React CMS",
+    "welcomeHeading": "Willkommen beim Drupal-React-Headless-Projekt",
+    "welcomeBack": "Willkommen zurück",
+    "loadingLogout": "Abmeldung läuft..."
+  },
+
+  "navigation": {
+    "home": "Startseite",
+    "dashboard": "Dashboard",
+    "tasks": "Aufgabenliste",
+    "topics": "Themenliste",
+		"navigation": "Navigation",
+    "account": "Konto",
+		"login": "Anmelden",
+		"register": "Registrieren"
+  },
+
+  "authentication": {
+    "signIn": "Anmelden",
+    "logIn": "Anmelden",
+    "logOut": "Abmelden",
+		"loggingOut": "Abmeldung läuft...",
+    "register": "Registrieren",
+    "createAccount": "Konto erstellen",
+    "createNewAccount": "Neues Konto erstellen",
+    "loginDescription": "Verwenden Sie Ihr Drupal-Konto, um den Projekt-Tracker zu verwalten.",
+    "registerDescription": "Registrieren Sie ein neues Benutzerkonto für den Projekt-Tracker.",
+    "dontHaveAccount": "Sie haben noch kein Konto?",
+    "alreadyHaveAccount": "Sie haben bereits ein Konto?",
+    "passwordRequirement": "Mindestens 8 Zeichen mit Großbuchstaben, Kleinbuchstaben und einer Zahl."
+  },
+
+  "user": {
+    "user": "Benutzer",
+    "superAdmin": "Superadministrator",
+    "userInformation": "Benutzerkontoinformationen",
+    "userId": "Benutzer-ID",
+    "username": "Benutzername",
+    "email": "E-Mail",
+    "role": "Benutzerrolle",
+    "accountCreated": "Konto erstellt"
+  },
+
+  "dashboard": {
+    "description": "Verwalten Sie Ihr Konto und entdecken Sie aktive Themen sowie aktuelle Aufgaben.",
+    "trendingTopics": "Trendthemen",
+    "projectTracker": "Projekt-Tracker",
+    "projectTrackerDescription": "Alle Aufgaben aller Benutzer anzeigen und verwalten.",
+    "viewTaskList": "Aufgabenliste anzeigen",
+    "readMore": "Mehr lesen...",
+    "noTopicsFound": "Keine Themen gefunden."
+  },
+
+  "topic": {
+		"topicList": "Themenliste",
+    "addTopic": "Thema hinzufügen",
+    "addNewTopic": "Neues Thema hinzufügen",
+    "title": "Titel",
+    "subHeading": "Unterüberschrift",
+    "description": "Beschreibung",
+    "enterTitle": "Thementitel eingeben",
+    "enterSubHeading": "Kurze Unterüberschrift eingeben",
+    "enterDescription": "Themenbeschreibung eingeben",
+    "saveTopic": "Thema speichern",
+    "trending": "Trendthema",
+    "no": "Nein",
+    "yes": "Ja"
+  },
+
+  "task": {
+    "createTask": "Neue Projekt-Tracker-Aufgabe erstellen",
+    "title": "Titel",
+    "description": "Beschreibung",
+    "assignTo": "Zuweisen an",
+    "selectUser": "Benutzer auswählen",
+    "enterTitle": "Aufgabentitel eingeben",
+    "enterDescription": "Detaillierte Beschreibung eingeben",
+    "dueDate": "Fälligkeitsdatum",
+    "saveTask": "Aufgabe speichern"
+  },
+
+  "status": {
+		"title": "Status",
+    "open": "Offen",
+    "inProgress": "In Bearbeitung",
+    "completed": "Abgeschlossen",
+    "cancelled": "Abgesagt"
+  },
+
+  "severity": {
+		"title": "Schwere",
+    "low": "Niedrig",
+    "medium": "Mittel",
+    "high": "Hoch",
+    "critical": "Kritisch"
+  },
+
+  "common": {
+    "title": "Titel",
+    "description": "Beschreibung",
+    "status": "Status",
+    "severity": "Priorität",
+    "email": "E-Mail",
+    "emailAddress": "E-Mail-Adresse",
+    "password": "Passwort",
+    "firstName": "Vorname",
+    "lastName": "Nachname",
+    "characters": "Zeichen",
+    "requiredFields": "Mit einem Sternchen gekennzeichnete Felder sind Pflichtfelder.",
+    "cancel": "Abbrechen",
+    "close": "Schließen",
+    "backToDashboard": "Zurück zum Dashboard",
+    "backToTasks": "Zurück zu den Aufgaben",
+		"saving": "Speichern..."
+  },
+
+  "footer": {
+    "description": "Ein Headless-CMS, entwickelt mit Drupal 11 und React 19.",
+    "builtWith": "Entwickelt mit"
+  }
+}

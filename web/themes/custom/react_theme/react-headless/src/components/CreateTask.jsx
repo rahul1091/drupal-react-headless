@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { addTask, getUsers } from "../api/client";
 import "../css/tasklist.css";
+import { useTranslation } from "react-i18next";
 
 export default function CreateTask() {
+	const { t } = useTranslation();
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
@@ -59,9 +61,9 @@ export default function CreateTask() {
       <div className="create-task-card">
         <div className="create-task-header">
           <div>
-            <h2>Create New Project Tracker Task</h2>
+            <h2>{t("task.createTask")}</h2>
             <p className="create-task-subtitle">
-              Fields marked <span className="required">*</span> are required.
+              <span className="required">*</span> {t("common.requiredFields")}
             </p>
           </div>
           <button
@@ -70,7 +72,7 @@ export default function CreateTask() {
             onClick={() => navigate("/tasks")}
             disabled={isSubmitting}
           >
-            <span aria-hidden="true">&larr;</span> Back to Tasks
+            <span aria-hidden="true">&larr;</span> {t("common.backToTasks")}
           </button>
         </div>
 
@@ -78,7 +80,7 @@ export default function CreateTask() {
           {/* Title */}
           <div className="form-group">
             <label htmlFor="title">
-              Title <span className="required">*</span>
+              {t("task.title")} <span className="required">*</span>
             </label>
             <input
               type="text"
@@ -87,7 +89,7 @@ export default function CreateTask() {
               value={formData.title}
               onChange={handleInputChange}
               required
-              placeholder="Enter task title"
+              placeholder={t("task.enterTitle")}
               disabled={isSubmitting}
             />
           </div>
@@ -95,7 +97,7 @@ export default function CreateTask() {
           {/* Assign To */}
           <div className="form-group">
             <label htmlFor="assigned_to">
-              Assign To <span className="required">*</span>
+              {t("task.assignTo")} <span className="required">*</span>
             </label>
             <select
               id="assigned_to"
@@ -106,7 +108,7 @@ export default function CreateTask() {
               disabled={isSubmitting || usersLoading || !!usersError}
             >
               <option value="" disabled>
-                {usersLoading ? "Loading users..." : "Select a user"}
+                {usersLoading ? t("loadingUsers") : t("task.selectUser")}
               </option>
               {users.map((u) => (
                 <option key={u.uid} value={u.uid}>
@@ -121,7 +123,7 @@ export default function CreateTask() {
           <div className="form-group">
             <div className="form-label-row">
               <label htmlFor="description">
-                Description <span className="required">*</span>
+                {t("task.description")} <span className="required">*</span>
               </label>
               <span className="char-count">
                 {formData.description.length} characters
@@ -134,7 +136,7 @@ export default function CreateTask() {
               onChange={handleInputChange}
               rows="4"
               required
-              placeholder="Enter detailed description"
+              placeholder={t("task.enterDescription")}
               disabled={isSubmitting}
             />
           </div>
@@ -145,7 +147,7 @@ export default function CreateTask() {
           <div className="form-row form-row--3col">
             <div className="form-group">
               <label htmlFor="due_date">
-                Due Date <span className="required">*</span>
+                {t("task.dueDate")} <span className="required">*</span>
               </label>
               <input
                 type="date"
@@ -160,7 +162,7 @@ export default function CreateTask() {
 
             <div className="form-group">
               <label htmlFor="severity">
-                Severity <span className="required">*</span>
+                {t("common.severity")} <span className="required">*</span>
               </label>
               <select
                 id="severity"
@@ -170,16 +172,16 @@ export default function CreateTask() {
                 required
                 disabled={isSubmitting}
               >
-                <option value="low">Low</option>
-                <option value="medium">Medium</option>
-                <option value="high">High</option>
-                <option value="critical">Critical</option>
+                <option value="low">{t("severity.low")}</option>
+                <option value="medium">{t("severity.medium")}</option>
+                <option value="high">{t("severity.high")}</option>
+                <option value="critical">{t("severity.critical")}</option>
               </select>
             </div>
 
             <div className="form-group">
               <label htmlFor="status">
-                Status <span className="required">*</span>
+                {t("common.status")} <span className="required">*</span>
               </label>
               <select
                 id="status"
@@ -189,10 +191,10 @@ export default function CreateTask() {
                 required
                 disabled={isSubmitting}
               >
-                <option value="open">Open</option>
-                <option value="in_progress">In Progress</option>
-                <option value="completed">Completed</option>
-                <option value="cancelled">Cancelled</option>
+                <option value="open">{t("status.open")}</option>
+                <option value="in_progress">{t("status.inProgress")}</option>
+                <option value="completed">{t("status.completed")}</option>
+                <option value="cancelled">{t("status.cancelled")}</option>
               </select>
             </div>
           </div>
@@ -205,14 +207,14 @@ export default function CreateTask() {
               onClick={() => navigate("/tasks")}
               disabled={isSubmitting}
             >
-              Cancel
+              {t("common.cancel")}
             </button>
             <button
               type="submit"
               className="btn-primary"
               disabled={isSubmitting}
             >
-              {isSubmitting ? "Saving..." : "Save Task"}
+              {isSubmitting ? t("saving") : t("task.saveTask")}
             </button>
           </div>
         </form>
