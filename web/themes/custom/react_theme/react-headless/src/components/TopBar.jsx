@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import "../css/topbar.css";
 import { useTranslation } from "react-i18next";
+import { getLanguages } from "../api/client";
 
 export default function TopBar() {
   const { user, logout } = useAuth() || {};
@@ -12,6 +13,21 @@ export default function TopBar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 	const { i18n, t } = useTranslation();
+	const [languages, setLanguages] = useState([]);
+
+	useEffect(() => {
+		const fetchLanguages = async () => {
+			try {
+				const response = await getLanguages();
+				setLanguages(response.data.result);
+			} catch (error) {
+				console.error("Failed to fetch languages:", error);
+			}
+		};
+		fetchLanguages();
+	}, []);
+
+	console.log("Available languages:", languages);
 
   const displayName =
     [user?.firstname, user?.lastname].filter(Boolean).join(" ") ||
@@ -171,8 +187,11 @@ export default function TopBar() {
 						value={i18n.language}
 						onChange={handleLanguageChange}
 					>
-						<option value="en">EN</option>
-						<option value="de">DE</option>
+						{languages.map((lang) => (
+							<option key={lang.langcode} value={lang.langcode}>
+								{lang.name}
+							</option>
+						))}
 					</select>
         </div>
       </div>
