@@ -3,7 +3,7 @@
 
   "app": {
     "siteTitle": "Drupal React CMS",
-    "welcomeHeading": "Willkommen beim Drupal-React-Headless-Projekt",
+    "welcomeHeading": "Willkommen beim Drupal-React Headless Projekt",
     "welcomeBack": "Willkommen zurück",
     "loadingLogout": "Abmeldung läuft..."
   },
@@ -13,17 +13,17 @@
     "dashboard": "Dashboard",
     "tasks": "Aufgabenliste",
     "topics": "Themenliste",
-		"navigation": "Navigation",
+    "navigation": "Navigation",
     "account": "Konto",
-		"login": "Anmelden",
-		"register": "Registrieren"
+    "login": "Anmelden",
+    "register": "Registrieren"
   },
 
   "authentication": {
     "signIn": "Anmelden",
     "logIn": "Anmelden",
     "logOut": "Abmelden",
-		"loggingOut": "Abmeldung läuft...",
+    "loggingOut": "Abmeldung läuft...",
     "register": "Registrieren",
     "createAccount": "Konto erstellen",
     "createNewAccount": "Neues Konto erstellen",
@@ -52,11 +52,11 @@
     "projectTrackerDescription": "Alle Aufgaben aller Benutzer anzeigen und verwalten.",
     "viewTaskList": "Aufgabenliste anzeigen",
     "readMore": "Mehr lesen...",
-    "noTopicsFound": "Keine Themen gefunden."
+    "noTopicsFound": "Keine Themen Gefunden."
   },
 
   "topic": {
-		"topicList": "Themenliste",
+    "topicList": "Themenliste",
     "addTopic": "Thema hinzufügen",
     "addNewTopic": "Neues Thema hinzufügen",
     "title": "Titel",
@@ -84,7 +84,7 @@
   },
 
   "status": {
-		"title": "Status",
+    "title": "Status",
     "open": "Offen",
     "inProgress": "In Bearbeitung",
     "completed": "Abgeschlossen",
@@ -92,7 +92,7 @@
   },
 
   "severity": {
-		"title": "Schwere",
+    "title": "Schwere",
     "low": "Niedrig",
     "medium": "Mittel",
     "high": "Hoch",
@@ -115,7 +115,7 @@
     "close": "Schließen",
     "backToDashboard": "Zurück zum Dashboard",
     "backToTasks": "Zurück zu den Aufgaben",
-		"saving": "Speichern..."
+    "saving": "Speichern..."
   },
 
   "footer": {

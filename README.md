@@ -1,177 +1,391 @@
 # Drupal + React Headless CMS
 
-A monorepo: a Drupal 11 backend exposing custom REST endpoints, consumed by a
-React 19 SPA that is embedded inside a custom Drupal theme (`react_theme`).
+A monorepo that combines a **Drupal 10/11 backend** with a **React 18 single-page application (SPA)** embedded in a custom Drupal theme. The project exposes custom REST resources for managing **Articles** and **Project Trackers**, while Drupal remains the content, authentication, permissions, and API layer.
 
-> **Note on this README:** an earlier version of this file described a
-> different, more ambitious architecture (a `content_api` module with full
-> Articles + Project Tracker CRUD, a CORS event subscriber, exported
-> `config/sync/` permissions, etc.). None of that existed in the actual
-> codebase — the real module is `apiservices`. This version documents what
-> is actually here, including task assignment/editing and admin-only topic
-> creation.
+## Key Features
 
----
+- Drupal 10 backend managed through Composer
+- React 18 frontend located inside a custom Drupal theme
+- Single-repository architecture for backend and frontend code
+- Custom REST API module for Articles and Project Trackers
+- Public read access for Project Tracker content
+- Authenticated create, update, and delete operations
+- Drupal session or HTTP Basic authentication support
+- CSRF protection for mutating requests
+- Filtering and pagination for Project Tracker collections
+- Automated local bootstrap through `scripts/setup.sh`
+
+## Architecture
+
+```text
+Browser
+|
+v
+React 18 SPA
+|
+| Axios / JSON / Drupal session
+v
+Custom Drupal REST resources
+|
+v
+Drupal entities, permissions, and database
+```
+
+Drupal acts as the CMS and API provider. React consumes Drupal's JSON endpoints and renders the user interface. Production frontend assets can be built and served through the custom Drupal theme, while the Vite development server can be used during frontend development.
 
 ## Repository Structure
 
-```
+```text
 drupal-react-headless/
-├── composer.json                              ← pins Drupal core to ^11.4
-├── scripts/setup.sh                          ← bootstrapper (Drupal install + npm build)
+├── composer.json
+├── composer.lock
+├── db_backup/
+├── scripts/
+│ └── setup.sh
 └── web/
-    ├── modules/custom/apiservices/            ← custom REST module (declares core_version_requirement: ^10 || ^11,
-    │   │                                        though composer.json above fixes the actual site to 11)
-    │   ├── apiservices.info.yml
-    │   ├── apiservices.install                 ← creates field_assigned_to via update hook
-    │   ├── apiservices.services.yml            ← registers CrossOriginSessionCookieSubscriber
-    │   ├── src/EventSubscriber/
-    │   │   └── CrossOriginSessionCookieSubscriber.php  ← makes the session cookie work cross-origin (see Known Gaps)
-    │   └── src/Plugin/rest/resource/
-    │       ├── TopicList.php                  ← GET  /api/topiclist        (landing_page nodes),
-    │       │                                     POST /api/add-topic       (admin-only)
-    │       ├── TaskList.php                    ← GET  /api/task-list       (only tasks assigned to the caller),
-    │       │                                     POST /api/add-task        (project_tracker nodes)
-    │       ├── TaskDetail.php                  ← GET/POST /api/task/{id}   (view/edit a task - assignee-only)
-    │       ├── UserList.php                    ← GET  /api/user-list       (for the Assign To dropdown)
-    │       ├── UserLogin.php                   ← POST /api/user-login      (also returns isAdmin)
-    │       └── UserRegistration.php            ← POST /api/user-registration
-    └── themes/custom/react_theme/
-        ├── react_theme.info.yml
-        ├── react_theme.libraries.yml           ← attaches compiled js/app.js + css/app.css
-        ├── react_theme.theme                    ← injects drupalSettings.reactApp (baseUrl, csrfToken, currentUser)
-        ├── templates/page.html.twig             ← renders <div id="react-root">, React mounts there
-        ├── css/theme.css                        ← static theme chrome (header/footer)
-        └── react-headless/                      ← the React app's source (Vite + TS)
-            └── src/
-                ├── api/client.js                ← single Axios client: auth + topics + tasks + users
-                ├── hooks/useAuth.jsx             ← also exposes user.isAdmin
-                ├── components/
-                │   ├── TopBar, TopicList
-                │   ├── TaskList                  ← "my assigned tasks" grid, with an Edit button per card
-                │   ├── CreateTask, EditTask       ← create vs. edit a task (edit has no reassignment field)
-                │   └── AddTopic                  ← admin-only topic creation
-                └── pages/ (HomePage, LoginPage, RegisterPage, DashboardPage)
+├── modules/custom/content_api/
+│ ├── content_api.info.yml
+│ ├── content_api.install
+│ ├── content_api.routing.yml
+│ ├── content_api.services.yml
+│ ├── config/install/
+│ │ ├── rest.resource.content_api.articles.yml
+│ │ └── rest.resource.content_api.project_trackers.yml
+│ └── src/
+│ ├── Controller/OptionsController.php
+│ ├── EventSubscriber/CorsSubscriber.php
+│ └── Plugin/rest/resource/
+│ ├── ArticlesResource.php
+│ └── ProjectTrackersResource.php
+└── themes/custom/react_theme/
+└── react-app/
+└── src/
+├── api/
+│ ├── client.js
+│ ├── articles.js
+│ └── projectTrackers.js
+├── hooks/
+│ ├── useAuth.js
+│ ├── useArticles.js
+│ └── useProjectTrackers.js
+├── components/
+│ ├── ProjectTrackerCard.jsx
+│ ├── ProjectTrackerForm.jsx
+│ ├── Modal.jsx
+│ ├── ConfirmDialog.jsx
+│ ├── Pagination.jsx
+│ └── TopBar.jsx
+└── pages/
+├── ArticlesPage.jsx
+├── ProjectTrackersPage.jsx
+└── ProjectTrackerDetailPage.jsx
 ```
 
-There is no `config/sync/` in this repo — REST resource permissions, CORS,
-and the `project_tracker` / `landing_page` content types and their fields
-are assumed to already exist on the target Drupal site (created manually or
-via a config export that isn't checked in yet). See **Known Gaps** below.
+## Prerequisites
 
----
+Install the following tools before setting up the project:
 
-## Content Types Used
+- PHP and required Drupal PHP extensions
+- Composer 2
+- A Drupal-compatible MySQL or MariaDB database
+- Node.js and npm
+- A local web server or Drupal-compatible local development environment
+- Git
 
-| Content type | Fields consumed by the API | Used by |
-|---|---|---|
-| `landing_page` | `field_sub_heading`, `field_description`, `field_trending` (stores the lowercase string `"yes"`/`"no"`) | `TopicList.php` → `/api/topiclist`, `/api/add-topic` |
-| `project_tracker` | `field_description`, `field_due_date`, `field_severity`, `field_status`, `field_assigned_to` (entity reference → user, added by `apiservices_update_9001()`) | `TaskList.php`, `TaskDetail.php` → `/api/task-list`, `/api/add-task`, `/api/task/{id}` |
-
----
-
-## REST API
-
-All endpoints return JSON in the shape `{ status, message?, result }`.
-
-| Method | Path | Auth | Notes |
-|---|---|---|---|
-| GET | `/api/topiclist?_format=json` | Public | Landing page "topics" |
-| POST | `/api/add-topic?_format=json` | **Admin only** (`administrator` role) | `{ title, subheading, description, trending }` — `trending` is normalized to lowercase `"yes"`/`"no"` before saving into `field_trending`; the Add Topic form's dropdown shows capitalized "Yes"/"No" labels to the user but sends the lowercase value |
-| GET | `/api/task-list?_format=json` | **Authenticated** | Only tasks **assigned to the caller** (`field_assigned_to`), not all tasks |
-| POST | `/api/add-task?_format=json` | **Authenticated** | `{ title, description, due_date, severity, status, assigned_to }` — `assigned_to` (uid) is required and validated against an active user; the creator is recorded automatically as the node's author |
-| GET | `/api/task/{id}?_format=json` | **Authenticated, assignee only** | Fetch a single task, for the edit page |
-| POST | `/api/task/{id}?_format=json` | **Authenticated, assignee only** | `{ title, description, due_date, severity, status }` — updates a task; reassignment isn't allowed through this endpoint (uses POST rather than PATCH — see comment in `TaskDetail.php`) |
-| GET | `/api/user-list?_format=json` | **Authenticated** | `{ uid, name, email }[]` — used to populate the "Assign To" dropdown |
-| POST | `/api/user-login?_format=json` | Public | `{ email, password }` → returns `current_user` (includes `isAdmin: boolean`, checked against the `administrator` role machine name), `csrf_token`, `logout_token` |
-| POST | `/api/user-registration?_format=json` | Public | `{ firstname, lastname, email, password }` |
-
-Mutating requests (`POST` here) must send the `X-CSRF-Token` header, using
-the token returned by login (or `GET /session/token`). The SPA's Axios
-client (`src/api/client.js`) attaches this automatically once a token is in
-`sessionStorage` or `drupalSettings`.
-
----
-
-## Frontend Routes
-
-| Route | Access | Page |
-|---|---|---|
-| `/` | Public | Home |
-| `/login`, `/register` | Public | Auth |
-| `/dashboard` | Authenticated | User info, trending topics, "My Tasks" |
-| `/create-task` | Authenticated | Create a task and assign it to any user |
-| `/edit-task/:id` | Authenticated, assignee only (enforced server-side) | Edit a task assigned to you |
-| `/add-topic` | **Admin only** (`AdminRoute` redirects non-admins to `/dashboard`) | Create a landing-page topic |
-
----
+> Exact runtime versions should be validated against `composer.json`, `composer.lock`, and the frontend `package.json` before installation.
 
 ## Quick Start
 
+### 1. Clone the repository
+
 ```bash
-chmod +x scripts/setup.sh
-./scripts/setup.sh                 # composer install, Drupal install, enable module+theme
-
-# Run pending updates (needed for field_assigned_to - see apiservices.install):
-drush updb
-
-# Build the React app into the theme (production):
-cd web/themes/custom/react_theme/react-headless
-npm install
-npm run build                      # outputs js/app.js + css/app.css into ../{js,css}
-                                    # (see vite.config.ts) — required before
-                                    # react_theme is usable, since the theme
-                                    # does not ship pre-built assets.
-
-# OR, for frontend development with hot reload against a running Drupal:
-cp .env.example .env               # set VITE_DRUPAL_API_URL to your Drupal base URL
-npm run dev                        # http://localhost:5173
+git clone https://github.com/rahulk1011/drupal-react-headless.git
+cd drupal-react-headless
 ```
 
-The standalone dev server (`npm run dev`) and the theme-embedded build read
-the API base URL differently: the embedded build reads
-`window.drupalSettings.reactApp.baseUrl` (same-origin, injected by
-`react_theme.theme`); the standalone dev server falls back to
-`VITE_DRUPAL_API_URL` from `.env`, and needs CORS enabled on Drupal since
-it's cross-origin (see **Known Gaps**). **It also needs an `https://` Drupal
-URL** — see the cross-origin session cookie note below, and the `.env.example`
-drift flagged in Known Gaps.
+### 2. Run the setup script
 
----
+```bash
+chmod +x scripts/setup.sh
+./scripts/setup.sh
+```
 
-## Known Gaps / Recommended Next Steps
+The setup script is intended to install Drupal dependencies, configure the application, enable the custom module and theme, and build the React application.
 
-This is an honest list of things that are *not* handled by the current
-code, so they aren't discovered by surprise in review or production:
+### 3. Start frontend development
 
-1. **`.env.example` no longer matches what the backend requires.** It
-   currently points at a plain `http://drupal-headless.site` placeholder
-   with no explanation. `CrossOriginSessionCookieSubscriber` (registered in
-   `apiservices.services.yml`) only rewrites the session cookie to
-   `SameSite=None; Secure` over HTTPS — pointing the dev server at an
-   `http://` Drupal URL will let login succeed but silently make every
-   later authenticated call (`/api/task-list`, `/api/user-list`,
-   `/api/add-task`, `/api/task/{id}`) look anonymous. Point
-   `VITE_DRUPAL_API_URL` at your Drupal site's `https://` URL instead.
-2. **`.gitignore` no longer excludes build artifacts or the DB dump.** It
-   doesn't currently ignore `web/themes/custom/react_theme/{js,css}`
-   (the compiled output of `npm run build`) or `db_backup/` (which
-   contains a raw database dump with real user data/password hashes and
-   shouldn't be committed). Worth re-adding both entries.
-3. **CORS is not configured anywhere in this repo.** Running the SPA via
-   `npm run dev` (a different origin/port from Drupal) will fail on
-   mutating requests until CORS is enabled — e.g. via `cors.config` in
-   `services.yml`, which isn't checked in here (correctly — it belongs in
-   an untracked, environment-specific `sites/*/services.yml`, not in git).
-4. **REST resource permissions aren't exported.** Which roles can call
-   which endpoint depends on the site's REST/RESTUI config, which isn't in
-   `config/sync/` here. Several endpoints enforce authentication/role
-   checks in code as defense-in-depth, but that's not a substitute for
-   exporting and committing the actual permissions config.
-5. **No automated tests** (PHPUnit for the module, or a JS test runner for
-   the SPA). Given the auth, assignment, and content-creation flows
-   involved, this is the highest-leverage next addition.
-6. **Password policy is duplicated** (regex in `UserRegistration.php` and
-   again in `RegisterPage.jsx`). Fine for now, but drifting the two apart
-   silently is an easy future bug — consider having the frontend surface
-   the *backend's* rejection message rather than re-implementing the rule.
+```bash
+cd web/themes/custom/react_theme/react-app
+cp .env.example .env
+npm install
+npm run dev
+```
+
+Set the Drupal base URL in `.env`:
+
+```dotenv
+VITE_DRUPAL_BASE_URL=http://localhost:8888
+```
+
+The Vite development server is normally available at:
+
+```text
+http://localhost:5173
+```
+
+## Frontend Build
+
+Create a production frontend build with:
+
+```bash
+cd web/themes/custom/react_theme/react-app
+npm install
+npm run build
+```
+
+After building, clear Drupal caches so that updated frontend assets are discovered:
+
+```bash
+vendor/bin/drush cr
+```
+
+## REST API
+
+All API requests require the Drupal JSON format query parameter:
+
+```text
+?_format=json
+```
+
+### Authentication
+
+The API supports either:
+
+- Drupal session-cookie authentication
+- HTTP Basic authentication
+
+Requests that modify content also require an `X-CSRF-Token` header. Retrieve a token from:
+
+```http
+GET /session/token
+```
+
+### Article Endpoints
+
+| Method   | Endpoint                          | Access        |
+| -------- | --------------------------------- | ------------- |
+| `GET`    | `/api/articles?_format=json`      | Public        |
+| `GET`    | `/api/articles/{id}?_format=json` | Public        |
+| `POST`   | `/api/articles?_format=json`      | Authenticated |
+| `PATCH`  | `/api/articles/{id}?_format=json` | Authenticated |
+| `DELETE` | `/api/articles/{id}?_format=json` | Authenticated |
+
+Example Article payload:
+
+```json
+{
+  "title": "Headless Drupal with React",
+  "body": "Article body content",
+  "summary": "A short article summary",
+  "status": 1
+}
+```
+
+### Project Tracker Endpoints
+
+| Method   | Endpoint                                  | Access        |
+| -------- | ----------------------------------------- | ------------- |
+| `GET`    | `/api/project-trackers?_format=json`      | Public        |
+| `GET`    | `/api/project-trackers/{id}?_format=json` | Public        |
+| `POST`   | `/api/project-trackers?_format=json`      | Authenticated |
+| `PATCH`  | `/api/project-trackers/{id}?_format=json` | Authenticated |
+| `DELETE` | `/api/project-trackers/{id}?_format=json` | Authenticated |
+
+Supported collection parameters:
+
+- `page`
+- `limit`
+- `status`
+- `severity`
+
+Example filtered request:
+
+```http
+GET /api/project-trackers?_format=json&page=1&limit=10&status=open&severity=high
+```
+
+Example Project Tracker payload:
+
+```json
+{
+  "title": "Complete API documentation",
+  "description": "Document all custom REST endpoints and payloads.",
+  "status": "in_progress",
+  "severity": "high",
+  "due_date": "2026-08-31"
+}
+```
+
+Supported status values:
+
+- `open`
+- `in_progress`
+- `on_hold`
+- `completed`
+- `cancelled`
+
+Supported severity values:
+
+- `low`
+- `medium`
+- `high`
+- `critical`
+
+The `due_date` value must use `YYYY-MM-DD` or be `null`.
+
+## Project Tracker Content Type
+
+The `project_tracker` content type is created programmatically when the `content_api` module is installed.
+
+| Label       | Machine name           | Drupal field type      | Allowed values                                             |
+| ----------- | ---------------------- | ---------------------- | ---------------------------------------------------------- |
+| Title       | `title`                | String                 | Required title value                                       |
+| Description | `field_pt_description` | Text (long, formatted) | Free-form text                                             |
+| Status      | `field_pt_status`      | List (string)          | `open`, `in_progress`, `on_hold`, `completed`, `cancelled` |
+| Severity    | `field_pt_severity`    | List (string)          | `low`, `medium`, `high`, `critical`                        |
+| Due Date    | `field_pt_due_date`    | Datetime (date only)   | `YYYY-MM-DD`                                               |
+
+Anonymous users can view Project Tracker content. Authenticated users can create content and edit or delete content according to the Drupal permissions configured by the module/site.
+
+## React Routes
+
+| Route                   | Access        | Description                                                             |
+| ----------------------- | ------------- | ----------------------------------------------------------------------- |
+| `/project-trackers`     | Public        | Lists Project Trackers; authenticated users receive management controls |
+| `/project-trackers/:id` | Public        | Displays one Project Tracker                                            |
+| `/articles`             | Authenticated | Lists and manages Articles                                              |
+| `/articles/:id`         | Authenticated | Displays one Article                                                    |
+| `/login`                | Public        | Provides Drupal session login                                           |
+
+## API Examples
+
+### Retrieve Project Trackers
+
+```bash
+curl "http://localhost:8888/api/project-trackers?_format=json&page=1&limit=10"
+```
+
+### Retrieve a CSRF token
+
+```bash
+curl \
+--cookie-jar cookies.txt \
+--cookie cookies.txt \
+"http://localhost:8888/session/token"
+```
+
+### Create a Project Tracker
+
+```bash
+curl --request POST \
+--url "http://localhost:8888/api/project-trackers?_format=json" \
+--header "Content-Type: application/json" \
+--header "X-CSRF-Token: YOUR_CSRF_TOKEN" \
+--cookie cookies.txt \
+--data '{
+"title": "Prepare release",
+"description": "Complete testing and deployment checks.",
+"status": "open",
+"severity": "high",
+"due_date": "2026-08-31"
+}'
+```
+
+## Development Workflow
+
+### Drupal development
+
+```bash
+composer install
+vendor/bin/drush cr
+```
+
+After changing module installation logic, test it against a clean environment or reinstall the module only when it is safe to remove module-owned configuration and data.
+
+### React development
+
+```bash
+cd web/themes/custom/react_theme/react-app
+npm install
+npm run dev
+```
+
+Use the Vite development server for local frontend work and `npm run build` before testing the theme-integrated production assets.
+
+## Security Notes
+
+- Do not commit `.env` files, database credentials, session cookies, or API credentials.
+- Keep Drupal core, contributed packages, npm dependencies, and Composer dependencies updated.
+- Use HTTPS outside local development.
+- Restrict write operations through Drupal permissions rather than relying only on frontend route protection.
+- Validate and sanitize all API input on the server.
+- Keep CORS origins limited to trusted frontend hosts.
+- Do not use administrator credentials in frontend source code.
+- Database backups may contain sensitive information and should not be committed to a public repository unless thoroughly sanitized.
+
+## Troubleshooting
+
+### API returns `403 Access Denied`
+
+- Confirm that the user is authenticated.
+- Verify the user's Drupal permissions.
+- Include a valid `X-CSRF-Token` for `POST`, `PATCH`, and `DELETE` requests.
+- Confirm that the browser or API client sends the Drupal session cookie.
+
+### Browser reports a CORS error
+
+- Confirm that the React origin is allowed by the Drupal CORS configuration.
+- Verify that preflight `OPTIONS` requests return the required headers.
+- Ensure that the frontend base URL points to the correct Drupal host.
+
+### API returns an unsupported-format error
+
+Append the required format parameter:
+
+```text
+?_format=json
+```
+
+### React changes are not visible in Drupal
+
+```bash
+cd web/themes/custom/react_theme/react-app
+npm run build
+cd ../../../../../..
+vendor/bin/drush cr
+```
+
+Also confirm that the Drupal theme library references the generated build files.
+
+## Recommended Improvements
+
+- Add automated PHPUnit or Drupal Kernel tests for REST resources.
+- Add React component and API-client tests.
+- Add CI checks for Composer validation, Drupal coding standards, frontend linting, and production builds.
+- Replace or sanitize committed database backups and document a safe local data-import process.
+- Document tested PHP, database, Node.js, and npm versions.
+- Add an API schema such as OpenAPI for easier integration and testing.
+- Add environment-specific CORS guidance and sample configuration.
+- Add screenshots or a short demo GIF of the application.
+
+## Contributing
+
+1. Create a feature branch from `main`.
+2. Make focused changes with clear commit messages.
+3. Run backend and frontend quality checks.
+4. Build the React application and test the Drupal-integrated output.
+5. Open a pull request describing the change and its testing evidence.
+
+## License
+
+See [`LICENSE.txt`](LICENSE.txt) for license information.

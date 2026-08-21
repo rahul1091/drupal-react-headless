@@ -13,17 +13,17 @@
     "dashboard": "Dashboard",
     "tasks": "Task List",
     "topics": "Topic List",
-		"navigation": "Navigation",
+    "navigation": "Navigation",
     "account": "Account",
-		"login": "Login",
-		"register": "Register"
+    "login": "Login",
+    "register": "Register"
   },
 
   "authentication": {
     "signIn": "Sign In",
     "logIn": "Log In",
     "logOut": "Log Out",
-		"loggingOut": "Logging Out...",
+    "loggingOut": "Logging Out...",
     "register": "Register",
     "createAccount": "Create Account",
     "createNewAccount": "Create New Account",
@@ -52,11 +52,11 @@
     "projectTrackerDescription": "View and manage all tasks across all users.",
     "viewTaskList": "View Task List",
     "readMore": "Read More...",
-    "noTopicsFound": "No topics found."
+    "noTopicsFound": "No Topics Found."
   },
 
   "topic": {
-		"topicList": "Topic List",
+    "topicList": "Topic List",
     "addTopic": "Add Topic",
     "addNewTopic": "Add New Topic",
     "title": "Title",
@@ -113,7 +113,7 @@
     "close": "Close",
     "backToDashboard": "Back to Dashboard",
     "backToTasks": "Back to Tasks",
-		"saving": "Saving..."
+    "saving": "Saving..."
   },
 
   "footer": {

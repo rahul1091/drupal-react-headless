@@ -13,7 +13,7 @@ function TopicList() {
   const [topics, setTopics] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedTopic, setSelectedTopic] = useState(null);
-	const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const CHARACTER_LIMIT = 250;
 
@@ -37,7 +37,7 @@ function TopicList() {
   }
 
   if (topics.length === 0) {
-    return <div className="no-topics">{t("noTopicsFound")}</div>;
+    return <div className="no-topics">{t("dashboard.noTopicsFound")}</div>;
   }
 
   return (

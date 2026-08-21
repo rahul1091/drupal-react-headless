@@ -70,8 +70,8 @@
 	font-size: 14px;
 	font-weight: 600;
 	color: #031634;
-	background: #E5FCC2;
-	border: 1px solid #374151;
+	background: #EBF7F8;
+	border: 2px solid #FF8A00;
 	border-radius: 6px;
 	cursor: pointer;
 	outline: none;
@@ -90,13 +90,9 @@
 	padding-right: 30px;
 }
 
-.language-switcher:hover {
-	border-color: #AEE239;
-}
-
+.language-switcher:hover,
 .language-switcher:focus {
-	border-color: #AEE239;
-	box-shadow: 0 0 0 3px rgba(174, 226, 57, 0.15);
+	border-color: #F03C02;
 }
 
 .language-switcher option {
