@@ -48,7 +48,7 @@
 }
 
 .topic-card--trending::before {
-  content: "Trending";
+  content: "🔥";
   position: absolute;
   top: -1px;
   right: 14px;

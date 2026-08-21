@@ -1,0 +1,123 @@
+{
+  "_comment": "Global application translations",
+
+  "app": {
+    "siteTitle": "Drupal React CMS",
+    "welcomeHeading": "Welcome to Drupal-React Headless Project",
+    "welcomeBack": "Welcome back",
+    "loadingLogout": "Logging out..."
+  },
+
+  "navigation": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "tasks": "Task List",
+    "topics": "Topic List",
+		"navigation": "Navigation",
+    "account": "Account",
+		"login": "Login",
+		"register": "Register"
+  },
+
+  "authentication": {
+    "signIn": "Sign In",
+    "logIn": "Log In",
+    "logOut": "Log Out",
+		"loggingOut": "Logging Out...",
+    "register": "Register",
+    "createAccount": "Create Account",
+    "createNewAccount": "Create New Account",
+    "loginDescription": "Use your Drupal account to manage Project Tracker",
+    "registerDescription": "Register a new user account for Project Tracker",
+    "dontHaveAccount": "Don't have an account?",
+    "alreadyHaveAccount": "Already have an account?",
+    "passwordRequirement": "Must be 8+ chars with uppercase, lowercase, and a number."
+  },
+
+  "user": {
+    "user": "User",
+    "superAdmin": "Super Admin",
+    "userInformation": "User Account Information",
+    "userId": "User ID",
+    "username": "Username",
+    "email": "Email",
+    "role": "User Role",
+    "accountCreated": "Account Created"
+  },
+
+  "dashboard": {
+    "description": "Manage your account and explore active topics & current tasks.",
+    "trendingTopics": "Trending Topics",
+    "projectTracker": "Project Tracker",
+    "projectTrackerDescription": "View and manage all tasks across all users.",
+    "viewTaskList": "View Task List",
+    "readMore": "Read More...",
+    "noTopicsFound": "No topics found."
+  },
+
+  "topic": {
+		"topicList": "Topic List",
+    "addTopic": "Add Topic",
+    "addNewTopic": "Add New Topic",
+    "title": "Title",
+    "subHeading": "Sub Heading",
+    "description": "Description",
+    "enterTitle": "Enter topic title",
+    "enterSubHeading": "Enter a short sub heading",
+    "enterDescription": "Enter topic description",
+    "saveTopic": "Save Topic",
+    "trending": "Trending",
+    "no": "No",
+    "yes": "Yes"
+  },
+
+  "task": {
+    "createTask": "Create New Project Tracker Task",
+    "title": "Title",
+    "description": "Description",
+    "assignTo": "Assign To",
+    "selectUser": "Select a user",
+    "enterTitle": "Enter task title",
+    "enterDescription": "Enter detailed description",
+    "dueDate": "Due Date",
+    "saveTask": "Save Task"
+  },
+
+  "status": {
+    "open": "Open",
+    "inProgress": "In Progress",
+    "completed": "Completed",
+    "cancelled": "Cancelled"
+  },
+
+  "severity": {
+    "low": "Low",
+    "medium": "Medium",
+    "high": "High",
+    "critical": "Critical"
+  },
+
+  "common": {
+    "title": "Title",
+    "description": "Description",
+    "status": "Status",
+    "severity": "Severity",
+    "email": "Email",
+    "emailAddress": "Email Address",
+    "password": "Password",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "characters": "characters",
+    "requiredFields": "Marked fields are required.",
+    "cancel": "Cancel",
+    "close": "Close",
+    "backToDashboard": "Back to Dashboard",
+    "backToTasks": "Back to Tasks",
+		"saving": "Saving..."
+  },
+
+  "footer": {
+    "description": "A headless CMS built on Drupal 11 and React 19.",
+    "builtWith": "Built with"
+  }
+}

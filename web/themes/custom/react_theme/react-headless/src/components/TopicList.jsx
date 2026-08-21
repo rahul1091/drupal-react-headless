@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getTopics } from "../api/client";
 import "../css/topiclist.css";
+import { useTranslation } from "react-i18next";
 
 // Helper to strip HTML tags for accurate character counting
 const stripHtml = (html) => {
@@ -12,15 +13,16 @@ function TopicList() {
   const [topics, setTopics] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedTopic, setSelectedTopic] = useState(null);
+	const { t, i18n } = useTranslation();
 
   const CHARACTER_LIMIT = 250;
 
   useEffect(() => {
-    getTopics()
+    getTopics(i18n.language)
       .then((response) => setTopics(response.data.result))
       .catch((error) => console.error("Error fetching topics:", error))
       .finally(() => setLoading(false));
-  }, []);
+  }, [i18n.language]);
 
   if (loading) {
     return (
@@ -35,12 +37,12 @@ function TopicList() {
   }
 
   if (topics.length === 0) {
-    return <div className="no-topics">No topics found.</div>;
+    return <div className="no-topics">{t("noTopicsFound")}</div>;
   }
 
   return (
     <div className="topic-list-container">
-      <h2 className="topic-list-heading">Topic List</h2>
+      <h2 className="topic-list-heading">{t("topic.topicList")}</h2>
       <div className="topic-grid">
         {topics.map((topic, index) => {
           const rawDescription = topic.description || "";
@@ -68,7 +70,7 @@ function TopicList() {
                       onClick={() => setSelectedTopic(topic)}
                       className="read-more-btn"
                     >
-                      Read More...
+                      {t("dashboard.readMore")}
                     </button>
                   )}
                 </div>
@@ -106,7 +108,7 @@ function TopicList() {
                 onClick={() => setSelectedTopic(null)}
                 className="modal-action-btn"
               >
-                Close
+                {t("common.close")}
               </button>
             </div>
           </div>

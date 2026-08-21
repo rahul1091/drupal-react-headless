@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import "../css/login.css";
+import { useTranslation } from "react-i18next";
 
 export default function LoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
-
+	const { t } = useTranslation();
+	
   const [name, setName] = useState("");
   const [pass, setPass] = useState("");
   const [error, setError] = useState("");
@@ -35,15 +37,15 @@ export default function LoginPage() {
   return (
     <div className="login-wrapper">
       <div className="login-card">
-        <h1>Sign In</h1>
-        <p>Use your Drupal account to manage Project Tracker</p>
+        <h1>{t("authentication.signIn")}</h1>
+        <p>{t("authentication.loginDescription")}</p>
 
         {error && <div className="alert alert-error">{error}</div>}
 
         <form onSubmit={handleSubmit} noValidate>
           <div className="form-group">
             <label className="form-label" htmlFor="login-user">
-              Email
+              {t("common.email")}
             </label>
             <input
               id="login-user"
@@ -58,7 +60,7 @@ export default function LoginPage() {
 
           <div className="form-group">
             <label className="form-label" htmlFor="login-pass">
-              Password
+              {t("common.password")}
             </label>
             <input
               id="login-pass"
@@ -75,13 +77,13 @@ export default function LoginPage() {
             className="btn-login btn-sign-in"
             disabled={loading}
           >
-            {loading ? <span className="spinner" /> : "Sign In"}
+            {loading ? <span className="spinner" /> : t("authentication.signIn")}
           </button>
         </form>
 
         {/* --- Registration Section --- */}
         <div className="auth-divider">
-          <span>Don't have an account?</span>
+          <span>{t("authentication.dontHaveAccount")}</span>
         </div>
 
         <button
@@ -89,7 +91,7 @@ export default function LoginPage() {
           className="btn-login btn-login-register"
           onClick={() => navigate("/register")}
         >
-          Create New Account
+          {t("authentication.createNewAccount")}
         </button>
       </div>
     </div>
