@@ -124,10 +124,14 @@ export const registerUser = async (userData) => {
 };
 
 // ---------------------------------------------------------------------------
-// Topics (landing_page content)
+// Fetch Languages (for language switcher in TopBar)
 // ---------------------------------------------------------------------------
 
-// export const getTopics = async () => API_URL.get("/api/topiclist?_format=json");
+export const getLanguages = async () => API_URL.get("/api/language-list?_format=json");
+
+// ---------------------------------------------------------------------------
+// Topics (landing_page content)
+// ---------------------------------------------------------------------------
 
 export const getTopics = async (langcode = "en") =>
   API_URL.get("/api/topiclist", {
