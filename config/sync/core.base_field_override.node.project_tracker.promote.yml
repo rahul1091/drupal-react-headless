@@ -1,0 +1,22 @@
+uuid: 045746ef-d11a-4166-b108-15cb663491f7
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.project_tracker
+id: node.project_tracker.promote
+field_name: promote
+entity_type: node
+bundle: project_tracker
+label: 'Promoted to front page'
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

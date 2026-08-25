@@ -1,0 +1,45 @@
+uuid: bb90847c-b330-44c6-828e-8f27da56ac5e
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.basic_html
+    - rest.resource.language_list_rest
+    - rest.resource.project_details_rest
+    - rest.resource.taskdetail_rest
+    - rest.resource.tasklist_rest
+    - rest.resource.topiclist_rest
+    - rest.resource.userlist_rest
+  module:
+    - comment
+    - contact
+    - file
+    - filter
+    - rest
+    - search
+    - shortcut
+    - system
+_core:
+  default_config_hash: cFrlqjtkTfvY3RGccjJkPf1SGIfJ942IrxTLWAO4mgA
+id: authenticated
+label: 'Authenticated user'
+weight: 1
+is_admin: false
+permissions:
+  - 'access comments'
+  - 'access content'
+  - 'access shortcuts'
+  - 'access site-wide contact form'
+  - 'delete own files'
+  - 'post comments'
+  - 'restful get language_list_rest'
+  - 'restful get project_details_rest'
+  - 'restful get taskdetail_rest'
+  - 'restful get tasklist_rest'
+  - 'restful get topiclist_rest'
+  - 'restful get userlist_rest'
+  - 'restful post taskdetail_rest'
+  - 'restful post tasklist_rest'
+  - 'search content'
+  - 'skip comment approval'
+  - 'use text format basic_html'

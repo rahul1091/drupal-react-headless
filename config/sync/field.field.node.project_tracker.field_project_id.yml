@@ -1,0 +1,29 @@
+uuid: b60e250a-e010-49eb-a78c-3081df770fa3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_project_id
+    - node.type.project_details
+    - node.type.project_tracker
+id: node.project_tracker.field_project_id
+field_name: field_project_id
+entity_type: node
+bundle: project_tracker
+label: 'Project ID'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      project_details: project_details
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

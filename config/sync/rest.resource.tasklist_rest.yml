@@ -1,0 +1,19 @@
+uuid: b6631266-b326-496d-9edf-4c43475c379a
+langcode: en
+status: true
+dependencies:
+  module:
+    - apiservices
+    - serialization
+    - user
+id: tasklist_rest
+plugin_id: tasklist_rest
+granularity: resource
+configuration:
+  methods:
+    - GET
+    - POST
+  formats:
+    - json
+  authentication:
+    - cookie

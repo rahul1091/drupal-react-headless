@@ -1,0 +1,23 @@
+uuid: 1afccd54-7999-486a-bf3d-2654acda9e6f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_client_budget
+    - node.type.project_details
+id: node.project_details.field_client_budget
+field_name: field_client_budget
+entity_type: node
+bundle: project_details
+label: 'Client Budget'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

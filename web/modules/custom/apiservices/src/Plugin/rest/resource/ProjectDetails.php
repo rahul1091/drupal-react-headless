@@ -91,10 +91,10 @@ class ProjectDetails extends ResourceBase
 	 */
 	public function get()
 	{
-		if ($this->currentUser->isAnonymous() || !in_array('administrator', $this->currentUser->getRoles(), TRUE)) {
+		if ($this->currentUser->isAnonymous()) {
 			return new JsonResponse([
 				'status' => 'Error',
-				'message' => 'Administrator access required to see the project details.',
+				'message' => 'Authenticated user access required to see the project details.',
 			], 403);
 		}
 
@@ -123,20 +123,30 @@ class ProjectDetails extends ResourceBase
 					}
 				}
 
-				$projects[] = [
-					'nid' => $node->id(),
+				$project_details = [
+					'project_id' => $node->id(),
 					'title' => $node->getTitle(),
 					'project_code' => $node->get('field_project_code')->value,
 					'description' => $node->get('field_description')->value,
 					'start_date' => date("d-m-Y", strtotime($node->get('field_start_date')->value)),
 					'end_date' => date("d-m-Y", strtotime($node->get('field_end_date')->value)),
 					'project_manager' => $project_manager,
+				];
+
+				$client_details = [
 					'client_name' => $node->get('field_client_name')->value,
 					'client_address' => $node->get('field_client_address')->value,
 					'client_city' => $node->get('field_client_city')->value,
 					'client_country' => $node->get('field_client_country')->value,
 					'client_budget' => $node->get('field_client_budget')->value,
+				];
+
+				$projects[] = [
+					'nid' => $node->id(),
 					'created' => date('d-m-Y', $node->getCreatedTime()),
+					'project_details' => $project_details,
+					'client_details' => $client_details,
+					'project_issues' => []
 				];
 			}
 

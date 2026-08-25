@@ -1,0 +1,24 @@
+uuid: 31c79723-132b-4ccc-be36-98f44fbabfe6
+langcode: en
+status: true
+dependencies:
+  module:
+    - apiservices
+    - serialization
+    - user
+id: taskdetail_rest
+plugin_id: taskdetail_rest
+granularity: resource
+configuration:
+  methods:
+    - GET
+    - POST
+  formats:
+    - json
+  authentication:
+    - cookie
+  POST:
+    supported_formats:
+      - json
+    supported_auth:
+      - cookie

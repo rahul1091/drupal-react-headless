@@ -1,0 +1,33 @@
+uuid: f4bf74cb-7bc3-4df2-9183-1d9a9e3d2dd9
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.restricted_html
+    - rest.resource.language_list_rest
+    - rest.resource.topiclist_rest
+    - rest.resource.user_login_rest
+    - rest.resource.user_registration_rest
+  module:
+    - comment
+    - contact
+    - filter
+    - rest
+    - search
+    - system
+_core:
+  default_config_hash: 6WavjUYXIegP9AAg2zXGx54MWIVoomC3SZhNiqe-Dyk
+id: anonymous
+label: 'Anonymous user'
+weight: 0
+is_admin: false
+permissions:
+  - 'access comments'
+  - 'access content'
+  - 'access site-wide contact form'
+  - 'restful get language_list_rest'
+  - 'restful get topiclist_rest'
+  - 'restful post user_login_rest'
+  - 'restful post user_registration_rest'
+  - 'search content'
+  - 'use text format restricted_html'

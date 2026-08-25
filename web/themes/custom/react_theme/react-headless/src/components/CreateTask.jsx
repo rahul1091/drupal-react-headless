@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { addTask, getUsers } from "../api/client";
+import { addTask, getUsers, getProjects } from "../api/client";
 import "../css/tasklist.css";
 import { useTranslation } from "react-i18next";
 
@@ -15,11 +15,15 @@ export default function CreateTask() {
     severity: "low",
     status: "open",
     assigned_to: "",
+		project_name: "",
   });
 
   const [users, setUsers] = useState([]);
   const [usersLoading, setUsersLoading] = useState(true);
   const [usersError, setUsersError] = useState(null);
+	const [projects, setProjects ] = useState([]);
+	const [projectsLoading, setProjectsLoading] = useState(true);
+	const [projectsError, setProjectsError ] = useState(null);
 
   useEffect(() => {
     getUsers()
@@ -32,6 +36,18 @@ export default function CreateTask() {
       })
       .finally(() => setUsersLoading(false));
   }, []);
+
+	useEffect(() => {
+		getProjects()
+			.then((response) => {
+				setProjects(response.data?.result || []);
+			})
+			.catch((err) => {
+				console.error("Failed to load projects:", err);
+        setProjectsError("Couldn't load the list of projects to assign this task to.");
+			})
+			.finally(() => setProjectsLoading(false));
+	}, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -92,6 +108,31 @@ export default function CreateTask() {
               placeholder={t("task.enterTitle")}
               disabled={isSubmitting}
             />
+          </div>
+
+					{/* Project Name */}
+          <div className="form-group">
+            <label htmlFor="project_name">
+              Project Name <span className="required">*</span>
+            </label>
+            <select
+              id="project_name"
+              name="project_name"
+              value={formData.project_name}
+              onChange={handleInputChange}
+              required
+              disabled={isSubmitting || projectsLoading || !!projectsError}
+            >
+              <option value="" disabled>
+                {projectsLoading ? 'Loading Projects' : 'Select Project'}
+              </option>
+              {projects.map((p) => (
+                <option key={p.project_details.project_id} value={p.project_details.project_id}>
+                  {p.project_details.title}
+                </option>
+              ))}
+            </select>
+            {projectsError && <p className="field-error">{projectsError}</p>}
           </div>
 
           {/* Assign To */}

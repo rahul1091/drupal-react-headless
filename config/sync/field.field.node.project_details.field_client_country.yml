@@ -1,0 +1,19 @@
+uuid: 2b34c7ff-c92d-42ed-abd2-6ad53167f731
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_client_country
+    - node.type.project_details
+id: node.project_details.field_client_country
+field_name: field_client_country
+entity_type: node
+bundle: project_details
+label: 'Client Country'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string
