@@ -1,0 +1,27 @@
+uuid: 13d58c31-9ee7-4930-80a7-6827dd0aae5e
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.topic_list.field_description
+    - field.field.node.topic_list.field_sub_heading
+    - field.field.node.topic_list.field_trending
+    - node.type.topic_list
+  module:
+    - user
+id: node.topic_list.teaser
+targetEntityType: node
+bundle: topic_list
+mode: teaser
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_description: true
+  field_sub_heading: true
+  field_trending: true
+  langcode: true

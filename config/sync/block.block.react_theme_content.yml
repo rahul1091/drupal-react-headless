@@ -1,0 +1,22 @@
+uuid: 090d9f76-df0d-45d5-9996-ffe013b7a590
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - react_theme
+_core:
+  default_config_hash: erQSEZF2XUjNmgTl0uNRBzmg18ZGXwUcw2FhApoeuHk
+id: react_theme_content
+theme: react_theme
+region: content
+weight: 0
+provider: null
+plugin: system_main_block
+settings:
+  id: system_main_block
+  label: 'Main page content'
+  label_display: '0'
+  provider: system
+visibility: {  }

@@ -1,0 +1,22 @@
+uuid: f4eaf50b-2322-4a3c-a677-0961f0d2c243
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_assigned_to
+    - node.type.project_tracker
+id: node.project_tracker.field_assigned_to
+field_name: field_assigned_to
+entity_type: node
+bundle: project_tracker
+label: 'Assigned To'
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:user'
+  handler_settings:
+    include_anonymous: false
+field_type: entity_reference

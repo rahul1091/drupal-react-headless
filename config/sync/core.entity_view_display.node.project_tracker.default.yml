@@ -1,0 +1,71 @@
+uuid: 2d883481-ec61-4a0f-8ad0-56110f07590d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.project_tracker.field_assigned_to
+    - field.field.node.project_tracker.field_description
+    - field.field.node.project_tracker.field_due_date
+    - field.field.node.project_tracker.field_project_id
+    - field.field.node.project_tracker.field_severity
+    - field.field.node.project_tracker.field_status
+    - node.type.project_tracker
+  module:
+    - datetime
+    - options
+    - text
+    - user
+id: node.project_tracker.default
+targetEntityType: node
+bundle: project_tracker
+mode: default
+content:
+  field_assigned_to:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_due_date:
+    type: datetime_default
+    label: hidden
+    settings:
+      timezone_override: ''
+      format_type: html_date
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_project_id:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_severity:
+    type: list_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_status:
+    type: list_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
+hidden:
+  langcode: true
+  links: true

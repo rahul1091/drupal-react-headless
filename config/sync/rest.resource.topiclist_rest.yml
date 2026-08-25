@@ -1,0 +1,19 @@
+uuid: 45842b58-36b1-40bd-9d00-6fae0142bba9
+langcode: en
+status: true
+dependencies:
+  module:
+    - apiservices
+    - serialization
+    - user
+id: topiclist_rest
+plugin_id: topiclist_rest
+granularity: resource
+configuration:
+  methods:
+    - GET
+    - POST
+  formats:
+    - json
+  authentication:
+    - cookie

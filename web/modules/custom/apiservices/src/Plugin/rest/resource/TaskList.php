@@ -130,8 +130,13 @@ class TaskList extends ResourceBase
 			$tasks = [];
 
 			foreach ($nodes as $node) {
+				$project_id = $node->get('field_project_id')->target_id;
+				$project = Node::load($project_id);
+				$project_name = $project->getTitle();
 				$tasks[] = [
 					'id' => $node->id(),
+					'project_id' => $project_id,
+					'project_name' => $project_name,
 					'title' => $node->getTitle(),
 					'description' => $node->hasField('field_description') ? $node->get('field_description')->value : '',
 					'due_date' => $node->hasField('field_due_date') ? $node->get('field_due_date')->value : '',

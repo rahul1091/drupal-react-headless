@@ -1,0 +1,18 @@
+uuid: 0d518287-4cf9-4d15-8581-362ac4245af5
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus:
+      - main
+    parent: 'main:'
+name: 'Project Tracker'
+type: project_tracker
+description: null
+help: null
+new_revision: true
+preview_mode: 1
+display_submitted: false

@@ -3,6 +3,7 @@ recipes
 web/core
 web/modules/contrib
 web/themes/contrib
+web/web.config
 
 web/sites/*/*settings*.php
 web/sites/*/*services*.yml
@@ -20,3 +21,6 @@ web/themes/custom/react_theme/react-headless/dist-ssr
 .DS_Store
 web/themes/custom/react_theme/react-headless/.env
 web/themes/custom/react_theme/react-headless/.env.example
+
+# DDEV files
+.ddev

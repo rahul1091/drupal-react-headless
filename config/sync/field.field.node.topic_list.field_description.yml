@@ -1,0 +1,22 @@
+uuid: 14ab40b3-1f78-4a11-b0c1-f710983bdec3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_description
+    - node.type.topic_list
+  module:
+    - text
+id: node.topic_list.field_description
+field_name: field_description
+entity_type: node
+bundle: topic_list
+label: Description
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long

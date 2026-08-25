@@ -1,0 +1,33 @@
+uuid: edc7f2f2-ab2e-4969-aa16-059a8724ce48
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.project_tracker.field_assigned_to
+    - field.field.node.project_tracker.field_description
+    - field.field.node.project_tracker.field_due_date
+    - field.field.node.project_tracker.field_project_id
+    - field.field.node.project_tracker.field_severity
+    - field.field.node.project_tracker.field_status
+    - node.type.project_tracker
+  module:
+    - user
+id: node.project_tracker.teaser
+targetEntityType: node
+bundle: project_tracker
+mode: teaser
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_assigned_to: true
+  field_description: true
+  field_due_date: true
+  field_project_id: true
+  field_severity: true
+  field_status: true
+  langcode: true
