@@ -27,8 +27,6 @@ export default function TopBar() {
 		fetchLanguages();
 	}, []);
 
-	console.log("Available languages:", languages);
-
   const displayName =
     [user?.firstname, user?.lastname].filter(Boolean).join(" ") ||
     user?.name ||

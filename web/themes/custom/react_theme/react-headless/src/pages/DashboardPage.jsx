@@ -137,23 +137,42 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <div className="dashboard-tasks-nav">
-        <div className="tasks-nav-info">
-          <h2>{t("dashboard.projectTracker")}</h2>
-          <p>
-            {user?.isSuperAdmin
-              ? t("dashboard.projectTrackerDescription")
-              : t("dashboard.description")}
-          </p>
-        </div>
-        <button
-          type="button"
-          className="add-topic-btn"
-          onClick={() => navigate("/tasks")}
-        >
-          {t("dashboard.viewTaskList")}
-        </button>
-      </div>
+			<h2 className="dashboard-project-section-title">View & Manage Project Information</h2>
+			<div className="project-task-wrapper">
+				{user?.isSuperAdmin && (
+					<div className="dashboard-projects-info">
+						<div className="projects-nav-info">
+							<h2>Project Details</h2>
+							<p>View and manage all projects across the organization</p>
+						</div>
+						<button
+							type="button"
+							className="add-project-btn"
+							onClick={() => navigate("/projects")}
+						>
+							View Project Details
+						</button>
+					</div>
+				)}
+
+				<div className="dashboard-tasks-nav">
+					<div className="tasks-nav-info">
+						<h2>{t("dashboard.projectTracker")}</h2>
+						<p>
+							{user?.isSuperAdmin
+								? t("dashboard.projectTrackerDescription")
+								: t("dashboard.description")}
+						</p>
+					</div>
+					<button
+						type="button"
+						className="add-topic-btn"
+						onClick={() => navigate("/tasks")}
+					>
+						{t("dashboard.viewTaskList")}
+					</button>
+				</div>
+			</div>
 
       {/* Detail Modal */}
       {selectedTopic && (

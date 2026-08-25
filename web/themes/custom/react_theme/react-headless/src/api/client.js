@@ -189,4 +189,27 @@ export const addTask = async (taskData) => {
   return API_URL.post("/api/add-task?_format=json", payload);
 };
 
+// ---------------------------------------------------------------------------
+// Project Details
+// ---------------------------------------------------------------------------
+
+export const getProjects = async () => API_URL.get("/api/project-details?_format=json");
+
+export const addProject = async (projectData) => {
+	const payload = {
+		project_name: projectData.projectName,
+		project_code: projectData.projectCode,
+		description: projectData.description,
+		project_manager: projectData.projectManager,
+		start_date: projectData.startDate,
+		end_date: projectData.endDate,
+		client_name: projectData.clientName,
+		client_address: projectData.clientAddress,
+		client_city: projectData.clientCity,
+		client_country: projectData.clientCountry,
+		client_budget: projectData.clientBudget,
+	};
+	return API_URL.post("/api/add-project?_format=json", payload);
+};
+
 export default API_URL;

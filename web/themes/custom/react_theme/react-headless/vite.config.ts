@@ -22,7 +22,7 @@ export default defineConfig({
         entryFileNames: "app.js",
         chunkFileNames: "app-[name].js",
         assetFileNames: (assetInfo) =>
-          assetInfo.name?.endsWith(".css") ? "../css/app.css" : "assets/[name][extname]",
+          assetInfo.name?.endsWith(".css") ? "css/app.css" : "assets/[name][extname]",
       },
     },
     cssCodeSplit: false,

@@ -83,7 +83,6 @@
 
 .add-topic-btn:hover {
 	background-color: #1d4ed8;
-	transform: translateY(-1px);
 	box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
 }
 
@@ -246,6 +245,53 @@
 	color: #6b7280;
 }
 
+h2.dashboard-project-section-title {
+	font-size: 20px;
+	font-weight: 600;
+	color: #033649;
+	margin: 24px 0 0 0;
+}
+
+.project-task-wrapper {
+	display: flex;
+	flex-direction: row;
+	gap: 5%;
+	align-items: center;
+}
+
+/* Project Details on Dashboard */
+.dashboard-projects-info {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	margin-top: 24px;
+	padding: 20px 24px;
+	background: #E5FCC2;
+	border: 1px solid #e5e7eb;
+	border-left: 4px solid #BD1550;
+	border-radius: 8px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+	width: 45%;
+}
+
+.add-project-btn {
+	background-color: #BD1550;
+	color: #ffffff;
+	border: none;
+	padding: 8px 16px;
+	border-radius: 6px;
+	font-size: 14px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.add-project-btn:hover {
+	background-color: #033649;
+	box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+}
+
 /* Project Tracker nav card */
 .dashboard-tasks-nav {
 	display: flex;
@@ -259,16 +305,19 @@
 	border-left: 4px solid #2563eb;
 	border-radius: 8px;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+	width: 45%;
 }
 
-.tasks-nav-info h2 {
+.tasks-nav-info h2,
+.projects-nav-info h2 {
 	margin: 0 0 3px;
 	font-size: 16px;
 	font-weight: 600;
 	color: #111827;
 }
 
-.tasks-nav-info p {
+.tasks-nav-info p,
+.projects-nav-info p {
 	margin: 0;
 	font-size: 13px;
 	color: #6b7280;
@@ -394,6 +443,16 @@
 	.topics-card {
 		width: calc(100vw - 112px);
 	}
+
+	.project-task-wrapper {
+		flex-direction: column;
+		align-items: normal;
+		gap: 0;
+	}
+
+	.dashboard-projects-info, .dashboard-tasks-nav {
+		width: unset;
+	}
 }
 
 @media (max-width: 768px) {
@@ -405,14 +464,14 @@
 		font-size: 22px;
 	}
 
-	.dashboard-tasks-nav {
+	.dashboard-projects-info, .dashboard-tasks-nav {
 		flex-direction: column;
 		align-items: flex-start;
 		gap: 12px;
 		padding: 16px;
 	}
 
-	.dashboard-tasks-nav .add-topic-btn {
+	.dashboard-projects-info .add-project-btn, .dashboard-tasks-nav .add-topic-btn {
 		width: 100%;
 		text-align: center;
 	}

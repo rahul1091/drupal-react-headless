@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./hooks/useAuth";
+import type { ReactNode } from "react";
 
 import TopBar from "./components/TopBar";
 import Footer from "./components/Footer";
@@ -11,33 +12,44 @@ import TaskList from "./components/TaskList";
 import CreateTask from "./components/CreateTask";
 import EditTask from "./components/EditTask";
 import AddTopic from "./components/AddTopic";
+import ProjectList from "./components/ProjectList";
+import AddProject from "./components/AddProject";
 
-function ProtectedRoute({ children }) {
+type RouteProps = {
+  children: ReactNode;
+};
+
+function ProtectedRoute({ children }: RouteProps) {
   const { user, loading } = useAuth();
-  if (loading)
+  if (loading) {
     return (
       <div className="loading-center">
         <span className="spinner spinner-lg" />
       </div>
     );
-  if (!user) return <Navigate to="/login" replace />;
-  return children;
+  }
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+  return <>{children}</>;
 }
 
-function AdminRoute({ children }) {
+function AdminRoute({ children }: RouteProps) {
   const { user, loading } = useAuth();
-  if (loading)
+  if (loading) {
     return (
       <div className="loading-center">
         <span className="spinner spinner-lg" />
       </div>
     );
-  if (!user) return <Navigate to="/login" replace />;
-  // Topic creation is admin-only - anyone else who lands here (e.g. via a
-  // stale bookmark) is bounced back to their dashboard rather than shown
-  // a form that will just 403 on submit.
-  if (!user.isAdmin) return <Navigate to="/dashboard" replace />;
-  return children;
+  }
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+  if (!user.isAdmin) {
+    return <Navigate to="/dashboard" replace />;
+  }
+  return <>{children}</>;
 }
 
 function AppLayout() {
@@ -89,6 +101,22 @@ function AppLayout() {
               <AdminRoute>
                 <AddTopic />
               </AdminRoute>
+            }
+          />
+          <Route
+            path="/projects"
+            element={
+              <ProtectedRoute>
+                <ProjectList />
+              </ProtectedRoute>
+            }
+          />
+					<Route
+            path="/add-project"
+            element={
+              <ProtectedRoute>
+                <AddProject />
+              </ProtectedRoute>
             }
           />
         </Routes>
