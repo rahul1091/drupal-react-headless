@@ -1,0 +1,5 @@
+active_translator: libretranslate
+translators:
+  libretranslate:
+    api_url: 'https://libretranslate.com/translate'
+    api_key: ''

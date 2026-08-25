@@ -1,0 +1,20 @@
+<?php
+
+/**
+ * @file
+ * Contains hooks for the Content Translate module.
+ */
+
+/**
+ * Implements hook_help().
+ */
+function content_translate_help($route_name, \Drupal\Core\Routing\RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.content_translate':
+    case 'content_translate.settings':
+      return '<p>' . t('Content Translate lets you batch-translate node and custom block content into other languages configured on this site, using an external translation API (LibreTranslate by default). Configure the API provider under Settings, then run jobs from the Translate content page. Note: the target content types / block types and languages must first be enabled for translation at <a href=":url">Content language settings</a>.', [
+        ':url' => '/admin/config/regional/content-language',
+      ]) . '</p>';
+  }
+  return NULL;
+}
