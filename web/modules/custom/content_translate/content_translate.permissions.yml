@@ -1,0 +1,9 @@
+administer content translate:
+  title: 'Administer Content Translate settings'
+  description: 'Configure translation API providers and credentials.'
+  restrict access: true
+
+translate content via content translate:
+  title: 'Run Content Translate batch translations'
+  description: 'Select content/blocks and run batch translation jobs.'
+  restrict access: true

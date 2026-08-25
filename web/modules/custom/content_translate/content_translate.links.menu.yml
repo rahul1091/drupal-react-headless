@@ -1,0 +1,13 @@
+content_translate.settings:
+  title: 'Content Translate'
+  description: 'Configure translation API providers used to auto-translate content.'
+  parent: system.admin_config_regional
+  route_name: content_translate.settings
+  weight: 20
+
+content_translate.batch_form:
+  title: 'Translate content'
+  description: 'Batch-translate nodes and blocks into other site languages.'
+  parent: content_translate.settings
+  route_name: content_translate.batch_form
+  weight: 10

@@ -1,0 +1,12 @@
+services:
+  plugin.manager.content_translate_translator:
+    class: Drupal\content_translate\TranslatorPluginManager
+    parent: default_plugin_manager
+
+  content_translate.field_helper:
+    class: Drupal\content_translate\TranslatableFieldHelper
+    arguments: ['@entity_field.manager', '@entity_type.bundle.info']
+
+  content_translate.translator_service:
+    class: Drupal\content_translate\ContentTranslatorService
+    arguments: ['@plugin.manager.content_translate_translator', '@config.factory', '@content_translate.field_helper', '@logger.factory']

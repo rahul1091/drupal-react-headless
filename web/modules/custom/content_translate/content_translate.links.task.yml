@@ -1,0 +1,9 @@
+content_translate.settings_tab:
+  title: 'Settings'
+  route_name: content_translate.settings
+  base_route: content_translate.settings
+
+content_translate.batch_form_tab:
+  title: 'Translate content'
+  route_name: content_translate.batch_form
+  base_route: content_translate.settings

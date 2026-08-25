@@ -1,0 +1,11 @@
+name: 'Content Translate'
+type: module
+description: 'Batch-translate node and block content into other site languages using pluggable translation APIs (LibreTranslate, and others in future).'
+package: Custom
+core_version_requirement: ^10 || ^11
+dependencies:
+  - drupal:content_translation
+  - drupal:language
+  - drupal:locale
+  - drupal:node
+  - drupal:block_content

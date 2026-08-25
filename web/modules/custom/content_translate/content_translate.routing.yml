@@ -1,0 +1,15 @@
+content_translate.settings:
+  path: '/admin/config/regional/content-translate'
+  defaults:
+    _form: '\Drupal\content_translate\Form\SettingsForm'
+    _title: 'Content Translate settings'
+  requirements:
+    _permission: 'administer content translate'
+
+content_translate.batch_form:
+  path: '/admin/config/regional/content-translate/translate'
+  defaults:
+    _form: '\Drupal\content_translate\Form\TranslateBatchForm'
+    _title: 'Translate content'
+  requirements:
+    _permission: 'translate content via content translate'

@@ -1,0 +1,29 @@
+<?php
+
+/**
+ * @file
+ * Install/uninstall hooks for Content Translate.
+ */
+
+/**
+ * Implements hook_requirements().
+ */
+function content_translate_requirements($phase) {
+  $requirements = [];
+
+  if ($phase === 'runtime') {
+    $language_manager = \Drupal::languageManager();
+    if (!$language_manager->isMultilingual()) {
+      $requirements['content_translate_languages'] = [
+        'title' => t('Content Translate'),
+        'value' => t('Only one language is configured'),
+        'description' => t('Add at least one additional language at <a href=":url">the languages settings page</a> to be able to translate content.', [
+          ':url' => '/admin/config/regional/language',
+        ]),
+        'severity' => REQUIREMENT_WARNING,
+      ];
+    }
+  }
+
+  return $requirements;
+}
