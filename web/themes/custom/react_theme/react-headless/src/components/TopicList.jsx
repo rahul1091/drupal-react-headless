@@ -37,7 +37,7 @@ function TopicList() {
   }
 
   if (topics.length === 0) {
-    return <div className="no-topics">{t("noTopicsFound")}</div>;
+    return <div className="no-topics">{t("dashboard.noTopicsFound")}</div>;
   }
 
   return (

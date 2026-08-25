@@ -1,31 +1,77 @@
-import { useState, useEffect, createContext, useContext } from "react";
+import {
+  useState,
+  useEffect,
+  createContext,
+  useContext,
+} from "react";
+
 import { loginUser, logoutUser } from "../api/client";
 
+/**
+ * @typedef {Object} AuthUser
+ * @property {string|number} [id]
+ * @property {string} [name]
+ * @property {string} [email]
+ * @property {string} [firstname]
+ * @property {string} [lastname]
+ * @property {string} [role]
+ * @property {string[]} [roles]
+ * @property {boolean} [isAdmin]
+ * @property {boolean} [isSuperAdmin]
+ * @property {string|number} [created]
+ */
+
+/**
+ * @typedef {Object} AuthContextValue
+ * @property {AuthUser|null} user
+ * @property {boolean} loading
+ * @property {(email: string, password: string) => Promise<void>} login
+ * @property {() => Promise<void>} logout
+ */
+
+/**
+ * @type {import("react").Context<AuthContextValue|null>}
+ */
 const AuthContext = createContext(null);
 
+/**
+ * @param {{ children: import("react").ReactNode }} props
+ */
 export function AuthProvider({ children }) {
+  /** @type {[AuthUser|null, import("react").Dispatch<import("react").SetStateAction<AuthUser|null>>]} */
   const [user, setUser] = useState(null);
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // If embedded in Drupal (react_theme.theme -> drupalSettings.reactApp),
-    // bootstrap the session from there instead of forcing another login.
-    const ds = window.drupalSettings?.reactApp?.currentUser;
-    if (ds && !ds.isAnonymous) {
+    // When embedded in Drupal, bootstrap the authenticated user
+    // from drupalSettings instead of requesting another login.
+    const currentUser =
+      window.drupalSettings?.reactApp?.currentUser;
+
+    if (currentUser && !currentUser.isAnonymous) {
       setUser({
-        id: ds.id,
-        name: ds.name,
-        roles: ds.roles,
-        isAdmin: ds.roles?.includes("administrator"),
+        id: currentUser.id,
+        name: currentUser.name,
+        roles: currentUser.roles || [],
+        isAdmin:
+          currentUser.roles?.includes("administrator") || false,
+        isSuperAdmin:
+          currentUser.roles?.includes("administrator") || false,
       });
     }
+
     setLoading(false);
   }, []);
 
+  /**
+   * @param {string} email
+   * @param {string} password
+   * @returns {Promise<void>}
+   */
   const login = async (email, password) => {
-    // loginUser() already unwraps the `result` envelope and returns
-    // `current_user` directly - do not re-nest it here.
     const currentUser = await loginUser(email, password);
+
     setUser({
       id: currentUser.uid,
       name: currentUser.username,
@@ -33,24 +79,46 @@ export function AuthProvider({ children }) {
       firstname: currentUser.firstname,
       lastname: currentUser.lastname,
       role: currentUser.role,
-      isAdmin: !!currentUser.isAdmin,
-      isSuperAdmin: !!currentUser.isSuperAdmin,
-			created: currentUser.created,
+      isAdmin: Boolean(currentUser.isAdmin),
+      isSuperAdmin: Boolean(currentUser.isSuperAdmin),
+      created: currentUser.created,
     });
   };
 
+  /**
+   * @returns {Promise<void>}
+   */
   const logout = async () => {
     await logoutUser();
     setUser(null);
   };
 
+  /** @type {AuthContextValue} */
+  const contextValue = {
+    user,
+    loading,
+    login,
+    logout,
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+    <AuthContext.Provider value={contextValue}>
       {children}
     </AuthContext.Provider>
   );
 }
 
+/**
+ * @returns {AuthContextValue}
+ */
 export function useAuth() {
-  return useContext(AuthContext);
+  const context = useContext(AuthContext);
+
+  if (context === null) {
+    throw new Error(
+      "useAuth must be used within an AuthProvider."
+    );
+  }
+
+  return context;
 }

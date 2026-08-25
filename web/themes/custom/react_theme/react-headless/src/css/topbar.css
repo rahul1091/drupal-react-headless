@@ -163,7 +163,6 @@
 .app-topbar__avatar:hover,
 .app-topbar__avatar--open {
 	box-shadow: 0 0 0 2px #0f2d5e, 0 0 0 3.5px #93c5fd, 0 2px 8px rgba(0, 0, 0, 0.4);
-	transform: translateY(-1px);
 }
 
 .app-topbar__avatar:focus-visible {
