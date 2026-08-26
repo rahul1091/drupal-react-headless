@@ -1,4 +1,5 @@
 import TopicList from "../components/TopicList";
+import ClientList from "../components/ClientList";
 import { useTranslation } from "react-i18next";
 
 export default function HomePage() {
@@ -10,6 +11,7 @@ export default function HomePage() {
         {t("app.welcomeHeading")}
       </h1>
       <TopicList />
+			<ClientList />
     </div>
   );
 }

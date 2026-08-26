@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
-import { getProjects } from "../api/client";
+import { getProjectDetails } from "../api/client";
 import "../css/projectlist.css";
 
 export default function ProjectList() {
@@ -15,7 +15,7 @@ export default function ProjectList() {
   const projectsPerPage = 5;
 
   useEffect(() => {
-    getProjects()
+    getProjectDetails()
       .then((response) => setProjects(response.data?.result || []))
       .catch((err) => console.error("Error fetching projects:", err))
       .finally(() => setLoading(false));

@@ -207,6 +207,7 @@ class TaskList extends ResourceBase
 			$severity = trim($data['severity'] ?? 'Low');
 			$status = trim($data['status'] ?? 'Open');
 			$assignedTo = isset($data['assigned_to']) ? (int) $data['assigned_to'] : 0;
+			$project_id = isset($data['project_name']) ? (int) $data['project_name'] : '';
 
 			// Validation check for required fields
 			if (empty($title) || empty($description) || empty($dueDate)) {
@@ -253,9 +254,9 @@ class TaskList extends ResourceBase
 				'field_severity' => $severity,
 				'field_status' => $status,
 				'field_assigned_to' => ['target_id' => $assignedTo],
+				'field_project_id' => ['target_id' => $project_id],
 				'status' => 1, // Published
 			]);
-
 			$node->save();
 
 			return new JsonResponse([

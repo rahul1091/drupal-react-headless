@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { addTask, getUsers, getProjects } from "../api/client";
+import { addTask, getUsers, getProjectList, getProjectDetails } from "../api/client";
 import "../css/tasklist.css";
 import { useTranslation } from "react-i18next";
 
@@ -38,7 +38,7 @@ export default function CreateTask() {
   }, []);
 
 	useEffect(() => {
-		getProjects()
+		getProjectList()
 			.then((response) => {
 				setProjects(response.data?.result || []);
 			})
@@ -127,8 +127,8 @@ export default function CreateTask() {
                 {projectsLoading ? 'Loading Projects' : 'Select Project'}
               </option>
               {projects.map((p) => (
-                <option key={p.project_details.project_id} value={p.project_details.project_id}>
-                  {p.project_details.title}
+                <option key={p.project_id} value={p.project_id}>
+                  {p.project_name}
                 </option>
               ))}
             </select>

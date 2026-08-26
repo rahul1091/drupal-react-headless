@@ -185,6 +185,7 @@ export const addTask = async (taskData) => {
     severity: taskData.severity,
     status: taskData.status,
     assigned_to: taskData.assigned_to,
+		project_name: taskData.project_name,
   };
   return API_URL.post("/api/add-task?_format=json", payload);
 };
@@ -193,7 +194,9 @@ export const addTask = async (taskData) => {
 // Project Details
 // ---------------------------------------------------------------------------
 
-export const getProjects = async () => API_URL.get("/api/project-details?_format=json");
+export const getProjectList = async () => API_URL.get("/api/project-list?_format=json");
+
+export const getProjectDetails = async () => API_URL.get("/api/project-details?_format=json");
 
 export const addProject = async (projectData) => {
 	const payload = {

@@ -62,6 +62,49 @@
 	font-size: 24px;
 }
 
+/* Project Filter Bar */
+.tasklist-filter-bar {
+  display: flex;
+	flex-direction: row;
+  align-items: center;
+  background-color: #1F5F61;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid #9FD6D2;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  margin-bottom: 24px;
+}
+
+.tasklist-filter-bar label {
+  font-size: 14px;
+  color: #FCFEF5;
+  font-weight: 600;
+  margin-right: 12px;
+}
+
+.tasklist-filter-bar select {
+  font-size: 14px;
+  color: #2d3748;
+  background-color: #f7fafc;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #cbd5e0;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  min-width: 200px;
+}
+
+.tasklist-filter-bar select:hover {
+  border-color: #a0aec0;
+}
+
+.tasklist-filter-bar select:focus {
+  border-color: #3182ce;
+  box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.15);
+  background-color: #ffffff;
+}
+
 /* Buttons */
 .add-task-btn,
 .btn-primary {
@@ -98,12 +141,21 @@
 
 /* Loading & Empty States */
 .tasklist-loading,
-.tasklist-error,
-.no-tasks {
+.tasklist-error {
 	text-align: center;
 	padding: 48px 0;
 	color: #6b7280;
 	font-size: 18px;
+}
+
+.no-tasks {
+	text-align: center;
+	padding: 48px;
+	color: #0F3460;
+	font-size: 18px;
+	font-weight: 700;
+	background: #fff;
+	border-radius: 8px;
 }
 
 .tasklist-error {
@@ -139,7 +191,7 @@
 	border: 1px solid #e5e7eb;
 	border-radius: 8px;
 	padding: 12px;
-	min-height: 120px;
+	min-height: 410px;
 }
 
 .task-column--open {
@@ -185,20 +237,36 @@
 
 .task-column__empty {
 	text-align: center;
-	color: #9ca3af;
-	font-size: 13px;
+	color: #8D99AE;
+	font-size: 14px;
 	padding: 20px 0;
 }
 
 /* Task Card */
 .task-card {
 	background: #ffffff;
-	border: 1px solid #e5e7eb;
+	border: 1px solid #D0ECEA;
 	border-radius: 8px;
 	padding: 16px;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 	display: flex;
 	flex-direction: column;
+	min-height: 328px;
+}
+
+.task-card-project-header {
+	margin-bottom: 16px;
+	background: #031634;
+	border-radius: 6px;
+	padding: 12px 8px;
+}
+
+.task-card-project-header h2 {
+	margin: 0;
+	font-size: 16px;
+	line-height: 1.25;
+	color: #F7FFF7;
+	text-align: center;
 }
 
 .task-card-header {
@@ -504,6 +572,15 @@
 }
 
 @media (max-width: 480px) {
+	.tasklist-filter-bar {
+		flex-direction: column;
+		gap: 12px;
+	}
+
+	.tasklist-filter-bar select {
+		min-width: unset;
+		max-width: 100%;
+	}
 
 	.tasklist-container,
 	.create-task-container {
