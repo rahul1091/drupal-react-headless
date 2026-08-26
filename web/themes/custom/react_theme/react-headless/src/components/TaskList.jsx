@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
-import { getTasks } from "../api/client";
+import { getTasks, getProjectList } from "../api/client";
 import "../css/tasklist.css";
 
 const COLUMNS = [
-  { key: "open",        label: "Open" },
+  { key: "open", label: "Open" },
   { key: "in_progress", label: "In Progress" },
-  { key: "completed",   label: "Completed" },
-  { key: "cancelled",   label: "Cancelled" },
+  { key: "completed", label: "Completed" },
+  { key: "cancelled", label: "Cancelled" },
 ];
 
 export default function TaskList() {
   const [tasks, setTasks] = useState([]);
+  const [projects, setProjects] = useState([]);
+  const [selectedProject, setSelectedProject] = useState("all");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -20,20 +22,50 @@ export default function TaskList() {
   const isSuperAdmin = !!user?.isSuperAdmin;
 
   useEffect(() => {
+    let isMounted = true;
     setIsLoading(true);
-    getTasks()
-      .then((response) => {
-        setTasks(response.data?.result || []);
+
+    Promise.all([getTasks(), getProjectList()])
+      .then(([tasksRes, projectsRes]) => {
+        if (!isMounted) return;
+        setTasks(tasksRes.data?.result || []);
+        
+        // Adjust based on how your getProjectList API returns its data array
+        const projectData = projectsRes.data?.result || projectsRes.data || [];
+        setProjects(projectData);
       })
       .catch((err) => {
-        console.error("Error fetching tasks:", err);
-        setError("Failed to load tasks. Please try again.");
+        if (!isMounted) return;
+        console.error("Error fetching initial data:", err);
+        setError("Failed to load task list. Please try again.");
       })
-      .finally(() => setIsLoading(false));
+      .finally(() => {
+        if (isMounted) setIsLoading(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const normaliseStatus = (raw = "") =>
     raw.toLowerCase().replace(/[\s-]+/g, "_");
+
+  // Map project names from the fetched projects list. 
+  // Falls back to unique project names from tasks if projects endpoint returns objects or strings.
+  const uniqueProjects = Array.from(
+    new Set(
+      projects.length > 0
+        ? projects.map((p) => (typeof p === "string" ? p : p.name || p.project_name))
+        : tasks.map((task) => task.project_name)
+    )
+  ).filter(Boolean);
+
+  // Filter tasks based on the selected project
+  const filteredTasks = tasks.filter((task) => {
+    if (selectedProject === "all") return true;
+    return task.project_name === selectedProject;
+  });
 
   const grouped = COLUMNS.reduce((acc, col) => {
     acc[col.key] = [];
@@ -41,7 +73,7 @@ export default function TaskList() {
   }, {});
   const other = [];
 
-  tasks.forEach((task) => {
+  filteredTasks.forEach((task) => {
     const norm = normaliseStatus(task.status);
     if (grouped[norm] !== undefined) {
       grouped[norm].push(task);
@@ -65,7 +97,7 @@ export default function TaskList() {
             <span className="breadcrumb-sep">/</span>
             <span>Task List</span>
           </div>
-          <h2>Task List ({tasks.length})</h2>
+          <h2>Task List ({filteredTasks.length})</h2>
           <p className="tasklist-scope">
             {isSuperAdmin
               ? "Showing all tasks across all users."
@@ -80,46 +112,86 @@ export default function TaskList() {
         </button>
       </div>
 
+      {/* Project Filter Controls - Showing all available projects from API */}
+      {!isLoading && !error && (
+        <div className="tasklist-filter-bar">
+          <label htmlFor="project-filter">Filter by Project:</label>
+          <select
+            id="project-filter"
+            value={selectedProject}
+            onChange={(e) => setSelectedProject(e.target.value)}
+          >
+            <option value="all">All Projects</option>
+            {uniqueProjects.map((projectName) => (
+              <option key={projectName} value={projectName}>
+                {projectName}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
+
       {isLoading && <div className="tasklist-loading">Loading tasks...</div>}
-      {error   && <div className="tasklist-error">{error}</div>}
+      {error && <div className="tasklist-error">{error}</div>}
 
       {!isLoading && !error && (
         <div className="tasklist-body">
-          {tasks.length === 0 ? (
-            <div className="no-tasks">No tasks found.</div>
+          {filteredTasks.length === 0 ? (
+            <div className="no-tasks">No Active Tasks</div>
           ) : (
             <div className="task-board">
               {COLUMNS.map((col) => {
-                const colTasks = col.key === "open"
-                  ? [...(grouped.open || []), ...other]
-                  : grouped[col.key] || [];
+                const colTasks =
+                  col.key === "open"
+                    ? [...(grouped.open || []), ...other]
+                    : grouped[col.key] || [];
 
                 return (
-                  <div key={col.key} className={`task-column task-column--${col.key}`}>
+                  <div
+                    key={col.key}
+                    className={`task-column task-column--${col.key}`}
+                  >
                     <div className="task-column__header">
-                      <span className={`badge status-${col.key}`}>{col.label}</span>
-                      <span className="task-column__count">{colTasks.length}</span>
+                      <span className={`badge status-${col.key}`}>
+                        {col.label}
+                      </span>
+                      <span className="task-column__count">
+                        {colTasks.length}
+                      </span>
                     </div>
 
                     <div className="task-column__cards">
                       {colTasks.length === 0 ? (
-                        <div className="task-column__empty">No tasks</div>
+                        <div className="task-column__empty">No Tasks</div>
                       ) : (
                         colTasks.map((task) => (
                           <div key={task.id} className="task-card">
+                            <div className="task-card-project-header">
+                              <h2>{task.project_name}</h2>
+                            </div>
                             <div className="task-card-header">
                               <h3>{task.title}</h3>
                             </div>
-                            <p className="task-description">{task.description}</p>
+                            <p className="task-description">
+                              {task.description}
+                            </p>
                             <div className="task-card-people">
                               {task.created_by?.name && (
                                 <p className="task-meta">
-                                  Created by <strong>{task.created_by.fullname || task.created_by.name}</strong>
+                                  Created by{" "}
+                                  <strong>
+                                    {task.created_by.fullname ||
+                                      task.created_by.name}
+                                  </strong>
                                 </p>
                               )}
                               {isSuperAdmin && task.assigned_to?.name && (
                                 <p className="task-meta">
-                                  Assigned to <strong>{task.assigned_to.fullname || task.assigned_to.name}</strong>
+                                  Assigned to{" "}
+                                  <strong>
+                                    {task.assigned_to.fullname ||
+                                      task.assigned_to.name}
+                                  </strong>
                                 </p>
                               )}
                             </div>
@@ -138,14 +210,14 @@ export default function TaskList() {
                                 </span>
                               </span>
                             </div>
-                            {/* Superadmin views all tasks for oversight only;
-                                editing is restricted to the assignee's own route. */}
                             {!isSuperAdmin && (
                               <button
                                 type="button"
                                 className="task-edit-btn"
                                 onClick={() =>
-                                  navigate(`/edit-task/${task.id}`, { state: { task } })
+                                  navigate(`/edit-task/${task.id}`, {
+                                    state: { task },
+                                  })
                                 }
                               >
                                 Edit Task
