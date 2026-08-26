@@ -1,0 +1,18 @@
+uuid: 9eef9d51-5383-4f93-bedf-48f7dd02a7ea
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.project_tracker
+id: node.project_tracker.created
+field_name: created
+entity_type: node
+bundle: project_tracker
+label: 'Authored on'
+description: 'The date and time that the content was created.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: created

@@ -5,6 +5,7 @@ dependencies:
   config:
     - filter.format.restricted_html
     - rest.resource.language_list_rest
+    - rest.resource.project_list_rest
     - rest.resource.topiclist_rest
     - rest.resource.user_login_rest
     - rest.resource.user_registration_rest
@@ -26,6 +27,7 @@ permissions:
   - 'access content'
   - 'access site-wide contact form'
   - 'restful get language_list_rest'
+  - 'restful get project_list_rest'
   - 'restful get topiclist_rest'
   - 'restful post user_login_rest'
   - 'restful post user_registration_rest'

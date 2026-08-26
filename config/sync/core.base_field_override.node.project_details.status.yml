@@ -1,14 +1,14 @@
-uuid: 045746ef-d11a-4166-b108-15cb663491f7
+uuid: c7ca2e70-2231-4940-a1f8-abcf4ce6ac9d
 langcode: en
 status: true
 dependencies:
   config:
-    - node.type.project_tracker
-id: node.project_tracker.promote
-field_name: promote
+    - node.type.project_details
+id: node.project_details.status
+field_name: status
 entity_type: node
-bundle: project_tracker
-label: 'Promoted to front page'
+bundle: project_details
+label: Published
 description: ''
 required: false
 translatable: false

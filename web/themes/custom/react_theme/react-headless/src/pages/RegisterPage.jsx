@@ -6,10 +6,19 @@ import { useTranslation } from "react-i18next";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
-	const { t } = useTranslation();
+  const { t } = useTranslation();
+
+  // User Type Security Codes (Updated to 4 digits to match validation logic)
+  const USER_TYPE_CODES = {
+    administrator: "1011",
+    client: "6498",
+    engineer: "4965",
+  };
 
   // Form State
   const [formData, setFormData] = useState({
+    usertype: "",
+    securityCode: "",
     firstname: "",
     lastname: "",
     email: "",
@@ -32,18 +41,44 @@ export default function RegisterPage() {
 
   // Client-side Validation
   const validateForm = () => {
-    const { firstname, lastname, email, password } = formData;
+    const {
+      usertype,
+      securityCode,
+      firstname,
+      lastname,
+      email,
+      password,
+    } = formData;
 
-    if (!firstname || !lastname || !email || !password) {
+    if (
+      !usertype ||
+      !securityCode ||
+      !firstname ||
+      !lastname ||
+      !email ||
+      !password
+    ) {
       setError("All fields are required.");
       return false;
     }
 
-    // Password strength requirement matching Drupal backend (Min 8 chars, 1 Upper, 1 Lower, 1 Digit)
+    // Validate 4-digit code
+    if (!/^\d{4}$/.test(securityCode)) {
+      setError("Security code must be a 4-digit number.");
+      return false;
+    }
+
+    // Validate code against selected user type
+    if (USER_TYPE_CODES[usertype] !== securityCode) {
+      setError("Invalid security code for selected user type.");
+      return false;
+    }
+
+    // Password strength validation
     const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
     if (!passwordPattern.test(password)) {
       setError(
-        "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number.",
+        "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number."
       );
       return false;
     }
@@ -55,26 +90,33 @@ export default function RegisterPage() {
     e.preventDefault();
     setError("");
     setSuccess("");
-
     if (!validateForm()) return;
 
     setLoading(true);
-
     try {
       const response = await registerUser(formData);
-
       if (response.data?.status === "Success") {
         setSuccess("Account created successfully! Redirecting to login...");
+
+				// Clear all form inputs
+        setFormData({
+          usertype: "",
+          securityCode: "",
+          firstname: "",
+          lastname: "",
+          email: "",
+          password: "",
+        });
+
         setTimeout(() => {
           navigate("/login");
-        }, 5000);
+        }, 3000);
       } else {
         setError(response.data?.result || "Registration failed.");
       }
     } catch (err) {
       console.error("Registration Error:", err);
-      const apiMessage =
-        err.response?.data?.result || err.response?.data?.message;
+      const apiMessage = err.response?.data?.result || err.response?.data?.message;
       setError(apiMessage || "Something went wrong. Please try again.");
     } finally {
       setLoading(false);
@@ -91,7 +133,53 @@ export default function RegisterPage() {
         {success && <div className="alert alert-success">{success}</div>}
 
         <form onSubmit={handleSubmit} noValidate>
-          {/* First & Last Name Grid */}
+          {/* User Type */}
+          <div className="form-group">
+            <label className="form-label" htmlFor="usertype">
+              User Type
+            </label>
+
+            <select
+              id="usertype"
+              name="usertype"
+              className="form-input"
+              value={formData.usertype}
+              onChange={handleChange}
+              disabled={loading}
+            >
+              <option value="">Select User Type</option>
+              <option value="administrator">Administrator</option>
+              <option value="client">Client</option>
+              <option value="engineer">Engineer</option>
+            </select>
+          </div>
+
+          {/* Security Code */}
+          {formData.usertype && (
+            <div className="form-group">
+              <label className="form-label" htmlFor="securityCode">
+                Security Code
+              </label>
+
+              <input
+                id="securityCode"
+                name="securityCode"
+                type="password"
+                className="form-input"
+                value={formData.securityCode}
+                onChange={handleChange}
+                maxLength={4}
+                placeholder="Enter 4 digit security code"
+                disabled={loading}
+              />
+
+              <small className="form-hint">
+                Enter the security code assigned for the selected user type.
+              </small>
+            </div>
+          )}
+
+          {/* First Name */}
           <div className="form-group">
             <label className="form-label" htmlFor="firstname">
               {t("common.firstName")}
@@ -108,6 +196,7 @@ export default function RegisterPage() {
             />
           </div>
 
+          {/* Last Name */}
           <div className="form-group">
             <label className="form-label" htmlFor="lastname">
               {t("common.lastName")}
@@ -122,6 +211,7 @@ export default function RegisterPage() {
               disabled={loading}
             />
           </div>
+
           {/* Email */}
           <div className="form-group">
             <label className="form-label" htmlFor="email">
@@ -159,13 +249,17 @@ export default function RegisterPage() {
             </small>
           </div>
 
-          {/* Submit Button */}
-          <button type="submit" className="btn-register" disabled={loading}>
+          {/* Submit */}
+          <button
+            type="submit"
+            className="btn-register"
+            disabled={loading}
+          >
             {loading ? <span className="spinner" /> : t("authentication.register")}
           </button>
         </form>
 
-        {/* Back to Login Link */}
+        {/* Footer */}
         <div className="auth-footer">
           <span>{t("authentication.alreadyHaveAccount")}</span>
           <Link to="/login" className="auth-link">

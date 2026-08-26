@@ -1,20 +1,20 @@
-uuid: 045746ef-d11a-4166-b108-15cb663491f7
+uuid: 929178ed-ad6d-4743-93a4-f2b747591996
 langcode: en
 status: true
 dependencies:
   config:
-    - node.type.project_tracker
-id: node.project_tracker.promote
-field_name: promote
+    - node.type.project_details
+id: node.project_details.sticky
+field_name: sticky
 entity_type: node
-bundle: project_tracker
-label: 'Promoted to front page'
+bundle: project_details
+label: 'Sticky at top of lists'
 description: ''
 required: false
 translatable: false
 default_value:
   -
-    value: 1
+    value: 0
 default_value_callback: ''
 settings:
   on_label: 'On'

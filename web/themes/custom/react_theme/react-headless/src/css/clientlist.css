@@ -5,7 +5,7 @@
   background-color: #F8F9FA;
   border-radius: 20px;
   border: 1px solid #E2E8F0;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
 }
 
 .client-list-header {
@@ -37,7 +37,7 @@
 }
 
 .clients-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-4px);
   border-color: rgba(255, 255, 255, 0.15);
 }
 

@@ -1,0 +1,9 @@
+uuid: f99ca6f9-3929-4428-bacf-aa1770e9b216
+langcode: en
+status: true
+dependencies: {  }
+id: engineer
+label: Engineer
+weight: 5
+is_admin: false
+permissions: {  }

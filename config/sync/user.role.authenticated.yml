@@ -6,6 +6,7 @@ dependencies:
     - filter.format.basic_html
     - rest.resource.language_list_rest
     - rest.resource.project_details_rest
+    - rest.resource.project_list_rest
     - rest.resource.taskdetail_rest
     - rest.resource.tasklist_rest
     - rest.resource.topiclist_rest
@@ -34,6 +35,7 @@ permissions:
   - 'post comments'
   - 'restful get language_list_rest'
   - 'restful get project_details_rest'
+  - 'restful get project_list_rest'
   - 'restful get taskdetail_rest'
   - 'restful get tasklist_rest'
   - 'restful get topiclist_rest'

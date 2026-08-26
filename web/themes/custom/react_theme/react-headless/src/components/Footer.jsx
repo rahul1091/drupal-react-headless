@@ -28,9 +28,6 @@ export default function Footer() {
               <li>
                 <Link to="/dashboard"> {t("navigation.dashboard")} </Link>
               </li>
-              <li>
-                <Link to="/tasks"> {t("navigation.tasks")} </Link>
-              </li>
             </ul>
           </div>
           <div className="app-footer__col">
