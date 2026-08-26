@@ -1,0 +1,18 @@
+uuid: 760fbf56-4777-48e6-a5b2-167d82694545
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.project_tracker
+id: node.project_tracker.title
+field_name: title
+entity_type: node
+bundle: project_tracker
+label: Title
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

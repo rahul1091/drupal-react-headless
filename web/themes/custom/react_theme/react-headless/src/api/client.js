@@ -115,6 +115,8 @@ export const logoutUser = async (token) => {
 /** Registers a new Drupal user via /api/user-registration. */
 export const registerUser = async (userData) => {
   const payload = {
+		usertype: userData.usertype,
+		security_code: userData.securityCode,
     firstname: userData.firstname,
     lastname: userData.lastname,
     email: userData.email,

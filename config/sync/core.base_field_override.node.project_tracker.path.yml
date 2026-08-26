@@ -1,21 +1,20 @@
-uuid: c1e816de-4a38-45fd-97d8-c5333dd1ed72
+uuid: 9d4be453-de9e-4fb0-9be3-b6790c87f304
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_due_date
     - node.type.project_tracker
   module:
-    - datetime
-id: node.project_tracker.field_due_date
-field_name: field_due_date
+    - path
+id: node.project_tracker.path
+field_name: path
 entity_type: node
 bundle: project_tracker
-label: 'Due Date'
+label: 'URL alias'
 description: ''
 required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''
 settings: {  }
-field_type: datetime
+field_type: path

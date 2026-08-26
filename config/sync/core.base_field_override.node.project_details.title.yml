@@ -1,0 +1,18 @@
+uuid: dd700060-c326-4481-b38a-53eaa3856c97
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.project_details
+id: node.project_details.title
+field_name: title
+entity_type: node
+bundle: project_details
+label: Title
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

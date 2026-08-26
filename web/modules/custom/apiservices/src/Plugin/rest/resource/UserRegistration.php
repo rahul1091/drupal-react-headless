@@ -78,11 +78,18 @@ class UserRegistration extends ResourceBase
   public function post(Request $request)
   {
     try {
+			// Security validation codes
+			$codes = [
+				'administrator' => '1011',
+				'client' => '6498',
+				'engineer' => '4965',
+			];
+
       $params = json_decode($request->getContent(), TRUE) ?? [];
 
       // 1. Mandatory Field Validation
       $missingFields = [];
-      foreach (['firstname', 'lastname', 'email', 'password'] as $field) {
+      foreach (['usertype', 'security_code', 'firstname', 'lastname', 'email', 'password'] as $field) {
         if (empty($params[$field])) {
           $missingFields[] = ucfirst($field);
         }
@@ -101,6 +108,8 @@ class UserRegistration extends ResourceBase
       $lastName = trim(preg_replace('/[^A-Za-z0-9 ]/', '', $params['lastname']));
       $userEmail = trim($params['email']);
       $userPassword = $params['password'];
+			$usertype = trim($params['usertype']);
+			$security_code = trim($params['security_code']);
 
       $userName = strtolower($firstName . '.' . $lastName) . '.' . date('dmy');
       $userFullName = ucfirst($firstName) . ' ' . ucfirst($lastName);
@@ -151,13 +160,21 @@ class UserRegistration extends ResourceBase
         ], 409);
       }
 
-      // 5. Create and Save User Entity
+			// 5. Check user-type code
+			if (!isset($codes[$usertype]) || $codes[$usertype] !== $security_code) {
+				return new JsonResponse([
+					'status' => 'Error',
+					'result' => 'Invalid security code.',
+				], 400);
+			}
+
+      // 6. Create and Save User Entity
       /** @var \Drupal\user\UserInterface $user */
       $user = $userStorage->create([
         'name' => $userName,
         'pass' => $userPassword,
         'mail' => $userEmail,
-        'roles' => ['client'], // 'authenticated' is added automatically by Drupal
+        'roles' => [$usertype], // 'authenticated' is added automatically by Drupal
         'field_firstname' => ucfirst($firstName),
         'field_lastname' => ucfirst($lastName),
         'status' => 1,
