@@ -1,0 +1,5 @@
+services:
+  user_import.creator:
+    class: Drupal\user_import\UserCreator
+    arguments:
+      - '@entity_type.manager'

@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { getProjectList } from "../api/client";
+import { getClientList } from "../api/client";
 import "../css/clientlist.css";
 
 export default function ClientList() {
-  const [projects, setProjects] = useState([]);
+  const [clients, setClients] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getProjectList()
-      .then((response) => setProjects(response.data?.result || []))
+    getClientList()
+      .then((response) => setClients(response.data?.result || []))
       .catch((err) => console.error("Error fetching projects:", err))
       .finally(() => setLoading(false));
   }, []);
 
-	console.log("projects: ", projects);
+	console.log("clients: ", clients);
 
   if (loading) {
     return (
@@ -27,21 +27,22 @@ export default function ClientList() {
     );
   }
 
-  if (projects.length === 0) {
-    return <div className="no-projects">No Projects Found.</div>;
+  if (clients.length === 0) {
+    return <div className="no-projects">No Clients Found.</div>;
   }
 
   return (
 		<div className="client-list-container">
 			<h2 className="client-list-header">Clients List</h2>
 			<div className="client-cards-grid">
-				{projects.map((project, index) => {
+				{clients.map((client, index) => {
 					return (
 						<div
-							key={project.project_id}
+							key={client.project_id}
 							className="clients-card"
 						>
-							<p>{project.client_name}</p>
+							<h3>{client.client_name}</h3>
+							<p>{client.client_city}, {client.client_country}</p>
 						</div>
 					);
 				})}

@@ -15,13 +15,11 @@
     "topics": "Themenliste",
     "navigation": "Navigation",
     "account": "Konto",
-    "login": "Anmelden",
     "register": "Registrieren"
   },
 
   "authentication": {
-    "signIn": "Anmelden",
-    "logIn": "Anmelden",
+		"login": "Anmelden",
     "logOut": "Abmelden",
     "loggingOut": "Abmeldung läuft...",
     "register": "Registrieren",

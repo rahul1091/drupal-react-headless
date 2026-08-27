@@ -196,7 +196,7 @@ export const addTask = async (taskData) => {
 // Project Details
 // ---------------------------------------------------------------------------
 
-export const getProjectList = async () => API_URL.get("/api/project-list?_format=json");
+export const getClientList = async () => API_URL.get("/api/client-list?_format=json");
 
 export const getProjectDetails = async () => API_URL.get("/api/project-details?_format=json");
 
@@ -209,6 +209,7 @@ export const addProject = async (projectData) => {
 		start_date: projectData.startDate,
 		end_date: projectData.endDate,
 		client_name: projectData.clientName,
+		client_manager: projectData.clientManager,
 		client_address: projectData.clientAddress,
 		client_city: projectData.clientCity,
 		client_country: projectData.clientCountry,

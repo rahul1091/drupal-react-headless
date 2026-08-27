@@ -11,7 +11,7 @@ export default function ProjectList() {
 
   const navigate = useNavigate();
   const { user } = useAuth();
-  const isSuperAdmin = !!user?.isSuperAdmin;
+  const isAdmin = !!user?.isAdmin;
   const projectsPerPage = 5;
 
   useEffect(() => {
@@ -105,48 +105,66 @@ export default function ProjectList() {
               <div className="project-card-header">
                 <div className="project-heading">
                   <p className="project-label">Project</p>
-                  <h2 className="project-title">{project.project_details.title}</h2>
+                  <h2 className="project-title">
+                    {project.project_details.title}
+                  </h2>
                 </div>
 
-                <p className="project-code">{project.project_details.project_code}</p>
+                <p className="project-code">
+                  {project.project_details.project_code}
+                </p>
               </div>
 
               <div className="project-summary">
                 <div className="project-info-item">
                   <p className="project-info-label">Client Name</p>
-                  <p className="project-info-value">{project.client_details.client_name}</p>
+                  <p className="project-info-value">
+                    {project.client_details.client_name}
+                  </p>
                 </div>
 
                 <div className="project-info-item">
                   <p className="project-info-label">Project Manager</p>
-                  <p className="project-info-value">{project.project_details.project_manager?.fullname}</p>
+                  <p className="project-info-value">
+                    {project.project_details.project_manager?.fullname}
+                  </p>
                 </div>
 
                 <div className="project-info-item">
                   <p className="project-info-label">Start Date</p>
-                  <p className="project-info-value">{project.project_details.start_date}</p>
+                  <p className="project-info-value">
+                    {project.project_details.start_date}
+                  </p>
                 </div>
 
                 <div className="project-info-item">
                   <p className="project-info-label">End Date</p>
-                  <p className="project-info-value">{project.project_details.end_date}</p>
+                  <p className="project-info-value">
+                    {project.project_details.end_date}
+                  </p>
                 </div>
               </div>
 
               <div className="project-summary">
                 <div className="project-info-item">
                   <p className="project-info-label">Client Address</p>
-                  <p className="project-info-value">{project.client_details.client_address}</p>
+                  <p className="project-info-value">
+                    {project.client_details.client_address}
+                  </p>
                 </div>
 
                 <div className="project-info-item">
                   <p className="project-info-label">Client City</p>
-                  <p className="project-info-value">{project.client_details.client_city}</p>
+                  <p className="project-info-value">
+                    {project.client_details.client_city}
+                  </p>
                 </div>
 
                 <div className="project-info-item">
                   <p className="project-info-label">Client Country</p>
-                  <p className="project-info-value">{project.client_details.client_country}</p>
+                  <p className="project-info-value">
+                    {project.client_details.client_country}
+                  </p>
                 </div>
 
                 <div className="project-info-item">
@@ -160,7 +178,9 @@ export default function ProjectList() {
               <div className="project-description">
                 <div className="project-info-item">
                   <p className="project-info-label">Description</p>
-                  <p className="project-info-value">{project.project_details.description}</p>
+                  <p className="project-info-value">
+                    {project.project_details.description}
+                  </p>
                 </div>
 
                 <div className="project-info-item">
@@ -205,7 +225,7 @@ export default function ProjectList() {
             </button>
           </div>
 
-					<div className="page-info">
+          <div className="page-info">
             Showing {indexOfFirstProject + 1} -{" "}
             {Math.min(indexOfLastProject, projects.length)} of {projects.length}{" "}
             projects

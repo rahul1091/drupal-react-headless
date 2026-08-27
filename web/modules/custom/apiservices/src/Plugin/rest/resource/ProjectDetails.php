@@ -204,6 +204,7 @@ class ProjectDetails extends ResourceBase
 			$start_date = trim($data['start_date'] ?? '');
 			$end_date = trim($data['end_date'] ?? '');
 			$client_name = trim($data['client_name'] ?? '');
+			$client_manager = isset($data['client_manager']) ? (int) $data['client_manager'] : 0;
 			$client_address = trim($data['client_address'] ?? '');
 			$client_city = trim($data['client_city'] ?? '');
 			$client_country = trim($data['client_country'] ?? '');
@@ -217,10 +218,10 @@ class ProjectDetails extends ResourceBase
 				], 400);
 			}
 
-			if (empty($project_manager)) {
+			if (empty($project_manager) || empty($client_manager)) {
 				return new JsonResponse([
 					'status' => 'Error',
-					'message' => 'Missing required field: Project Manager (uid of the user to assign this project to).',
+					'message' => 'Missing required field: Project/Client Manager (uid of the user to assign this project to).',
 				], 400);
 			}
 
@@ -231,10 +232,16 @@ class ProjectDetails extends ResourceBase
 					'message' => 'The selected assignee is not a valid, active user.',
 				], 400);
 			}
-			// Superadmin (uid=1) is the oversight role and should not be assigned
-			// tasks — the user list the frontend shows already excludes them, and
-			// this check prevents a crafted POST from bypassing that restriction.
-			if ((int) $project_manager->id() === 1) {
+			$client_manager = $this->entityTypeManager->getStorage('user')->load($client_manager);
+			if (!$client_manager || !$client_manager->isActive()) {
+				return new JsonResponse([
+					'status' => 'Error',
+					'message' => 'The selected assignee is not a valid, active user.',
+				], 400);
+			}
+			// Superadmin (uid=1) is the oversight role and should not be assigned tasks — the user list the frontend shows already excludes them
+			// This check prevents a crafted POST from bypassing that restriction.
+			if ((int) $project_manager->id() === 1 || (int) $client_manager->id() === 1) {
 				return new JsonResponse([
 					'status' => 'Error',
 					'message' => 'Project Manager cannot be assigned to the superadmin account.',
@@ -252,6 +259,7 @@ class ProjectDetails extends ResourceBase
 				'field_start_date' => $start_date,
 				'field_end_date' => $end_date,
 				'field_client_name' => $client_name,
+				'field_client_manager' => ['target_id' => $client_manager->id()],
 				'field_client_address' => $client_address,
 				'field_client_city' => $client_city,
 				'field_client_country' => $client_country,
@@ -273,6 +281,7 @@ class ProjectDetails extends ResourceBase
 					'field_start_date' => $start_date,
 					'field_end_date' => $end_date,
 					'field_client_name' => $client_name,
+					'field_client_manager' => $this->userSummary($client_manager),
 					'field_client_address' => $client_address,
 					'field_client_city' => $client_city,
 					'field_client_country' => $client_country,

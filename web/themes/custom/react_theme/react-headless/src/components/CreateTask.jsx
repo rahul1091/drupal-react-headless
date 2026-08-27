@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { addTask, getUsers, getProjectList, getProjectDetails } from "../api/client";
+import { addTask, getUsers, getClientList, getProjectDetails } from "../api/client";
 import "../css/tasklist.css";
 import { useTranslation } from "react-i18next";
 
@@ -37,8 +37,13 @@ export default function CreateTask() {
       .finally(() => setUsersLoading(false));
   }, []);
 
+	// Filter users to include only those with the 'engineer' role (case-insensitive check)
+  const engineerUsers = users.filter(
+    (u) => u.role && u.role.toLowerCase() === "engineer",
+  );
+
 	useEffect(() => {
-		getProjectList()
+		getClientList()
 			.then((response) => {
 				setProjects(response.data?.result || []);
 			})
@@ -151,7 +156,7 @@ export default function CreateTask() {
               <option value="" disabled>
                 {usersLoading ? t("loadingUsers") : t("task.selectUser")}
               </option>
-              {users.map((u) => (
+              {engineerUsers.map((u) => (
                 <option key={u.uid} value={u.uid}>
                   {u.fullname || u.name}
                 </option>
