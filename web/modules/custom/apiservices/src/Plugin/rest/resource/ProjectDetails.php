@@ -133,12 +133,26 @@ class ProjectDetails extends ResourceBase
 					'project_manager' => $project_manager,
 				];
 
+				$client_manager = [];
+				if (!$node->get('field_client_manager')->isEmpty()) {
+					$user = $node->get('field_client_manager')->entity;
+					if ($user) {
+						$client_manager = [
+							'uid' => $user->id(),
+							'name' => $user->getDisplayName(),
+							'mail' => $user->getEmail(),
+							'fullname' => trim($user->get('field_firstname')->value . ' ' . $user->get('field_lastname')->value),
+						];
+					}
+				}
+
 				$client_details = [
 					'client_name' => $node->get('field_client_name')->value,
 					'client_address' => $node->get('field_client_address')->value,
 					'client_city' => $node->get('field_client_city')->value,
 					'client_country' => $node->get('field_client_country')->value,
 					'client_budget' => $node->get('field_client_budget')->value,
+					'client_poc' => $client_manager,
 				];
 
 				$projects[] = [
@@ -146,7 +160,6 @@ class ProjectDetails extends ResourceBase
 					'created' => date('d-m-Y', $node->getCreatedTime()),
 					'project_details' => $project_details,
 					'client_details' => $client_details,
-					'project_issues' => []
 				];
 			}
 
