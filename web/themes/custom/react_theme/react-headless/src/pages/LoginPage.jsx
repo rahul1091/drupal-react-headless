@@ -37,7 +37,7 @@ export default function LoginPage() {
   return (
     <div className="login-wrapper">
       <div className="login-card">
-        <h1>{t("authentication.signIn")}</h1>
+        <h1>{t("authentication.login")}</h1>
         <p>{t("authentication.loginDescription")}</p>
 
         {error && <div className="alert alert-error">{error}</div>}
@@ -77,7 +77,7 @@ export default function LoginPage() {
             className="btn-login btn-sign-in"
             disabled={loading}
           >
-            {loading ? <span className="spinner" /> : t("authentication.signIn")}
+            {loading ? <span className="spinner" /> : t("authentication.login")}
           </button>
         </form>
 

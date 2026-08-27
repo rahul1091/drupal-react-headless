@@ -12,20 +12,20 @@ export default function TopBar() {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
-	const { i18n, t } = useTranslation();
-	const [languages, setLanguages] = useState([]);
+  const { i18n, t } = useTranslation();
+  const [languages, setLanguages] = useState([]);
 
-	useEffect(() => {
-		const fetchLanguages = async () => {
-			try {
-				const response = await getLanguages();
-				setLanguages(response.data.result);
-			} catch (error) {
-				console.error("Failed to fetch languages:", error);
-			}
-		};
-		fetchLanguages();
-	}, []);
+  useEffect(() => {
+    const fetchLanguages = async () => {
+      try {
+        const response = await getLanguages();
+        setLanguages(response.data.result);
+      } catch (error) {
+        console.error("Failed to fetch languages:", error);
+      }
+    };
+    fetchLanguages();
+  }, []);
 
   const displayName =
     [user?.firstname, user?.lastname].filter(Boolean).join(" ") ||
@@ -59,11 +59,11 @@ export default function TopBar() {
     }
   };
 
-	const handleLanguageChange = (e) => {
-		const lang = e.target.value;
-		i18n.changeLanguage(lang);
-		localStorage.setItem("langcode", lang);
-	};
+  const handleLanguageChange = (e) => {
+    const lang = e.target.value;
+    i18n.changeLanguage(lang);
+    localStorage.setItem("langcode", lang);
+  };
 
   // Close the dropdown when the user clicks outside of it
   useEffect(() => {
@@ -168,29 +168,31 @@ export default function TopBar() {
                         <polyline points="16 17 21 12 16 7" />
                         <line x1="21" y1="12" x2="9" y2="12" />
                       </svg>
-                      {isLoggingOut ? t("authentication.loggingOut") : t("authentication.logOut")}
+                      {isLoggingOut
+                        ? t("authentication.loggingOut")
+                        : t("authentication.logOut")}
                     </button>
                   </div>
                 )}
               </div>
             ) : (
               <Link to="/login" className="btn-login">
-                {t("authentication.signIn")}
+                {t("authentication.login")}
               </Link>
             )}
           </nav>
 
-					<select
-						className="language-switcher"
-						value={i18n.language}
-						onChange={handleLanguageChange}
-					>
-						{languages.map((lang) => (
-							<option key={lang.langcode} value={lang.langcode}>
-								{lang.name}
-							</option>
-						))}
-					</select>
+          <select
+            className="language-switcher"
+            value={i18n.language}
+            onChange={handleLanguageChange}
+          >
+            {languages.map((lang) => (
+              <option key={lang.langcode} value={lang.langcode}>
+                {lang.name}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
     </header>

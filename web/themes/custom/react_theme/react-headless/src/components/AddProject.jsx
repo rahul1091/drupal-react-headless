@@ -6,59 +6,70 @@ import { useTranslation } from "react-i18next";
 
 export default function AddProject() {
   const { t } = useTranslation();
-	const navigate = useNavigate();
-	const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
-		projectName: "",
-		projectCode: "",
-		projectManager: "",
-		description: "",
-		startDate: "",
-		endDate: "",
-		clientName: "",
-		clientAddress: "",
-		clientCity: "",
-		clientCountry: "",
-		clientBudget: ""
-	});
+    projectName: "",
+    projectCode: "",
+    projectManager: "",
+    description: "",
+    startDate: "",
+    endDate: "",
+    clientName: "",
+    clientManager: "",
+    clientAddress: "",
+    clientCity: "",
+    clientCountry: "",
+    clientBudget: "",
+  });
   const [users, setUsers] = useState([]);
   const [usersLoading, setUsersLoading] = useState(true);
   const [usersError, setUsersError] = useState(null);
 
-	useEffect(() => {
-		getUsers()
-			.then((response) => {
-				setUsers(response.data?.result || []);
-			})
-			.catch((err) => {
-				console.error("Failed to load users:", err);
-				setUsersError("Couldn't load the list of users.");
-			})
-			.finally(() => setUsersLoading(false));
-	}, []);
+  useEffect(() => {
+    getUsers()
+      .then((response) => {
+        setUsers(response.data?.result || []);
+      })
+      .catch((err) => {
+        console.error("Failed to load users:", err);
+        setUsersError("Couldn't load the list of users.");
+      })
+      .finally(() => setUsersLoading(false));
+  }, []);
 
-	const handleInputChange = (e) => {
-		const { name, value } = e.target;
-		setFormData((prev) => ({
-			...prev,
-			[name]: value,
-		}));
-	};
+  // Filter users to include only those with the 'engineer' role (case-insensitive check)
+  const engineerUsers = users.filter(
+    (u) => u.role && u.role.toLowerCase() === "engineer",
+  );
 
-	const handleSubmit = async (e) => {
-		e.preventDefault();
-		setIsSubmitting(true);
+  // Filter users to include only those with the 'client' role (case-insensitive check)
+  const clientUsers = users.filter(
+    (u) => u.role && u.role.toLowerCase() === "client",
+  );
 
-		try {
-			await addProject(formData);
-			navigate("/projects");
-		} catch (err) {
-			console.error("Failed to add new project:", err);
-			alert("Failed to add project. Please check network or authentication.");
-		} finally {
-			setIsSubmitting(false);
-		}
-	};
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      await addProject(formData);
+      navigate("/projects");
+    } catch (err) {
+      console.error("Failed to add new project:", err);
+      alert("Failed to add project. Please check network or authentication.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className="add-project-container">
@@ -81,68 +92,68 @@ export default function AddProject() {
         </div>
 
         <form onSubmit={handleSubmit} className="project-form">
-					{/* Project Name */}
-					<div className="form-group">
-						<label htmlFor="projectName">
-							Project Name <span className="required">*</span>
-						</label>
-						<input
-							type="text"
-							id="projectName"
-							name="projectName"
-							value={formData.projectName}
-							onChange={handleInputChange}
-							required
-							placeholder="Enter Project Name"
-							disabled={isSubmitting}
-						/>
-					</div>
+          {/* Project Name */}
+          <div className="form-group">
+            <label htmlFor="projectName">
+              Project Name <span className="required">*</span>
+            </label>
+            <input
+              type="text"
+              id="projectName"
+              name="projectName"
+              value={formData.projectName}
+              onChange={handleInputChange}
+              required
+              placeholder="Enter Project Name"
+              disabled={isSubmitting}
+            />
+          </div>
 
-					<div className="form-row">
-						{/* Project Code */}
-						<div className="form-group">
-							<label htmlFor="projectCode">
-								Project Code <span className="required">*</span>
-							</label>
-							<input
-								type="text"
-								id="projectCode"
-								name="projectCode"
-								value={formData.projectCode}
-								onChange={handleInputChange}
-								required
-								placeholder="Enter Project Code"
-								disabled={isSubmitting}
-							/>
-						</div>
+          <div className="form-row">
+            {/* Project Code */}
+            <div className="form-group">
+              <label htmlFor="projectCode">
+                Project Code <span className="required">*</span>
+              </label>
+              <input
+                type="text"
+                id="projectCode"
+                name="projectCode"
+                value={formData.projectCode}
+                onChange={handleInputChange}
+                required
+                placeholder="Enter Project Code"
+                disabled={isSubmitting}
+              />
+            </div>
 
-						{/* Project Manager */}
-						<div className="form-group">
-							<label htmlFor="projectManager">
-								Project Manager <span className="required">*</span>
-							</label>
-							<select
-								id="projectManager"
-								name="projectManager"
-								value={formData.projectManager}
-								onChange={handleInputChange}
-								required
-								disabled={isSubmitting || usersLoading || !!usersError}
-							>
-								<option value="" disabled>
-									{usersLoading ? t("loadingUsers") : t("task.selectUser")}
-								</option>
-								{users.map((u) => (
-									<option key={u.uid} value={u.uid}>
-										{u.fullname || u.name}
-									</option>
-								))}
-							</select>
-							{usersError && <p className="field-error">{usersError}</p>}
-						</div>
-					</div>
+            {/* Project Manager */}
+            <div className="form-group">
+              <label htmlFor="projectManager">
+                Project Manager <span className="required">*</span>
+              </label>
+              <select
+                id="projectManager"
+                name="projectManager"
+                value={formData.projectManager}
+                onChange={handleInputChange}
+                required
+                disabled={isSubmitting || usersLoading || !!usersError}
+              >
+                <option value="" disabled>
+                  {usersLoading ? t("loadingUsers") : t("task.selectUser")}
+                </option>
+                {engineerUsers.map((u) => (
+                  <option key={u.uid} value={u.uid}>
+                    {u.fullname || u.name}
+                  </option>
+                ))}
+              </select>
+              {usersError && <p className="field-error">{usersError}</p>}
+            </div>
+          </div>
 
-					{/* Description */}
+          {/* Description */}
           <div className="form-group">
             <div className="form-label-row">
               <label htmlFor="description">
@@ -153,7 +164,7 @@ export default function AddProject() {
               id="description"
               name="description"
               value={formData.description}
-							onChange={handleInputChange}
+              onChange={handleInputChange}
               rows="4"
               required
               placeholder="Enter detailed project description"
@@ -161,130 +172,155 @@ export default function AddProject() {
             />
           </div>
 
-					<div className="form-row">
-						{/* Start Date */}
-						<div className="form-group">
-							<label htmlFor="startDate">
-								Start Date <span className="required">*</span>
-							</label>
-							<input
-								type="date"
-								id="startDate"
-								name="startDate"
-								value={formData.startDate}
-								onChange={handleInputChange}
-								required
-								disabled={isSubmitting}
-							/>
-						</div>
+          <div className="form-row">
+            {/* Start Date */}
+            <div className="form-group">
+              <label htmlFor="startDate">
+                Start Date <span className="required">*</span>
+              </label>
+              <input
+                type="date"
+                id="startDate"
+                name="startDate"
+                value={formData.startDate}
+                onChange={handleInputChange}
+                required
+                disabled={isSubmitting}
+              />
+            </div>
 
-						{/* End Date */}
-						<div className="form-group">
-							<label htmlFor="endDate">
-								End Date <span className="required">*</span>
-							</label>
-							<input
-								type="date"
-								id="endDate"
-								name="endDate"
-								value={formData.endDate}
-								onChange={handleInputChange}
-								required
-								disabled={isSubmitting}
-							/>
-						</div>
-					</div>
+            {/* End Date */}
+            <div className="form-group">
+              <label htmlFor="endDate">
+                End Date <span className="required">*</span>
+              </label>
+              <input
+                type="date"
+                id="endDate"
+                name="endDate"
+                value={formData.endDate}
+                onChange={handleInputChange}
+                required
+                disabled={isSubmitting}
+              />
+            </div>
+          </div>
 
-					{/* Client Name */}
-					<div className="form-group">
-						<label htmlFor="clientName">
-							Client Name <span className="required">*</span>
-						</label>
-						<input
-							type="text"
-							id="clientName"
-							name="clientName"
-							value={formData.clientName}
-							onChange={handleInputChange}
-							required
-							placeholder="Enter Client Name"
-							disabled={isSubmitting}
-						/>
-					</div>
+          {/* Client Name */}
+          <div className="form-group">
+            <label htmlFor="clientName">
+              Client Name <span className="required">*</span>
+            </label>
+            <input
+              type="text"
+              id="clientName"
+              name="clientName"
+              value={formData.clientName}
+              onChange={handleInputChange}
+              required
+              placeholder="Enter Client Name"
+              disabled={isSubmitting}
+            />
+          </div>
 
-					{/* Client Address */}
-					<div className="form-group">
-						<label htmlFor="clientAddress">
-							Client Address <span className="required">*</span>
-						</label>
-						<input
-							type="text"
-							id="clientAddress"
-							name="clientAddress"
-							value={formData.clientAddress}
-							onChange={handleInputChange}
-							required
-							placeholder="Enter Client Address"
-							disabled={isSubmitting}
-						/>
-					</div>
+          {/* Client Representative Manager */}
+          <div className="form-group">
+            <label htmlFor="clientManager">
+              Client Manager <span className="required">*</span>
+            </label>
+            <select
+              id="clientManager"
+              name="clientManager"
+              value={formData.clientManager}
+              onChange={handleInputChange}
+              required
+              disabled={isSubmitting || usersLoading || !!usersError}
+            >
+              <option value="" disabled>
+                {usersLoading ? t("loadingUsers") : t("task.selectUser")}
+              </option>
+              {clientUsers.map((u) => (
+                <option key={u.uid} value={u.uid}>
+                  {u.fullname || u.name}
+                </option>
+              ))}
+            </select>
+            {usersError && <p className="field-error">{usersError}</p>}
+          </div>
 
-					<div className="form-row">
-						{/* Client City */}
-						<div className="form-group">
-							<label htmlFor="clientCity">
-								Client City <span className="required">*</span>
-							</label>
-							<input
-								type="text"
-								id="clientCity"
-								name="clientCity"
-								value={formData.clientCity}
-								onChange={handleInputChange}
-								required
-								placeholder="Enter Client City"
-								disabled={isSubmitting}
-							/>
-						</div>
+          {/* Client Address */}
+          <div className="form-group">
+            <label htmlFor="clientAddress">
+              Client Address <span className="required">*</span>
+            </label>
+            <input
+              type="text"
+              id="clientAddress"
+              name="clientAddress"
+              value={formData.clientAddress}
+              onChange={handleInputChange}
+              required
+              placeholder="Enter Client Address"
+              disabled={isSubmitting}
+            />
+          </div>
 
-						{/* Client Country */}
-						<div className="form-group">
-							<label htmlFor="clientCountry">
-								Client Country <span className="required">*</span>
-							</label>
-							<input
-								type="text"
-								id="clientCountry"
-								name="clientCountry"
-								value={formData.clientCountry}
-								onChange={handleInputChange}
-								required
-								placeholder="Enter Client Country"
-								disabled={isSubmitting}
-							/>
-						</div>
-					</div>
+          <div className="form-row">
+            {/* Client City */}
+            <div className="form-group">
+              <label htmlFor="clientCity">
+                Client City <span className="required">*</span>
+              </label>
+              <input
+                type="text"
+                id="clientCity"
+                name="clientCity"
+                value={formData.clientCity}
+                onChange={handleInputChange}
+                required
+                placeholder="Enter Client City"
+                disabled={isSubmitting}
+              />
+            </div>
 
-					{/* Budget */}
-					<div className="form-group">
-						<label htmlFor="clientBudget">
-							Client Budget <span className="required">*</span>
-						</label>
-						<input
-							type="number"
-							id="clientBudget"
-							name="clientBudget"
-							value={formData.clientBudget}
-							onChange={handleInputChange}
-							required
-							placeholder="Enter Client Budget"
-							disabled={isSubmitting}
-						/>
-					</div>
+            {/* Client Country */}
+            <div className="form-group">
+              <label htmlFor="clientCountry">
+                Client Country <span className="required">*</span>
+              </label>
+              <input
+                type="text"
+                id="clientCountry"
+                name="clientCountry"
+                value={formData.clientCountry}
+                onChange={handleInputChange}
+                required
+                placeholder="Enter Client Country"
+                disabled={isSubmitting}
+              />
+            </div>
+          </div>
+
+          {/* Budget */}
+          <div className="form-group">
+            <label htmlFor="clientBudget">
+              Client Budget <span className="required">*</span>
+            </label>
+            <input
+              type="number"
+              id="clientBudget"
+              name="clientBudget"
+              value={formData.clientBudget}
+              onChange={handleInputChange}
+              required
+              placeholder="Enter Client Budget"
+              disabled={isSubmitting}
+            />
+          </div>
 
           {/* Form Actions */}
           <div className="form-actions">
-						<button
+            <button
               type="submit"
               className="btn-primary-project"
               disabled={isSubmitting}

@@ -15,13 +15,11 @@
     "topics": "Topic List",
     "navigation": "Navigation",
     "account": "Account",
-    "login": "Login",
     "register": "Register"
   },
 
   "authentication": {
-    "signIn": "Sign In",
-    "logIn": "Log In",
+		"login": "Login",
     "logOut": "Log Out",
     "loggingOut": "Logging Out...",
     "register": "Register",

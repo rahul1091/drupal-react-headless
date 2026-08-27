@@ -139,7 +139,7 @@ export default function DashboardPage() {
 
 			<h2 className="dashboard-project-section-title">View & Manage Project Information</h2>
 			<div className="project-task-wrapper">
-				{user?.isSuperAdmin && (
+				{user?.isAdmin && (
 					<div className="dashboard-projects-info">
 						<div className="projects-nav-info">
 							<h2>Project Details</h2>
@@ -159,7 +159,7 @@ export default function DashboardPage() {
 					<div className="tasks-nav-info">
 						<h2>{t("dashboard.projectTracker")}</h2>
 						<p>
-							{user?.isSuperAdmin
+							{user?.isAdmin
 								? t("dashboard.projectTrackerDescription")
 								: t("dashboard.description")}
 						</p>

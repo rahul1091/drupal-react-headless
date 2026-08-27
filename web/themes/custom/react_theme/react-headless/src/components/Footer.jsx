@@ -34,7 +34,7 @@ export default function Footer() {
             <h4>{t("account")}</h4>
             <ul>
               <li>
-                <Link to="/login"> {t("navigation.login")} </Link>
+                <Link to="/login"> {t("authentication.login")} </Link>
               </li>
               <li>
                 <Link to="/register"> {t("navigation.register")} </Link>

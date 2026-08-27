@@ -1,9 +1,4 @@
-import {
-  useState,
-  useEffect,
-  createContext,
-  useContext,
-} from "react";
+import { useState, useEffect, createContext, useContext } from "react";
 
 import { loginUser, logoutUser } from "../api/client";
 
@@ -17,7 +12,6 @@ import { loginUser, logoutUser } from "../api/client";
  * @property {string} [role]
  * @property {string[]} [roles]
  * @property {boolean} [isAdmin]
- * @property {boolean} [isSuperAdmin]
  * @property {string|number} [created]
  */
 
@@ -46,18 +40,14 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     // When embedded in Drupal, bootstrap the authenticated user
     // from drupalSettings instead of requesting another login.
-    const currentUser =
-      window.drupalSettings?.reactApp?.currentUser;
+    const currentUser = window.drupalSettings?.reactApp?.currentUser;
 
     if (currentUser && !currentUser.isAnonymous) {
       setUser({
         id: currentUser.id,
         name: currentUser.name,
         roles: currentUser.roles || [],
-        isAdmin:
-          currentUser.roles?.includes("administrator") || false,
-        isSuperAdmin:
-          currentUser.roles?.includes("administrator") || false,
+        isAdmin: currentUser.roles?.includes("administrator") || false,
       });
     }
 
@@ -80,7 +70,6 @@ export function AuthProvider({ children }) {
       lastname: currentUser.lastname,
       role: currentUser.role,
       isAdmin: Boolean(currentUser.isAdmin),
-      isSuperAdmin: Boolean(currentUser.isSuperAdmin),
       created: currentUser.created,
     });
   };
@@ -102,9 +91,7 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={contextValue}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
   );
 }
 
@@ -115,9 +102,7 @@ export function useAuth() {
   const context = useContext(AuthContext);
 
   if (context === null) {
-    throw new Error(
-      "useAuth must be used within an AuthProvider."
-    );
+    throw new Error("useAuth must be used within an AuthProvider.");
   }
 
   return context;
