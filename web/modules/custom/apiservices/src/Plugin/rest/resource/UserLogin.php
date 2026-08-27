@@ -167,13 +167,7 @@ class UserLogin extends ResourceBase
 
 				$roles = $user->getRoles();
 				$isAdmin = in_array('administrator', $roles, TRUE);
-				// uid=1 is Drupal's built-in superadmin. It can be identified by
-				// role too, but using uid=1 directly is unambiguous — there can
-				// only ever be one, and it exists even before any roles are
-				// assigned. The frontend uses this to (a) show all tasks in the
-				// task list instead of only assigned-to-me tasks, and (b) restrict
-				// the Create Task assignee dropdown to superadmin only.
-				$isSuperAdmin = ((int) $user->id() === 1);
+
 				// Remove "authenticated".
 				$roles = array_diff($roles, ['authenticated']);
 
@@ -189,10 +183,8 @@ class UserLogin extends ResourceBase
 						'firstname' => $user->hasField('field_firstname') ? $user->get('field_firstname')->value : '',
 						'lastname' => $user->hasField('field_lastname') ? $user->get('field_lastname')->value : '',
 						'role' => ucfirst($user_role),
-						// Explicit boolean, checked against the machine name - do not
-						// derive admin-gated UI from the 'role' display string above.
+						// Explicit boolean based on the 'administrator' role
 						'isAdmin' => $isAdmin,
-						'isSuperAdmin' => $isSuperAdmin,
 						'created' => date('d-M-Y', $user->getCreatedTime()),
 					],
 					'csrf_token' => $this->csrfToken->get('rest'),

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
-import { getTasks, getProjectList } from "../api/client";
+import { getTasks, getClientList } from "../api/client";
 import "../css/tasklist.css";
 
 const COLUMNS = [
@@ -19,18 +19,20 @@ export default function TaskList() {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const { user } = useAuth();
-  const isSuperAdmin = !!user?.isSuperAdmin;
+  const isAdmin = !!user?.isAdmin;
+
+  console.log("projects: ", projects); // Corrected from tasks to projects
 
   useEffect(() => {
     let isMounted = true;
     setIsLoading(true);
 
-    Promise.all([getTasks(), getProjectList()])
+    Promise.all([getTasks(), getClientList()])
       .then(([tasksRes, projectsRes]) => {
         if (!isMounted) return;
         setTasks(tasksRes.data?.result || []);
-        
-        // Adjust based on how your getProjectList API returns its data array
+
+        // Adjust based on how your getClientList API returns its data array
         const projectData = projectsRes.data?.result || projectsRes.data || [];
         setProjects(projectData);
       })
@@ -51,14 +53,16 @@ export default function TaskList() {
   const normaliseStatus = (raw = "") =>
     raw.toLowerCase().replace(/[\s-]+/g, "_");
 
-  // Map project names from the fetched projects list. 
+  // Map project names from the fetched projects list.
   // Falls back to unique project names from tasks if projects endpoint returns objects or strings.
   const uniqueProjects = Array.from(
     new Set(
       projects.length > 0
-        ? projects.map((p) => (typeof p === "string" ? p : p.name || p.project_name))
-        : tasks.map((task) => task.project_name)
-    )
+        ? projects.map((p) =>
+            typeof p === "string" ? p : p.name || p.project_name,
+          )
+        : tasks.map((task) => task.project_name),
+    ),
   ).filter(Boolean);
 
   // Filter tasks based on the selected project
@@ -99,7 +103,7 @@ export default function TaskList() {
           </div>
           <h2>Task List ({filteredTasks.length})</h2>
           <p className="tasklist-scope">
-            {isSuperAdmin
+            {isAdmin
               ? "Showing all tasks across all users."
               : "Showing tasks assigned to you."}
           </p>
@@ -112,22 +116,31 @@ export default function TaskList() {
         </button>
       </div>
 
-      {/* Project Filter Controls - Showing all available projects from API */}
+      {/* Project Filter Controls - Handling empty projects state */}
       {!isLoading && !error && (
         <div className="tasklist-filter-bar">
           <label htmlFor="project-filter">Filter by Project:</label>
-          <select
-            id="project-filter"
-            value={selectedProject}
-            onChange={(e) => setSelectedProject(e.target.value)}
-          >
-            <option value="all">All Projects</option>
-            {uniqueProjects.map((projectName) => (
-              <option key={projectName} value={projectName}>
-                {projectName}
-              </option>
-            ))}
-          </select>
+          {projects.length === 0 ? (
+            <span
+              className="no-project-assigned-text"
+              style={{ fontWeight: "500", marginLeft: "8px" }}
+            >
+              No Project Assigned
+            </span>
+          ) : (
+            <select
+              id="project-filter"
+              value={selectedProject}
+              onChange={(e) => setSelectedProject(e.target.value)}
+            >
+              <option value="all">All Projects</option>
+              {uniqueProjects.map((projectName) => (
+                <option key={projectName} value={projectName}>
+                  {projectName}
+                </option>
+              ))}
+            </select>
+          )}
         </div>
       )}
 
@@ -185,7 +198,7 @@ export default function TaskList() {
                                   </strong>
                                 </p>
                               )}
-                              {isSuperAdmin && task.assigned_to?.name && (
+                              {isAdmin && task.assigned_to?.name && (
                                 <p className="task-meta">
                                   Assigned to{" "}
                                   <strong>
@@ -210,7 +223,7 @@ export default function TaskList() {
                                 </span>
                               </span>
                             </div>
-                            {!isSuperAdmin && (
+                            {!isAdmin && (
                               <button
                                 type="button"
                                 className="task-edit-btn"

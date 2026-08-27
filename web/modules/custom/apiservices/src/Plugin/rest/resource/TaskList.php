@@ -110,16 +110,18 @@ class TaskList extends ResourceBase
 			$nodeStorage = $this->entityTypeManager->getStorage('node');
 			$isSuperAdmin = ((int) $this->currentUser->id() === 1);
 
+			// Check if the current user has the 'administrator' role
+			$isAdminRole = in_array('administrator', $this->currentUser->getRoles());
+
 			$query = $nodeStorage->getQuery()
 				->condition('type', 'project_tracker')
 				->condition('status', 1)
 				->sort('created', 'DESC')
 				->accessCheck(FALSE);
 
-			// Superadmin (uid=1) can see all tasks across all users - this is
-			// the oversight view. Every other authenticated user only sees tasks
-			// assigned specifically to them.
-			if (!$isSuperAdmin) {
+			// Superadmin (uid=1) or users with 'administrator' role can see all tasks across all users.
+			// Other authenticated users only see tasks assigned specifically to them.
+			if (!$isSuperAdmin && !$isAdminRole) {
 				$query->condition('field_assigned_to', $this->currentUser->id());
 			}
 
@@ -130,9 +132,15 @@ class TaskList extends ResourceBase
 			$tasks = [];
 
 			foreach ($nodes as $node) {
-				$project_id = $node->get('field_project_id')->target_id;
-				$project = Node::load($project_id);
-				$project_name = $project->getTitle();
+				$project_id = $node->hasField('field_project_id') ? $node->get('field_project_id')->target_id : NULL;
+				$project_name = '';
+				if ($project_id) {
+					$project = Node::load($project_id);
+					if ($project) {
+						$project_name = $project->getTitle();
+					}
+				}
+
 				$tasks[] = [
 					'id' => $node->id(),
 					'project_id' => $project_id,
@@ -147,10 +155,19 @@ class TaskList extends ResourceBase
 				];
 			}
 
-			return new JsonResponse([
+			$response_data = [
 				'status' => 'Success',
 				'result' => $tasks,
-			], 200);
+			];
+
+			// Include a message if no tasks are assigned or found
+			if (empty($tasks)) {
+				$response_data['message'] = ($isSuperAdmin || $isAdminRole)
+					? 'No tasks are currently assigned to any users.'
+					: 'No tasks are currently assigned to you.';
+			}
+
+			return new JsonResponse($response_data, 200);
 		} catch (\Exception $exception) {
 			$this->logger->error($exception->getMessage());
 			return new JsonResponse([
@@ -186,10 +203,6 @@ class TaskList extends ResourceBase
 
 	public function post(Request $request)
 	{
-		// The React SPA only exposes "Create Task" to logged-in users, but that
-		// is a UI convenience, not access control. Enforce it here too, since
-		// the endpoint's Drupal REST permissions aren't captured in this repo
-		// (no config/sync export) and could be misconfigured to allow anonymous.
 		if ($this->currentUser->isAnonymous()) {
 			return new JsonResponse([
 				'status' => 'Error',
@@ -209,7 +222,6 @@ class TaskList extends ResourceBase
 			$assignedTo = isset($data['assigned_to']) ? (int) $data['assigned_to'] : 0;
 			$project_id = isset($data['project_name']) ? (int) $data['project_name'] : '';
 
-			// Validation check for required fields
 			if (empty($title) || empty($description) || empty($dueDate)) {
 				return new JsonResponse([
 					'status' => 'Error',
@@ -231,9 +243,7 @@ class TaskList extends ResourceBase
 					'message' => 'The selected assignee is not a valid, active user.',
 				], 400);
 			}
-			// Superadmin (uid=1) is the oversight role and should not be assigned
-			// tasks — the user list the frontend shows already excludes them, and
-			// this check prevents a crafted POST from bypassing that restriction.
+
 			if ((int) $assignedUser->id() === 1) {
 				return new JsonResponse([
 					'status' => 'Error',
@@ -241,13 +251,9 @@ class TaskList extends ResourceBase
 				], 400);
 			}
 
-			// Create new Project Tracker node programmatically
 			$node = Node::create([
 				'type' => 'project_tracker',
 				'title' => $title,
-				// 'uid' is the node's author/owner - i.e. whoever is logged in
-				// and submitted this request. This is what "created by" means
-				// below, distinct from field_assigned_to (who the task is for).
 				'uid' => $this->currentUser->id(),
 				'field_description' => $description,
 				'field_due_date' => $dueDate,
@@ -255,7 +261,7 @@ class TaskList extends ResourceBase
 				'field_status' => $status,
 				'field_assigned_to' => ['target_id' => $assignedTo],
 				'field_project_id' => ['target_id' => $project_id],
-				'status' => 1, // Published
+				'status' => 1,
 			]);
 			$node->save();
 

@@ -263,7 +263,7 @@ export default function RegisterPage() {
         <div className="auth-footer">
           <span>{t("authentication.alreadyHaveAccount")}</span>
           <Link to="/login" className="auth-link">
-            {t("authentication.signIn")}
+            {t("authentication.login")}
           </Link>
         </div>
       </div>

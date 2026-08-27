@@ -22,7 +22,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class UserList extends ResourceBase
 {
-
 	/**
 	 * The entity type manager service.
 	 *
@@ -88,9 +87,7 @@ class UserList extends ResourceBase
 
 		try {
 			$userStorage = $this->entityTypeManager->getStorage('user');
-			// Return all active users except superadmin (uid=1). Tasks are
-			// assigned to regular users; superadmin is the oversight role that
-			// sees all tasks but should not appear as an assignee option.
+			// Return all active users except uid=1
 			$uids = $userStorage->getQuery()
 				->condition('status', 1)
 				->condition('uid', 1, '>')
@@ -105,11 +102,18 @@ class UserList extends ResourceBase
 				$firstname = $user->hasField('field_firstname') ? trim((string) $user->get('field_firstname')->value) : '';
 				$lastname  = $user->hasField('field_lastname')  ? trim((string) $user->get('field_lastname')->value)  : '';
 				$fullname  = trim("$firstname $lastname") ?: $user->getDisplayName();
+
+				// Fetch and format user roles (excluding 'authenticated')
+				$roles = $user->getRoles();
+				$roles = array_diff($roles, ['authenticated']);
+				$user_role = !empty($roles) ? ucfirst(implode(', ', $roles)) : 'User';
+
 				$result[] = [
-					'uid'      => (int) $user->id(),
-					'name'     => $user->getDisplayName(),
+					'uid' => (int) $user->id(),
+					'name' => $user->getDisplayName(),
 					'fullname' => $fullname,
-					'email'    => $user->getEmail(),
+					'email' => $user->getEmail(),
+					'role' => $user_role,
 				];
 			}
 
