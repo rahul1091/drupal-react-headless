@@ -115,37 +115,14 @@ export default function ProjectList() {
                 </p>
               </div>
 
-              <div className="project-summary">
-                <div className="project-info-item">
+							<div className="project-summary">
+								<div className="project-info-item">
                   <p className="project-info-label">Client Name</p>
                   <p className="project-info-value">
                     {project.client_details.client_name}
                   </p>
                 </div>
 
-                <div className="project-info-item">
-                  <p className="project-info-label">Project Manager</p>
-                  <p className="project-info-value">
-                    {project.project_details.project_manager?.fullname}
-                  </p>
-                </div>
-
-                <div className="project-info-item">
-                  <p className="project-info-label">Start Date</p>
-                  <p className="project-info-value">
-                    {project.project_details.start_date}
-                  </p>
-                </div>
-
-                <div className="project-info-item">
-                  <p className="project-info-label">End Date</p>
-                  <p className="project-info-value">
-                    {project.project_details.end_date}
-                  </p>
-                </div>
-              </div>
-
-              <div className="project-summary">
                 <div className="project-info-item">
                   <p className="project-info-label">Client Address</p>
                   <p className="project-info-value">
@@ -166,6 +143,22 @@ export default function ProjectList() {
                     {project.client_details.client_country}
                   </p>
                 </div>
+              </div>
+
+							<div className="project-summary">
+                <div className="project-info-item">
+                  <p className="project-info-label">Client POC</p>
+                  <p className="project-info-value">
+                    {project.client_details.client_poc.fullname}
+                  </p>
+                </div>
+
+                <div className="project-info-item">
+                  <p className="project-info-label">Client POC Email</p>
+                  <p className="project-info-value">
+                    {project.client_details.client_poc.mail}
+                  </p>
+                </div>
 
                 <div className="project-info-item">
                   <p className="project-info-label">Client Budget</p>
@@ -175,18 +168,41 @@ export default function ProjectList() {
                 </div>
               </div>
 
+              <div className="project-summary">
+                <div className="project-info-item">
+                  <p className="project-info-label">Project Manager</p>
+                  <p className="project-info-value">
+                    {project.project_details.project_manager?.fullname}
+                  </p>
+                </div>
+
+                <div className="project-info-item">
+                  <p className="project-info-label">Start Date</p>
+                  <p className="project-info-value">
+                    {project.project_details.start_date}
+                  </p>
+                </div>
+
+                <div className="project-info-item">
+                  <p className="project-info-label">End Date</p>
+                  <p className="project-info-value">
+                    {project.project_details.end_date}
+                  </p>
+                </div>
+
+								<div className="project-info-item">
+                  <p className="project-info-label">Created</p>
+                  <p className="project-info-value project-created">
+                    {project.created}
+                  </p>
+                </div>
+              </div>
+
               <div className="project-description">
                 <div className="project-info-item">
                   <p className="project-info-label">Description</p>
                   <p className="project-info-value">
                     {project.project_details.description}
-                  </p>
-                </div>
-
-                <div className="project-info-item">
-                  <p className="project-info-label">Created</p>
-                  <p className="project-info-value project-created">
-                    {project.created}
                   </p>
                 </div>
               </div>

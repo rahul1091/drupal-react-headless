@@ -1,5 +1,0 @@
-name: User Import
-type: module
-description: Creates client and engineer users.
-package: Custom
-core_version_requirement: ^10 || ^11
