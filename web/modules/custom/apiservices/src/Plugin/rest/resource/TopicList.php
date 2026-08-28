@@ -11,6 +11,7 @@ use Drupal\node\Entity\Node;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpFoundation\Request;
 use Drupal\user\Entity\User;
+use Drupal\file\Entity\File;
 
 /**
  * Provides a resource to get view modes by entity and bundle.
@@ -90,11 +91,13 @@ class TopicList extends ResourceBase
 			$project_list_data = [];
 
 			foreach ($project_nodes as $node) {
-
 				// Load translated version if available.
 				if ($node->hasTranslation($langcode)) {
 					$node = $node->getTranslation($langcode);
 				}
+
+				$topic_fid = $node->get('field_content_image')->target_id;
+        $topic_image = File::load($topic_fid);
 
 				$project_list_data[] = [
 					'id' => $node->id(),
@@ -102,6 +105,7 @@ class TopicList extends ResourceBase
 					'subheading' => $node->get('field_sub_heading')->value ?? '',
 					'description' => $node->get('field_description')->value ?? '',
 					'trending' => $node->get('field_trending')->value ?? '',
+					'topic_img' => \Drupal::service('file_url_generator')->generateAbsoluteString($topic_image->getFileUri())
 				];
 			}
 

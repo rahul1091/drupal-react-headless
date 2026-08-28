@@ -5,10 +5,7 @@ import { useTranslation } from "react-i18next";
 
 // Helper to strip HTML tags safely
 const stripHtml = (html) => {
-  if (!html) return "";
-  if (typeof window === "undefined") {
-    return html.replace(/<[^>]*>?/gm, "");
-  }
+  if (typeof window === "undefined") return html.replace(/<[^>]*>?/gm, "");
   const doc = new DOMParser().parseFromString(html, "text/html");
   return doc.body.textContent || "";
 };
@@ -25,18 +22,20 @@ function TopicCard({ topic }) {
 
   return (
     <div className={`trending-topic-cards ${isExpanded ? "expanded" : ""}`}>
-      <h3 className="trending-title">{topic.title}</h3>
-      <h4 className="trending-subheading">{topic.subheading}</h4>
-      <p className="trending-description">{displayedDescription}</p>
-      
-      {shouldTruncate && (
-        <button 
-          className="trending-read-more" 
-          onClick={() => setIsExpanded(!isExpanded)}
-        >
-          {isExpanded ? "Read Less" : "Read More"}
-        </button>
-      )}
+			<img className="trending-topic-image" src={topic.topic_img} alt={topic.title} />
+			<div className="trending-topics-content">
+				<h3 className="trending-title">{topic.title}</h3>
+				<h4 className="trending-subheading">{topic.subheading}</h4>
+				<p className="trending-description">{displayedDescription}</p>
+				{shouldTruncate && (
+					<button 
+						className="trending-read-more" 
+						onClick={() => setIsExpanded(!isExpanded)}
+					>
+						{isExpanded ? "Read Less" : "Read More"}
+					</button>
+				)}
+			</div>
     </div>
   );
 }
