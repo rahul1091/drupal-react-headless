@@ -1,10 +1,16 @@
 import { useEffect, useState } from "react";
 import { getTopics } from "../api/client";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination, Navigation } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
 import "../css/topiclist.css";
 import { useTranslation } from "react-i18next";
 
 // Helper to strip HTML tags for accurate character counting
 const stripHtml = (html) => {
+  if (typeof window === "undefined") return html.replace(/<[^>]*>?/gm, "");
   const doc = new DOMParser().parseFromString(html, "text/html");
   return doc.body.textContent || "";
 };
@@ -43,7 +49,22 @@ function TopicList() {
   return (
     <div className="topic-list-container">
       <h2 className="topic-list-heading">{t("topic.topicList")}</h2>
-      <div className="topic-grid">
+      <Swiper
+				modules={[Pagination, Navigation]}
+				spaceBetween={24}
+				slidesPerView={1}
+				loop={true}
+				centeredSlides={true}
+				navigation
+				pagination={{ clickable: true }}
+				breakpoints={{
+					1440: {
+						slidesPerView: 3,
+						spaceBetween: 32,
+					},
+				}}
+				className="topic-slider"
+			>
         {topics.map((topic, index) => {
           const rawDescription = topic.description || "";
           const plainText = stripHtml(rawDescription);
@@ -54,17 +75,17 @@ function TopicList() {
             : plainText;
 
           return (
-            <div
-              key={topic.id || index}
-              className={`topic-card${topic.trending === "yes" ? " topic-card--trending" : ""}`}
-            >
-              <h3 className="topic-title">{topic.title}</h3>
-              {topic.subheading && (
+            <SwiperSlide key={topic.id || index}>
+              <div
+                className={`topic-card${topic.trending === "yes" ? " topic-card--trending" : ""}`}
+              >
+                <h3 className="topic-title">{topic.title}</h3>
                 <h4 className="topic-subheading">{topic.subheading}</h4>
-              )}
-              {rawDescription && (
                 <div className="topic-body">
                   <p className="topic-description-text">{truncatedText}</p>
+                  {topic.topic_img && (
+                    <img className="topic-image" src={topic.topic_img} alt={topic.title} />
+                  )}
                   {isLongText && (
                     <button
                       onClick={() => setSelectedTopic(topic)}
@@ -74,11 +95,11 @@ function TopicList() {
                     </button>
                   )}
                 </div>
-              )}
-            </div>
+              </div>
+            </SwiperSlide>
           );
         })}
-      </div>
+      </Swiper>
 
       {/* --- MODAL --- */}
       {selectedTopic && (
