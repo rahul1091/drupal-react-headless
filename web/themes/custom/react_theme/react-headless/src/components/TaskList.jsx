@@ -21,9 +21,9 @@ export default function TaskList() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const isAdmin = !!user?.isAdmin;
-	const isManager = user.role.toLowerCase() === 'manager';
-	const isEngineer = user.role.toLowerCase() === 'engineer';
-	const isClient = user.role.toLowerCase() === 'client';
+  const isManager = user.role.toLowerCase() === "manager";
+  const isEngineer = user.role.toLowerCase() === "engineer";
+  const isClient = user.role.toLowerCase() === "client";
 
   useEffect(() => {
     let isMounted = true;
@@ -51,19 +51,29 @@ export default function TaskList() {
 
         // Check response structure: Nested (Client/Manager) vs Flat (Admin/Engineer)
         rawResult.forEach((item) => {
-          if (item && Array.isArray(item.tasks)) {
-            // Client/Manager structure: { project_id, project_name, tasks: [...] }
-            projectList.push({ id: item.project_id, name: item.project_name });
+          if (!item || typeof item !== "object") return;
 
-            item.tasks.forEach((task) => {
-              normalizedTasks.push({
-                ...task,
-                project_id: item.project_id,
-                project_name: item.project_name,
+          // Check if response is nested project structure
+          if ("tasks" in item) {
+            if (item.project_name) {
+              projectList.push({
+                id: item.project_id,
+                name: item.project_name,
               });
-            });
-          } else if (item && typeof item === "object") {
-            // Admin/Engineer structure: flat array of task objects
+            }
+
+            // Only process tasks if tasks is an actual populated array
+            if (Array.isArray(item.tasks)) {
+              item.tasks.forEach((task) => {
+                normalizedTasks.push({
+                  ...task,
+                  project_id: item.project_id,
+                  project_name: item.project_name,
+                });
+              });
+            }
+          } else {
+            // Admin/Engineer flat structure: item is an individual task object
             normalizedTasks.push(item);
             if (item.project_name) {
               projectList.push({
@@ -143,14 +153,14 @@ export default function TaskList() {
               : "Showing tasks assigned to you."}
           </p>
         </div>
-				{!isClient && (
-					<button
-						className="add-task-btn"
-						onClick={() => navigate("/create-task")}
-					>
-						+ Add Task
-					</button>
-				)}
+        {!isClient && (
+          <button
+            className="add-task-btn"
+            onClick={() => navigate("/create-task")}
+          >
+            + Add Task
+          </button>
+        )}
       </div>
 
       {/* Project Filter Controls */}
@@ -216,8 +226,7 @@ export default function TaskList() {
                       ) : (
                         colTasks.map((task) => {
                           const taskId = task.node_id || task.task_id;
-                          const taskTitle =
-                            task.task_name || task.title || `Task #${taskId}`;
+                          const taskTitle = task.task_name || task.title;
 
                           return (
                             <div key={taskId} className="task-card">

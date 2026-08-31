@@ -38,9 +38,9 @@ export default function AddProject() {
       .finally(() => setUsersLoading(false));
   }, []);
 
-  // Filter users to include only those with the 'engineer' role (case-insensitive check)
+  // Filter users to include only those with the 'manager' role (case-insensitive check)
   const engineerUsers = users.filter(
-    (u) => u.role && u.role.toLowerCase() === "engineer",
+    (u) => u.role && u.role.toLowerCase() === "manager",
   );
 
   // Filter users to include only those with the 'client' role (case-insensitive check)
