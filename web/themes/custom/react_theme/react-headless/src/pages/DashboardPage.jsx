@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
+import DashboardInfo from "../components/DashboardInfo";
 import TrendingTopics from "../components/TrendingTopics";
 import { useTranslation } from "react-i18next";
 import "../css/dashboard.css";
@@ -51,34 +52,16 @@ export default function DashboardPage() {
 						</div>
 					</div>
 				</div>
+
+				<DashboardInfo />
       </div>
 
-			<h2 className="dashboard-project-section-title">View & Manage Project Information</h2>
+			<h2 className="dashboard-project-section-title">View & Manage Active Tasks in Projects</h2>
 			<div className="project-task-wrapper">
-				{user?.isAdmin && (
-					<div className="dashboard-projects-info">
-						<div className="projects-nav-info">
-							<h2>Project Details</h2>
-							<p>View and manage all projects across the organization</p>
-						</div>
-						<button
-							type="button"
-							className="add-project-btn"
-							onClick={() => navigate("/projects")}
-						>
-							View Project Details
-						</button>
-					</div>
-				)}
-
 				<div className="dashboard-tasks-nav">
 					<div className="tasks-nav-info">
 						<h2>{t("dashboard.projectTracker")}</h2>
-						<p>
-							{user?.isAdmin
-								? t("dashboard.projectTrackerDescription")
-								: t("dashboard.description")}
-						</p>
+						<p>{t("dashboard.projectTrackerDescription")}</p>
 					</div>
 					<button
 						type="button"

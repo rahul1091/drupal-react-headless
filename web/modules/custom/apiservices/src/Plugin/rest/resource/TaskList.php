@@ -97,9 +97,8 @@ class TaskList extends ResourceBase
 	 */
 	public function get()
 	{
-		// Task assignment is per-user, so an anonymous caller has no
-		// meaningful "my tasks" to return.
-		if ($this->currentUser->isAnonymous()) {
+		$currentUid = (int) $this->currentUser->id();
+		if ($currentUid === 0) {
 			return new JsonResponse([
 				'status' => 'Error',
 				'message' => 'Authentication required to view tasks.',
@@ -108,66 +107,151 @@ class TaskList extends ResourceBase
 
 		try {
 			$nodeStorage = $this->entityTypeManager->getStorage('node');
-			$isSuperAdmin = ((int) $this->currentUser->id() === 1);
+			$roles = $this->currentUser->getRoles();
 
-			// Check if the current user has the 'administrator' role
-			$isAdminRole = in_array('administrator', $this->currentUser->getRoles());
+			$isSuperAdmin = ($currentUid === 1);
+			$isAdmin = in_array('administrator', $roles, TRUE);
+			$isClient = in_array('client', $roles, TRUE);
+			$isManager = in_array('manager', $roles, TRUE);
+			$isEngineer = in_array('engineer', $roles, TRUE);
 
-			$query = $nodeStorage->getQuery()
-				->condition('type', 'project_tracker')
-				->condition('status', 1)
-				->sort('created', 'DESC')
-				->accessCheck(FALSE);
-
-			// Superadmin (uid=1) or users with 'administrator' role can see all tasks across all users.
-			// Other authenticated users only see tasks assigned specifically to them.
-			if (!$isSuperAdmin && !$isAdminRole) {
-				$query->condition('field_assigned_to', $this->currentUser->id());
-			}
-
-			$nids = $query->execute();
-
-			/** @var \Drupal\node\NodeInterface[] $nodes */
-			$nodes = $nodeStorage->loadMultiple($nids);
 			$tasks = [];
 
-			foreach ($nodes as $node) {
-				$project_id = $node->hasField('field_project_id') ? $node->get('field_project_id')->target_id : NULL;
-				$project_name = '';
-				if ($project_id) {
-					$project = Node::load($project_id);
-					if ($project) {
-						$project_name = $project->getTitle();
+			// 1. Admin & SuperAdmin View (All tasks)
+			if ($isSuperAdmin || $isAdmin) {
+				$nids = $nodeStorage->getQuery()
+					->condition('type', 'project_tracker')
+					->condition('status', 1)
+					->sort('created', 'DESC')
+					->accessCheck(FALSE)
+					->execute();
+
+				if ($nids) {
+					$nodes = $nodeStorage->loadMultiple($nids);
+
+					// Batch load referenced project nodes to eliminate N+1 queries.
+					$projectIds = array_filter(array_map(function ($node) {
+						return $node->get('field_project_id')->target_id;
+					}, $nodes));
+
+					$projects = $projectIds ? $nodeStorage->loadMultiple($projectIds) : [];
+
+					foreach ($nodes as $node) {
+						$projId = $node->get('field_project_id')->target_id;
+						$project = $projects[$projId] ?? NULL;
+
+						$tasks[] = [
+							'node_id' => (int) $node->id(),
+							'project_id' => $projId,
+							'project_name' => $project ? $project->getTitle() : '',
+							'description' => $node->get('field_description')->value,
+							'due_date' => $node->get('field_due_date')->value ? date('d-m-Y', strtotime($node->get('field_due_date')->value)) : NULL,
+							'severity' => $node->get('field_severity')->value,
+							'status' => $node->get('field_status')->value,
+							'assigned_to' => $this->userSummary($node->get('field_assigned_to')->entity),
+							'created_by' => $this->userSummary($node->getOwner()),
+						];
 					}
 				}
-
-				$tasks[] = [
-					'id' => $node->id(),
-					'project_id' => $project_id,
-					'project_name' => $project_name,
-					'title' => $node->getTitle(),
-					'description' => $node->hasField('field_description') ? $node->get('field_description')->value : '',
-					'due_date' => $node->hasField('field_due_date') ? $node->get('field_due_date')->value : '',
-					'severity' => $node->hasField('field_severity') ? $node->get('field_severity')->value : '',
-					'status' => $node->hasField('field_status') ? $node->get('field_status')->value : '',
-					'assigned_to' => $this->userSummary($node->hasField('field_assigned_to') ? $node->get('field_assigned_to')->entity : NULL),
-					'created_by' => $this->userSummary($node->getOwner()),
-				];
 			}
 
-			$response_data = [
+			// 2. Client & Manager Views (Grouped by Project)
+			elseif ($isClient || $isManager) {
+				$userField = $isClient ? 'field_client_manager' : 'field_project_manager';
+
+				$projectNids = $nodeStorage->getQuery()
+					->condition('type', 'project_details')
+					->condition('status', 1)
+					->condition($userField, $currentUid)
+					->sort('created', 'DESC')
+					->accessCheck(FALSE)
+					->execute();
+
+				if ($projectNids) {
+					$projectNodes = $nodeStorage->loadMultiple($projectNids);
+
+					// Fetch all tasks matching any of the user's projects in ONE query instead of N queries.
+					$allTaskNids = $nodeStorage->getQuery()
+						->condition('type', 'project_tracker')
+						->condition('field_project_id', array_keys($projectNodes), 'IN')
+						->condition('status', 1)
+						->sort('created', 'DESC')
+						->accessCheck(FALSE)
+						->execute();
+
+					$allTaskNodes = $allTaskNids ? $nodeStorage->loadMultiple($allTaskNids) : [];
+
+					// Group tasks by project_id in memory.
+					$tasksByProject = [];
+					foreach ($allTaskNodes as $taskNode) {
+						$projId = $taskNode->get('field_project_id')->target_id;
+						$tasksByProject[$projId][] = [
+							'task_id' => (int) $taskNode->id(),
+							'task_name' => $taskNode->getTitle(),
+							'description' => $taskNode->get('field_description')->value,
+							'due_date' => $taskNode->get('field_due_date')->value ? date('d-m-Y', strtotime($taskNode->get('field_due_date')->value)) : NULL,
+							'severity' => $taskNode->get('field_severity')->value,
+							'status' => $taskNode->get('field_status')->value,
+							'assigned_to' => $this->userSummary($taskNode->get('field_assigned_to')->entity),
+							'created_by' => $this->userSummary($taskNode->getOwner()),
+						];
+					}
+
+					// Build final response payload.
+					foreach ($projectNodes as $projectId => $projectNode) {
+						$pTasks = $tasksByProject[$projectId] ?? [];
+						$tasks[] = [
+							'project_id' => $projectId,
+							'project_name' => $projectNode->getTitle(),
+							'tasks' => empty($pTasks) ? 'No active tasks found' : $pTasks,
+						];
+					}
+				}
+			}
+
+			// 3. Engineer View (Assigned tasks)
+			elseif ($isEngineer) {
+				$nids = $nodeStorage->getQuery()
+					->condition('type', 'project_tracker')
+					->condition('status', 1)
+					->condition('field_assigned_to', $currentUid)
+					->sort('created', 'DESC')
+					->accessCheck(FALSE)
+					->execute();
+
+				if ($nids) {
+					$nodes = $nodeStorage->loadMultiple($nids);
+
+					// Batch load referenced project nodes to eliminate N+1 queries.
+					$projectIds = array_filter(array_map(function ($node) {
+						return $node->get('field_project_id')->target_id;
+					}, $nodes));
+
+					$projects = $projectIds ? $nodeStorage->loadMultiple($projectIds) : [];
+
+					foreach ($nodes as $node) {
+						$projId = $node->get('field_project_id')->target_id;
+						$project = $projects[$projId] ?? NULL;
+
+						$tasks[] = [
+							'node_id' => (int) $node->id(),
+							'project_id' => $projId,
+							'project_name' => $project ? $project->getTitle() : '',
+							'description' => $node->get('field_description')->value,
+							'due_date' => $node->get('field_due_date')->value ? date('d-m-Y', strtotime($node->get('field_due_date')->value)) : NULL,
+							'severity' => $node->get('field_severity')->value,
+							'status' => $node->get('field_status')->value,
+							'assigned_to' => $this->userSummary($node->get('field_assigned_to')->entity),
+							'created_by' => $this->userSummary($node->getOwner()),
+						];
+					}
+				}
+			}
+
+			return new JsonResponse([
 				'status' => 'Success',
-				'result' => $tasks,
-			];
-
-			// Include a message if no tasks are assigned or found
-			if (empty($tasks)) {
-				$response_data['message'] = ($isSuperAdmin || $isAdminRole)
-					? 'No tasks are currently assigned to any users.'
-					: 'No tasks are currently assigned to you.';
-			}
-
-			return new JsonResponse($response_data, 200);
+				'result' => empty($tasks) ? 'No active tasks found' : $tasks,
+			], 200);
 		} catch (\Exception $exception) {
 			$this->logger->error($exception->getMessage());
 			return new JsonResponse([
@@ -195,8 +279,8 @@ class TaskList extends ResourceBase
 		$lastname  = $user->hasField('field_lastname')  ? trim((string) $user->get('field_lastname')->value)  : '';
 		$fullname  = trim("$firstname $lastname") ?: $user->getDisplayName();
 		return [
-			'uid'      => (int) $user->id(),
-			'name'     => $user->getDisplayName(),
+			'uid' => (int) $user->id(),
+			'name' => $user->getDisplayName(),
 			'fullname' => $fullname,
 		];
 	}

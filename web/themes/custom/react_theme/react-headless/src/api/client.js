@@ -1,14 +1,6 @@
 import axios from "axios";
 
-// ---------------------------------------------------------------------------
 // Single Axios client for all Drupal REST calls made by this SPA.
-//
-// This file used to be split across `api/client.js` and `api/drupalService.js`,
-// each with its own Axios instance, its own CSRF interceptor, and its own
-// (slightly different) idea of where the session/CSRF tokens were stored.
-// That duplication was a bug risk (e.g. a token refreshed via one instance
-// was invisible to the other). Everything now lives here.
-// ---------------------------------------------------------------------------
 
 /** Resolve the Drupal base URL: prefer drupalSettings (theme-embedded mode),
  *  fall back to the Vite env var (standalone dev-server mode). */
@@ -32,10 +24,6 @@ const API_URL = axios.create({
 
 /** Attach the CSRF token to every mutating request. */
 API_URL.interceptors.request.use((config) => {
-	// config.params = {
-	// 	...config.params,
-	// 	langcode: localStorage.getItem("langcode") || "en",
-	// };
   const method = config.method?.toUpperCase();
   if (["POST", "PATCH", "PUT", "DELETE"].includes(method)) {
     const drupalToken = window.drupalSettings?.reactApp?.csrfToken;
@@ -46,8 +34,7 @@ API_URL.interceptors.request.use((config) => {
   return config;
 });
 
-/** Unwrap Drupal's REST error shapes into plain Error objects so callers
- *  can just read `err.message`. */
+/** Unwrap Drupal's REST error shapes into plain Error objects so callers can just read `err.message`. */
 API_URL.interceptors.response.use(
   (res) => res,
   (err) => {
@@ -63,10 +50,7 @@ API_URL.interceptors.response.use(
   },
 );
 
-// ---------------------------------------------------------------------------
-// Auth
-// ---------------------------------------------------------------------------
-
+// Auth Services
 /** Logs in via the custom /api/user-login resource and persists the CSRF /
  *  logout tokens Drupal returns so subsequent mutating requests can use them. */
 export const loginUser = async (email, password) => {
@@ -74,7 +58,6 @@ export const loginUser = async (email, password) => {
     email,
     password,
   });
-
   const result = response.data?.result || response.data;
 
   if (result?.csrf_token)
@@ -115,8 +98,8 @@ export const logoutUser = async (token) => {
 /** Registers a new Drupal user via /api/user-registration. */
 export const registerUser = async (userData) => {
   const payload = {
-		usertype: userData.usertype,
-		security_code: userData.securityCode,
+    usertype: userData.usertype,
+    security_code: userData.securityCode,
     firstname: userData.firstname,
     lastname: userData.lastname,
     email: userData.email,
@@ -125,23 +108,13 @@ export const registerUser = async (userData) => {
   return API_URL.post("/api/user-registration?_format=json", payload);
 };
 
-// ---------------------------------------------------------------------------
-// Fetch Languages (for language switcher in TopBar)
-// ---------------------------------------------------------------------------
-
+// User & Dashboard Services
 export const getLanguages = async () => API_URL.get("/api/language-list?_format=json");
+export const userDashboard = async () => API_URL.get("/api/user-dashboard?_format=json");
+export const getUsers = async () => API_URL.get("/api/user-list?_format=json");
 
-// ---------------------------------------------------------------------------
-// Topics (landing_page content)
-// ---------------------------------------------------------------------------
-
-export const getTopics = async (langcode = "en") =>
-  API_URL.get("/api/topiclist", {
-    params: {
-      _format: "json",
-      langcode,
-    },
-  });
+// Topics
+export const getTopics = async (langcode = "en") => API_URL.get("/api/topiclist", { params: { _format: "json", langcode } });
 
 export const addTopic = async (topicData) => {
   const payload = {
@@ -153,20 +126,10 @@ export const addTopic = async (topicData) => {
   return API_URL.post("/api/add-topic?_format=json", payload);
 };
 
-// ---------------------------------------------------------------------------
-// Users (for task assignment)
-// ---------------------------------------------------------------------------
-
-export const getUsers = async () => API_URL.get("/api/user-list?_format=json");
-
-// ---------------------------------------------------------------------------
-// Project Tracker tasks
-// ---------------------------------------------------------------------------
-
+// Tasks
 export const getTasks = async () => API_URL.get("/api/task-list?_format=json");
 
-export const getTaskById = async (id) =>
-  API_URL.get(`/api/task/${id}?_format=json`);
+export const getTaskById = async (id) => API_URL.get(`/api/task/${id}?_format=json`);
 
 export const updateTask = async (id, taskData) => {
   const payload = {
@@ -187,35 +150,32 @@ export const addTask = async (taskData) => {
     severity: taskData.severity,
     status: taskData.status,
     assigned_to: taskData.assigned_to,
-		project_name: taskData.project_name,
+    project_name: taskData.project_name,
   };
   return API_URL.post("/api/add-task?_format=json", payload);
 };
 
-// ---------------------------------------------------------------------------
-// Project Details
-// ---------------------------------------------------------------------------
-
+// Projects & Clients
 export const getClientList = async () => API_URL.get("/api/client-list?_format=json");
 
 export const getProjectDetails = async () => API_URL.get("/api/project-details?_format=json");
 
 export const addProject = async (projectData) => {
-	const payload = {
-		project_name: projectData.projectName,
-		project_code: projectData.projectCode,
-		description: projectData.description,
-		project_manager: projectData.projectManager,
-		start_date: projectData.startDate,
-		end_date: projectData.endDate,
-		client_name: projectData.clientName,
-		client_manager: projectData.clientManager,
-		client_address: projectData.clientAddress,
-		client_city: projectData.clientCity,
-		client_country: projectData.clientCountry,
-		client_budget: projectData.clientBudget,
-	};
-	return API_URL.post("/api/add-project?_format=json", payload);
+  const payload = {
+    project_name: projectData.projectName,
+    project_code: projectData.projectCode,
+    description: projectData.description,
+    project_manager: projectData.projectManager,
+    start_date: projectData.startDate,
+    end_date: projectData.endDate,
+    client_name: projectData.clientName,
+    client_manager: projectData.clientManager,
+    client_address: projectData.clientAddress,
+    client_city: projectData.clientCity,
+    client_country: projectData.clientCountry,
+    client_budget: projectData.clientBudget,
+  };
+  return API_URL.post("/api/add-project?_format=json", payload);
 };
 
 export default API_URL;
