@@ -21,11 +21,22 @@ export default function EditTask() {
     status: "open",
   });
 
+	// Helper function to ensure dates conform to YYYY-MM-DD for <input type="date">
+	const formatDateForInput = (dateStr) => {
+		if (!dateStr) return "";
+		if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return dateStr;
+		if (/^\d{2}-\d{2}-\d{4}$/.test(dateStr)) {
+			const [day, month, year] = dateStr.split("-");
+			return `${year}-${month}-${day}`;
+		}
+		return dateStr;
+	};
+
   const applyTask = (task) => {
     setFormData({
-      title: task.title || "",
+      title: task.title || task.task_name || "",
       description: task.description || "",
-      due_date: task.due_date || "",
+      due_date: formatDateForInput(task.due_date),
       severity: (task.severity || "low").toLowerCase(),
       status: (task.status || "open").toLowerCase().replace(/\s+/g, "_"),
     });

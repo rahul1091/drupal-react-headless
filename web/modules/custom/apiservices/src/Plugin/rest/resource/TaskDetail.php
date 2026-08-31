@@ -93,7 +93,6 @@ class TaskDetail extends ResourceBase
 				'message' => 'Authentication required.',
 			], 403);
 		}
-
 		$node = $this->entityTypeManager->getStorage('node')->load($id);
 
 		if (!$node || $node->bundle() !== 'project_tracker') {
@@ -102,20 +101,6 @@ class TaskDetail extends ResourceBase
 				'message' => 'Task not found.',
 			], 404);
 		}
-
-		$assignedUid = $node->hasField('field_assigned_to') ? (int) $node->get('field_assigned_to')->target_id : NULL;
-
-		// A task can only be viewed/edited by the user it's assigned to - not
-		// by its creator, not by anyone else. This matches the "edit tasks
-		// assigned to them" requirement, and mirrors the same-scoping already
-		// applied to GET /api/task-list.
-		if ($assignedUid !== (int) $this->currentUser->id()) {
-			return new JsonResponse([
-				'status' => 'Error',
-				'message' => 'You can only view or edit tasks assigned to you.',
-			], 403);
-		}
-
 		return $node;
 	}
 
@@ -135,8 +120,8 @@ class TaskDetail extends ResourceBase
 		$lastname  = $user->hasField('field_lastname')  ? trim((string) $user->get('field_lastname')->value)  : '';
 		$fullname  = trim("$firstname $lastname") ?: $user->getDisplayName();
 		return [
-			'uid'      => (int) $user->id(),
-			'name'     => $user->getDisplayName(),
+			'uid' => (int) $user->id(),
+			'name' => $user->getDisplayName(),
 			'fullname' => $fullname,
 		];
 	}
@@ -144,7 +129,6 @@ class TaskDetail extends ResourceBase
 	/**
 	 * Responds to GET requests to fetch a single task.
 	 * Route: GET /api/task/{id}?_format=json
-	 *
 	 * @return \Symfony\Component\HttpFoundation\JsonResponse
 	 */
 	public function get($id)
@@ -181,17 +165,6 @@ class TaskDetail extends ResourceBase
 	/**
 	 * Responds to POST requests to update a task.
 	 * Route: POST /api/task/{id}?_format=json
-	 *
-	 * Uses POST rather than PATCH by design here (not REST purism) - see
-	 * uri_paths on the class annotation: there's no separate "create" path,
-	 * so POST falls back to the same "canonical" path as GET, which is what
-	 * lets this update a single task by id without a dedicated create route.
-	 *
-	 * Only title, description, due_date, severity and status are editable
-	 * here - reassigning a task to a different user isn't part of this
-	 * endpoint (the assignee editing their own task has no reason to need
-	 * that, and it keeps the access-control check above simple and correct).
-	 *
 	 * @return \Symfony\Component\HttpFoundation\JsonResponse
 	 */
 	public function post($id, Request $request)
