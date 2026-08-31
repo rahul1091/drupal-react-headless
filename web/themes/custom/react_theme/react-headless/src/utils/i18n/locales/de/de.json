@@ -47,14 +47,14 @@
     "description": "Verwalten Sie Ihr Konto und entdecken Sie aktive Themen sowie aktuelle Aufgaben.",
     "trendingTopics": "Trendthemen",
     "projectTracker": "Projekt-Tracker",
-    "projectTrackerDescription": "Alle Aufgaben aller Benutzer anzeigen und verwalten.",
+    "projectTrackerDescription": "Alle aktuellen Aufgaben anzeigen und verwalten.",
     "viewTaskList": "Aufgabenliste anzeigen",
     "readMore": "Mehr lesen...",
     "noTopicsFound": "Keine Themen Gefunden."
   },
 
   "topic": {
-    "topicList": "Themenliste",
+    "topicList": "Entdecken Sie ausgewählte Themen und Einblicke",
     "addTopic": "Thema hinzufügen",
     "addNewTopic": "Neues Thema hinzufügen",
     "title": "Titel",

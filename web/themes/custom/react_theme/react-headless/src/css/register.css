@@ -4,7 +4,7 @@
 	justify-content: center;
 	align-items: flex-start;
 	padding: 48px;
-	min-height: calc(85vh - 120px);
+	min-height: calc(75vh - 120px);
 }
 
 .register-card {

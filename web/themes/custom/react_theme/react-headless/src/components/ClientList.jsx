@@ -13,8 +13,6 @@ export default function ClientList() {
       .finally(() => setLoading(false));
   }, []);
 
-	console.log("clients: ", clients);
-
   if (loading) {
     return (
       <div className="skeleton-grid">

@@ -4,14 +4,10 @@ namespace Drupal\apiservices\Plugin\rest\resource;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
-use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 use Drupal\rest\Plugin\ResourceBase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Drupal\node\Entity\Node;
-use Drupal\user\Entity\User;
 
 /**
  * Provides Client List API.
@@ -34,13 +30,14 @@ class ClientList extends ResourceBase
 	protected $entityTypeManager;
 
 	/**
-	 * A current user instance which is logged in the session.
+	 * The current user session.
+	 *
 	 * @var \Drupal\Core\Session\AccountProxyInterface
 	 */
 	protected $currentUser;
 
 	/**
-	 * Constructs a Drupal\rest\Plugin\ResourceBase object.
+	 * Constructs a new ClientList instance.
 	 */
 	public function __construct(
 		array $config,
@@ -73,84 +70,137 @@ class ClientList extends ResourceBase
 	}
 
 	/**
-	 * Get All Clients List API
+	 * Responds to GET requests to fetch Client Project List.
+	 * Route: GET /api/client-list?_format=json
+	 *
+	 * @return \Symfony\Component\HttpFoundation\JsonResponse
 	 */
-	public function get()
+	public function get(): JsonResponse
 	{
 		try {
-			$is_anonymous = $this->currentUser->isAnonymous();
-			$current_user_id = $this->currentUser->id();
-			$current_user_name = $is_anonymous ? 'anonymous' : $this->currentUser->getAccountName();
+			$currentUid = (int) $this->currentUser->id();
+			$isAnonymous = $this->currentUser->isAnonymous();
+			$currentUserName = $isAnonymous ? 'anonymous' : $this->currentUser->getAccountName();
 
-			$account_fullname = '';
-			$is_administrator = FALSE;
+			$accountFullname = '';
+			$nodeStorage = $this->entityTypeManager->getStorage('node');
+			$userStorage = $this->entityTypeManager->getStorage('user');
 
-			if (!$is_anonymous) {
-				$account = User::load($current_user_id);
+			if (!$isAnonymous) {
+				$account = $userStorage->load($currentUid);
 				if ($account) {
-					$account_fullname = trim(($account->get('field_firstname')->value ?? '') . ' ' . ($account->get('field_lastname')->value ?? ''));
-					$is_administrator = $account->hasRole('administrator');
+					$firstName = $account->hasField('field_firstname') ? trim((string) $account->get('field_firstname')->value) : '';
+					$lastName  = $account->hasField('field_lastname') ? trim((string) $account->get('field_lastname')->value) : '';
+					$accountFullname = trim("$firstName $lastName") ?: $account->getDisplayName();
 				}
 			}
 
-			// Load project details query
-			$query = \Drupal::entityQuery('node')
-				->accessCheck(TRUE)
+			$roles = $this->currentUser->getRoles();
+			$isSuperAdmin = ($currentUid === 1);
+			$isAdmin = in_array('administrator', $roles, TRUE);
+			$isClient = in_array('client', $roles, TRUE);
+			$isManager = in_array('manager', $roles, TRUE);
+			$isEngineer = in_array('engineer', $roles, TRUE);
+
+			// Base query for project_details nodes
+			$query = $nodeStorage->getQuery()
 				->condition('type', 'project_details')
 				->condition('status', 1)
-				->sort('created', 'DESC');
+				->sort('created', 'DESC')
+				->accessCheck(FALSE);
 
-			// If anonymous or non-administrator, handle restrictions.
-			if ($is_anonymous) {
-				// Anonymous users can view published projects (accessCheck handles node permissions)
-			} elseif (!$is_administrator) {
-				$query->condition('field_project_manager.target_id', $current_user_id);
+			// Role-based scoping logic
+			if ($isAnonymous) {
+				$message = 'Public Client Project List';
+			} elseif ($isSuperAdmin || $isAdmin) {
+				// Admins can view all projects (no additional filters)
+				$message = 'All Client Project List';
+			} elseif ($isClient) {
+				// Clients view projects where they are assigned as client manager
+				$query->condition('field_client_manager', $currentUid);
+				$message = 'Assigned Client Project List';
+			} elseif ($isManager) {
+				// Managers view projects where they are assigned as project manager
+				$query->condition('field_project_manager', $currentUid);
+				$message = 'Assigned Client Project List';
+			} elseif ($isEngineer) {
+				// Engineers view projects that contain tasks assigned to them
+				$assignedTaskProjectNids = $nodeStorage->getQuery()
+					->condition('type', 'project_tracker')
+					->condition('field_assigned_to', $currentUid)
+					->condition('status', 1)
+					->accessCheck(FALSE)
+					->execute();
+
+				if ($assignedTaskProjectNids) {
+					$taskNodes = $nodeStorage->loadMultiple($assignedTaskProjectNids);
+					$projectIds = array_filter(array_map(function ($task) {
+						return $task->get('field_project_id')->target_id;
+					}, $taskNodes));
+
+					if (!empty($projectIds)) {
+						$query->condition('nid', array_unique($projectIds), 'IN');
+					} else {
+						// Engineer has no valid assigned project tasks
+						return new JsonResponse([
+							'status' => 'Success',
+							'message' => 'Assigned Client Project List',
+							'result' => 'No Client Project Found.',
+						]);
+					}
+				} else {
+					// Engineer has no tasks assigned
+					return new JsonResponse([
+						'status' => 'Success',
+						'message' => 'Assigned Client Project List',
+						'result' => 'No Client Project Found.',
+					]);
+				}
+				$message = 'Assigned Client Project List';
+			} else {
+				$message = 'Client Project List';
 			}
 
 			$nids = $query->execute();
-			$nodes = Node::loadMultiple($nids);
 			$clients = [];
 
-			foreach ($nodes as $node) {
-				$project_manager = [];
-				if (!$node->get('field_project_manager')->isEmpty()) {
-					$user = $node->get('field_project_manager')->entity;
-					if ($user) {
-						$project_manager = [
-							'uid' => $user->id(),
-							'username' => $user->getAccountName(),
-							'fullname' => trim(($user->get('field_firstname')->value ?? '') . ' ' . ($user->get('field_lastname')->value ?? '')),
-						];
+			if (!empty($nids)) {
+				$nodes = $nodeStorage->loadMultiple($nids);
+
+				foreach ($nodes as $node) {
+					$projectManager = [];
+					if (!$node->get('field_project_manager')->isEmpty()) {
+						$pmUser = $node->get('field_project_manager')->entity;
+						if ($pmUser) {
+							$pmFirst = $pmUser->hasField('field_firstname') ? trim((string) $pmUser->get('field_firstname')->value) : '';
+							$pmLast  = $pmUser->hasField('field_lastname') ? trim((string) $pmUser->get('field_lastname')->value) : '';
+							$projectManager = [
+								'uid' => (int) $pmUser->id(),
+								'username' => $pmUser->getAccountName(),
+								'fullname' => trim("$pmFirst $pmLast") ?: $pmUser->getDisplayName(),
+							];
+						}
 					}
+
+					$clients[] = [
+						'nid' => (int) $node->id(),
+						'project_id' => (int) $node->id(),
+						'project_name' => $node->getTitle(),
+						'client_name' => $node->get('field_client_name')->value ?? '',
+						'client_city' => $node->get('field_client_city')->value ?? '',
+						'client_country' => $node->get('field_client_country')->value ?? '',
+						'current_user_id' => $currentUid,
+						'current_user_name' => $currentUserName,
+						'current_user_fullname' => $accountFullname,
+						'project_manager' => $projectManager,
+					];
 				}
-
-				$clients[] = [
-					'nid' => $node->id(),
-					'project_id' => $node->id(),
-					'project_name' => $node->getTitle(),
-					'client_name' => $node->get('field_client_name')->value,
-					'client_city' => $node->get('field_client_city')->value,
-					'client_country' => $node->get('field_client_country')->value,
-					'current_user_id' => $current_user_id,
-					'current_user_name' => $current_user_name,
-					'current_user_fullname' => $account_fullname,
-					'project_manager' => $project_manager,
-				];
-			}
-
-			$message = 'Client Project List';
-			if ($is_anonymous) {
-				$message = 'Public Client Project List';
-			} elseif ($is_administrator) {
-				$message = 'All Client Project List';
-			} else {
-				$message = 'Assigned Client Project List';
 			}
 
 			return new JsonResponse([
 				'status' => 'Success',
 				'message' => $message,
-				'result' => $clients === [] ? 'No Client Project Found.' : $clients,
+				'result' => empty($clients) ? 'No Client Project Found.' : $clients,
 			]);
 		} catch (\Exception $exception) {
 			return $this->exception_error_msg($exception->getMessage());

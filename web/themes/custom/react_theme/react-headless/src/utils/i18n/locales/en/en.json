@@ -47,14 +47,14 @@
     "description": "Manage your account and explore active topics & current tasks.",
     "trendingTopics": "Trending Topics",
     "projectTracker": "Project Tracker",
-    "projectTrackerDescription": "View and manage all tasks across all users.",
+    "projectTrackerDescription": "View and manage all current tasks.",
     "viewTaskList": "View Task List",
     "readMore": "Read More...",
     "noTopicsFound": "No Topics Found."
   },
 
   "topic": {
-    "topicList": "Topic List",
+    "topicList": "Explore Featured Topics and Insights",
     "addTopic": "Add Topic",
     "addNewTopic": "Add New Topic",
     "title": "Title",
