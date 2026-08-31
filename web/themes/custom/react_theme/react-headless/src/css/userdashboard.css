@@ -1,0 +1,124 @@
+/* Admin Project Details on Dashboard */
+.dashboard-projects-info {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 24px;
+	padding: 20px 24px;
+	background: #E5FCC2;
+	border: 1px solid #e5e7eb;
+	border-left: 4px solid #BD1550;
+	border-radius: 8px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.add-project-btn {
+	background-color: #BD1550;
+	color: #ffffff;
+	border: none;
+	padding: 8px 16px;
+	border-radius: 6px;
+	font-size: 14px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.add-project-btn:hover {
+	background-color: #033649;
+	box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+}
+
+.projects-nav-info h2 {
+	margin: 0 0 12px;
+	font-size: 18px;
+	font-weight: 600;
+	color: #111827;
+}
+
+.projects-nav-info p {
+	margin: 0;
+	font-size: 16px;
+	color: #6b7280;
+}
+
+/* Dashboard Container Layout */
+.user-dashboard-container {
+  background-color: #ffffff;
+	border-radius: 8px;
+	border: 1px solid #547980;
+	padding: 24px;
+	box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
+}
+
+.user-projects-section h2 {
+	font-size: 18px;
+	font-weight: 600;
+	margin: 0;
+	color: #111827;
+  border-bottom: 1px solid #f3f4f6;
+	padding-bottom: 14px;
+}
+
+.user-project-card {
+	border: none;
+	padding-top: 16px;
+}
+
+.user-project-card h3 {
+	font-size: 18px;
+	color: #C02942;
+	margin: 0 0 16px;
+}
+
+.user-project-card p {
+	color: #547980;
+	font-size: 16px;
+	margin: 0 0 16px;
+}
+
+.user-project-card p:last-child {
+	margin: 0;
+}
+
+.role-specific-info {
+	margin-bottom: 16px;
+}
+
+.role-specific-info:last-child {
+	margin-bottom: 0;
+}
+
+.role-specific-info h4 {
+	color: #033649;
+	margin: 0 0 16px;
+	border-bottom: 1px solid #f3f4f6;
+	padding-bottom: 8px;
+}
+
+.role-specific-info ul.assignees-list {
+	list-style-type: disc;
+  padding-left: 16px;
+  margin: 0;
+}
+
+.assignees-list li {
+  font-size: 16px;
+  color: #547980;
+	padding-bottom: 8px;
+}
+
+.assignees-list li:last-child {
+	padding-bottom: 0;
+}
+
+@media (max-width: 1100px) {
+	.dashboard-projects-info {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.add-project-btn {
+		width: 100%;
+	}
+}
