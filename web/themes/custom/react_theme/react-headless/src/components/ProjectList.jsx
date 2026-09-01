@@ -88,7 +88,7 @@ export default function ProjectList() {
         </div>
 
         <button
-          className="add-project-btn"
+          className="btn-admin add-project-btn"
           onClick={() => navigate("/add-project")}
         >
           + Add Project

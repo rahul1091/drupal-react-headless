@@ -69,10 +69,6 @@ class UserList extends ResourceBase
 	/**
 	 * Responds to GET requests to fetch the assignable user list.
 	 * Route: GET /api/user-list?_format=json
-	 *
-	 * Requires authentication - this is a directory of user accounts
-	 * (name/uid), not something anonymous visitors should be able to list.
-	 *
 	 * @return \Symfony\Component\HttpFoundation\JsonResponse
 	 *   JSON list of active users, sorted by name.
 	 */
@@ -90,7 +86,6 @@ class UserList extends ResourceBase
 			// Return all active users except uid=1
 			$uids = $userStorage->getQuery()
 				->condition('status', 1)
-				->condition('uid', 1, '>')
 				->accessCheck(FALSE)
 				->execute();
 
@@ -100,8 +95,8 @@ class UserList extends ResourceBase
 
 			foreach ($users as $user) {
 				$firstname = $user->hasField('field_firstname') ? trim((string) $user->get('field_firstname')->value) : '';
-				$lastname  = $user->hasField('field_lastname')  ? trim((string) $user->get('field_lastname')->value)  : '';
-				$fullname  = trim("$firstname $lastname") ?: $user->getDisplayName();
+				$lastname = $user->hasField('field_lastname') ? trim((string) $user->get('field_lastname')->value)  : '';
+				$fullname = trim("$firstname $lastname") ?: $user->getDisplayName();
 
 				// Fetch and format user roles (excluding 'authenticated')
 				$roles = $user->getRoles();
@@ -114,6 +109,8 @@ class UserList extends ResourceBase
 					'fullname' => $fullname,
 					'email' => $user->getEmail(),
 					'role' => $user_role,
+					'created' => date('d-m-Y', $user->getCreatedTime()),
+					'last_login' => $user->getLastLoginTime() ? date('d-m-Y H:i:s', $user->getLastLoginTime()) : 'Never',
 				];
 			}
 
