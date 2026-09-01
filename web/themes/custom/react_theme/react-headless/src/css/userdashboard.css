@@ -1,20 +1,28 @@
 /* Admin Project Details on Dashboard */
-.dashboard-projects-info {
+.admin-dashboard-container {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 24px;
+}
+
+.dashboard-projects-info,
+.dashboard-user-list {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
+	flex-direction: column;
+	justify-content: center;
+	align-items: flex-start;
+  gap: 16px;
   padding: 20px 24px;
   background: #E5FCC2;
   border: 1px solid #e5e7eb;
   border-left: 4px solid #BD1550;
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+	max-height: 160px;
 }
 
-.add-project-btn {
-  background-color: #BD1550;
-  color: #ffffff;
+.btn-admin {
+	color: #ffffff;
   border: none;
   padding: 8px 16px;
   border-radius: 6px;
@@ -24,19 +32,34 @@
   transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.15s ease;
 }
 
+.add-project-btn {
+  background-color: #BD1550;
+}
+
 .add-project-btn:hover {
   background-color: #033649;
   box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
 }
 
-.projects-nav-info h2 {
+.user-list-btn {
+	background-color: #033649;
+}
+
+.user-list-btn:hover {
+  background-color: #BD1550;
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+}
+
+.projects-nav-info h2,
+.user-list-info h2 {
   margin: 0 0 12px;
   font-size: 18px;
   font-weight: 600;
   color: #111827;
 }
 
-.projects-nav-info p {
+.projects-nav-info p,
+.user-list-info p {
   margin: 0;
   font-size: 16px;
   color: #6b7280;
@@ -190,12 +213,20 @@
 }
 
 @media (max-width: 1100px) {
-  .dashboard-projects-info {
+	.admin-dashboard-container {
+		grid-template-columns: auto;
+	}
+
+  .dashboard-projects-info,
+	.dashboard-user-list {
     flex-direction: column;
     align-items: flex-start;
   }
+}
 
-  .add-project-btn {
-    width: 100%;
+@media (max-width: 480px) {
+	.dashboard-projects-info,
+	.dashboard-user-list {
+    padding: 16px;
   }
 }

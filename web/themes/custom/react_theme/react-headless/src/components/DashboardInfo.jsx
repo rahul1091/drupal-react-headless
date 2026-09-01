@@ -126,10 +126,23 @@ export default function DashboardInfo() {
         </div>
         <button
           type="button"
-          className="add-project-btn"
+          className="btn-admin add-project-btn"
           onClick={() => navigate("/projects")}
         >
           View Project Details
+        </button>
+      </div>
+      <div className="dashboard-user-list">
+        <div className="user-list-info">
+          <h2>User List</h2>
+          <p>View and manage all users in the system</p>
+        </div>
+        <button
+          type="button"
+          className="btn-admin user-list-btn"
+          onClick={() => navigate("/user-list")}
+        >
+          View User List
         </button>
       </div>
     </div>
