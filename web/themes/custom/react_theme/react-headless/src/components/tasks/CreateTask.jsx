@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { addTask, getUsers, getClientList, getProjectDetails } from "../api/client";
-import "../css/tasklist.css";
+import { addTask, getUsers, getClientList, getProjectDetails } from "../../api/client";
+import "../../css/tasklist.css";
 import { useTranslation } from "react-i18next";
 
 export default function CreateTask() {

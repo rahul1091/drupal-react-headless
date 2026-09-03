@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
-import { getTaskById, updateTask } from "../api/client";
-import "../css/tasklist.css";
+import { getTaskById, updateTask } from "../../api/client";
+import "../../css/tasklist.css";
 
 export default function EditTask() {
   const navigate = useNavigate();

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
-import { getTasks } from "../api/client";
-import "../css/tasklist.css";
+import { useAuth } from "../../hooks/useAuth";
+import { getTasks } from "../../api/client";
+import "../../css/tasklist.css";
 
 const COLUMNS = [
   { key: "open", label: "Open" },

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "../css/footer.css";
+import "../../css/footer.css";
 import { useTranslation } from "react-i18next";
 
 export default function Footer() {
