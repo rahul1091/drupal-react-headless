@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
-import "../css/topbar.css";
+import { useAuth } from "../../hooks/useAuth";
+import "../../css/topbar.css";
 import { useTranslation } from "react-i18next";
-import { getLanguages } from "../api/client";
+import { getLanguages } from "../../api/client";
 
 export default function TopBar() {
   const { user, logout } = useAuth() || {};

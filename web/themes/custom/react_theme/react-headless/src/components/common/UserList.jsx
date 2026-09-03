@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
-import { getUsers } from "../api/client";
-import "../css/userlist.css";
+import { useAuth } from "../../hooks/useAuth";
+import { getUsers } from "../../api/client";
+import "../../css/userlist.css";
 
 export default function UserList() {
   const [users, setUsers] = useState([]);

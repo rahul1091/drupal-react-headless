@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { addProject, getUsers } from "../api/client";
-import "../css/projectlist.css";
+import { addProject, getUsers } from "../../api/client";
+import "../../css/projectlist.css";
 import { useTranslation } from "react-i18next";
 
 export default function AddProject() {

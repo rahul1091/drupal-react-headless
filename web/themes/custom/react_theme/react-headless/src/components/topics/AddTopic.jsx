@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { addTopic } from "../api/client";
-import "../css/tasklist.css";
+import { addTopic } from "../../api/client";
+import "../../css/tasklist.css";
 import { useTranslation } from "react-i18next";
 
 export default function AddTopic() {
