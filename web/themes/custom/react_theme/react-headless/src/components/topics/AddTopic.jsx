@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { addTopic } from "../../api/client";
-import "../../css/tasklist.css";
+import "../../css/index.css";
 import { useTranslation } from "react-i18next";
 
 export default function AddTopic() {
@@ -194,6 +194,13 @@ export default function AddTopic() {
 
           {/* Form Actions */}
           <div className="form-actions">
+						<button
+              type="submit"
+              className="btn-primary"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? t("common.saving") : t("topic.saveTopic")}
+            </button>
             <button
               type="button"
               className="btn-secondary"
@@ -201,13 +208,6 @@ export default function AddTopic() {
               disabled={isSubmitting}
             >
               {t("common.cancel")}
-            </button>
-            <button
-              type="submit"
-              className="btn-primary"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? t("common.saving") : t("topic.saveTopic")}
             </button>
           </div>
         </form>
