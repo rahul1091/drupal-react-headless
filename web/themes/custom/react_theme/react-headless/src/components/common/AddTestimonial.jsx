@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { addTestimonial } from "../../api/client";
-import "../../css/tasklist.css";
+import "../../css/index.css";
 import { useTranslation } from "react-i18next";
 
 export default function AddTestimonial() {
@@ -76,9 +76,9 @@ export default function AddTestimonial() {
           </button>
         </div>
         
-        <form onSubmit={handleSubmit} className="testimonial-form">
+        <form onSubmit={handleSubmit} className="task-form">
           {/* Title */}
-          <div className="testimonial-form-group">
+          <div className="form-group">
             <label htmlFor="title">
               {t("common.title")} <span className="required">*</span>
             </label>
@@ -95,7 +95,7 @@ export default function AddTestimonial() {
           </div>
 
 					{/* Client name */}
-          <div className="testimonial-form-group">
+          <div className="form-group">
             <label htmlFor="client_name">
               Client Name <span className="required">*</span>
             </label>
@@ -112,8 +112,8 @@ export default function AddTestimonial() {
           </div>
 
           {/* Description */}
-          <div className="testimonial-form-group">
-            <div className="testimonial-form-label-row">
+          <div className="form-group">
+            <div className="form-label-row">
               <label htmlFor="description">
                 {t("topic.description")} <span className="required">*</span>
               </label>
@@ -134,7 +134,7 @@ export default function AddTestimonial() {
           </div>
 
           {/* Topic Image */}
-          <div className="testimonial-form-group">
+          <div className="form-group">
             <label htmlFor="image">
               {t("topic.image")} <span className="required">*</span>
             </label>
@@ -151,6 +151,13 @@ export default function AddTestimonial() {
 
           {/* Form Actions */}
           <div className="form-actions">
+						<button
+              type="submit"
+              className="btn-primary"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? t("common.saving") : t("testimonial.saveTestimonial")}
+            </button>
             <button
               type="button"
               className="btn-secondary"
@@ -158,13 +165,6 @@ export default function AddTestimonial() {
               disabled={isSubmitting}
             >
               {t("common.cancel")}
-            </button>
-            <button
-              type="submit"
-              className="btn-primary"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? t("common.saving") : t("testimonial.saveTestimonial")}
             </button>
           </div>
         </form>

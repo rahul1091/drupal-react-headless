@@ -4,7 +4,7 @@ import { useAuth } from "../hooks/useAuth";
 import DashboardInfo from "../components/DashboardInfo";
 import TrendingTopics from "../components/topics/TrendingTopics";
 import { useTranslation } from "react-i18next";
-import "../css/dashboard.css";
+import "../css/index.css";
 
 export default function DashboardPage() {
   const { user } = useAuth();
