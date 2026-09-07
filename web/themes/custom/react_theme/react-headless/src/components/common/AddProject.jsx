@@ -76,7 +76,7 @@ export default function AddProject() {
       <div className="form-card">
         <div className="form-header">
           <div>
-            <h2 className="form-title">Add New Project</h2>
+            <h2 className="form-title">{t("project.addProjectTitle")}</h2>
             <p className="form-subtitle">
               <span className="required">*</span> {t("common.requiredFields")}
             </p>
@@ -87,7 +87,7 @@ export default function AddProject() {
             onClick={() => navigate("/projects")}
             disabled={isSubmitting}
           >
-            <span aria-hidden="true">&larr;</span> Back to Projects
+            <span aria-hidden="true">&larr;</span> {t("project.backToProjects")}
           </button>
         </div>
 
@@ -95,7 +95,7 @@ export default function AddProject() {
           {/* Project Name */}
           <div className="form-group">
             <label htmlFor="projectName">
-              Project Name <span className="required">*</span>
+              {t("project.projectName")} <span className="required">*</span>
             </label>
             <input
               type="text"
@@ -104,7 +104,7 @@ export default function AddProject() {
               value={formData.projectName}
               onChange={handleInputChange}
               required
-              placeholder="Enter Project Name"
+              placeholder={t("project.projectNamePlaceholder")}
               disabled={isSubmitting}
             />
           </div>
@@ -113,7 +113,7 @@ export default function AddProject() {
             {/* Project Code */}
             <div className="form-group">
               <label htmlFor="projectCode">
-                Project Code <span className="required">*</span>
+                {t("project.projectCode")} <span className="required">*</span>
               </label>
               <input
                 type="text"
@@ -122,7 +122,7 @@ export default function AddProject() {
                 value={formData.projectCode}
                 onChange={handleInputChange}
                 required
-                placeholder="Enter Project Code"
+                placeholder={t("project.projectCodePlaceholder")}
                 disabled={isSubmitting}
               />
             </div>
@@ -130,7 +130,7 @@ export default function AddProject() {
             {/* Project Manager */}
             <div className="form-group">
               <label htmlFor="projectManager">
-                Project Manager <span className="required">*</span>
+                {t("project.projectManager")} <span className="required">*</span>
               </label>
               <select
                 id="projectManager"
@@ -157,7 +157,7 @@ export default function AddProject() {
           <div className="form-group">
             <div className="form-label-row">
               <label htmlFor="description">
-                Project Description <span className="required">*</span>
+                {t("project.projectDescription")} <span className="required">*</span>
               </label>
             </div>
             <textarea
@@ -167,7 +167,7 @@ export default function AddProject() {
               onChange={handleInputChange}
               rows="4"
               required
-              placeholder="Enter detailed project description"
+              placeholder={t("project.projectDescriptionPlaceholder")}
               disabled={isSubmitting}
             />
           </div>
@@ -176,7 +176,7 @@ export default function AddProject() {
             {/* Start Date */}
             <div>
               <label htmlFor="startDate">
-                Start Date <span className="required">*</span>
+                {t("project.projectStartDate")} <span className="required">*</span>
               </label>
               <input
                 type="date"
@@ -192,7 +192,7 @@ export default function AddProject() {
             {/* End Date */}
             <div>
               <label htmlFor="endDate">
-                End Date <span className="required">*</span>
+                {t("project.projectEndDate")} <span className="required">*</span>
               </label>
               <input
                 type="date"
@@ -209,7 +209,7 @@ export default function AddProject() {
           {/* Client Name */}
           <div className="form-group">
             <label htmlFor="clientName">
-              Client Name <span className="required">*</span>
+              {t("project.clientName")} <span className="required">*</span>
             </label>
             <input
               type="text"
@@ -218,7 +218,7 @@ export default function AddProject() {
               value={formData.clientName}
               onChange={handleInputChange}
               required
-              placeholder="Enter Client Name"
+              placeholder={t("project.clientNamePlaceholder")}
               disabled={isSubmitting}
             />
           </div>
@@ -226,7 +226,7 @@ export default function AddProject() {
           {/* Client Representative Manager */}
           <div className="form-group">
             <label htmlFor="clientManager">
-              Client Manager <span className="required">*</span>
+              {t("project.clientManager")} <span className="required">*</span>
             </label>
             <select
               id="clientManager"
@@ -251,7 +251,7 @@ export default function AddProject() {
           {/* Client Address */}
           <div className="form-group">
             <label htmlFor="clientAddress">
-              Client Address <span className="required">*</span>
+              {t("project.clientAddress")} <span className="required">*</span>
             </label>
             <input
               type="text"
@@ -260,7 +260,7 @@ export default function AddProject() {
               value={formData.clientAddress}
               onChange={handleInputChange}
               required
-              placeholder="Enter Client Address"
+              placeholder={t("project.clientAddressPlaceholder")}
               disabled={isSubmitting}
             />
           </div>
@@ -269,7 +269,7 @@ export default function AddProject() {
             {/* Client City */}
             <div>
               <label htmlFor="clientCity">
-                Client City <span className="required">*</span>
+                {t("project.clientCity")} <span className="required">*</span>
               </label>
               <input
                 type="text"
@@ -278,7 +278,7 @@ export default function AddProject() {
                 value={formData.clientCity}
                 onChange={handleInputChange}
                 required
-                placeholder="Enter Client City"
+                placeholder={t("project.clientCityPlaceholder")}
                 disabled={isSubmitting}
               />
             </div>
@@ -286,7 +286,7 @@ export default function AddProject() {
             {/* Client Country */}
             <div>
               <label htmlFor="clientCountry">
-                Client Country <span className="required">*</span>
+                {t("project.clientCountry")} <span className="required">*</span>
               </label>
               <input
                 type="text"
@@ -295,7 +295,7 @@ export default function AddProject() {
                 value={formData.clientCountry}
                 onChange={handleInputChange}
                 required
-                placeholder="Enter Client Country"
+                placeholder={t("project.clientCountryPlaceholder")}
                 disabled={isSubmitting}
               />
             </div>
@@ -304,7 +304,7 @@ export default function AddProject() {
           {/* Budget */}
           <div className="form-group">
             <label htmlFor="clientBudget">
-              Client Budget <span className="required">*</span>
+              {t("project.clientBudget")} <span className="required">*</span>
             </label>
             <input
               type="number"
@@ -313,7 +313,7 @@ export default function AddProject() {
               value={formData.clientBudget}
               onChange={handleInputChange}
               required
-              placeholder="Enter Client Budget"
+              placeholder={t("project.clientBudgetPlaceholder")}
               disabled={isSubmitting}
             />
           </div>
@@ -325,7 +325,7 @@ export default function AddProject() {
               className="btn-primary"
               disabled={isSubmitting}
             >
-              {isSubmitting ? t("saving") : "Add Project"}
+              {isSubmitting ? t("saving") : t("project.addProjectButton")}
             </button>
             <button
               type="button"

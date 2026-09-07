@@ -16,8 +16,8 @@ DATA LISTS & TABLES
 
 .tasklist-scope,
 .list-scope {
-  margin: 3px 0 0;
-  font-size: var(--font-size-sm);
+  margin: 12px 0 0;
+  font-size: var(--font-size-lg);
   color: var(--color-text-secondary);
 }
 

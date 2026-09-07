@@ -112,6 +112,10 @@ p {
   margin: 0;
 }
 
+strong {
+	font-weight: var(--font-weight-semibold);
+}
+
 a {
   color: var(--color-info);
   text-decoration: none;
