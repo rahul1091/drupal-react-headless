@@ -275,7 +275,7 @@
 
 /* --- User Dashboard Section --- */
 .user-dashboard-container {
-  background-color: #ffffff;
+  background: linear-gradient(135deg, #0a192f 0%, #112240 50%, #233554 100%);
   border-radius: 8px;
   border: 1px solid #547980;
   padding: 24px;
@@ -283,29 +283,28 @@
 }
 
 .user-projects-section h2 {
-  font-size: 18px;
+  font-size: clamp(20px, 1.2rem + 0.25vw, 24px);
   font-weight: 600;
   margin: 0;
-  color: #111827;
-  border-bottom: 1px solid #f3f4f6;
+  color: var(--color-primary-light);
   padding-bottom: 14px;
 }
 
 .user-project-card {
   border: none;
-  padding-top: 16px;
+  padding-top: 8px;
 }
 
 .user-project-card h3 {
-  font-size: 18px;
-	font-weight: 700;
-  color: #C02942;
+  font-size: clamp(18px, 1.1rem + 0.125vw, 20px);
+	font-weight: 600;
+  color: #ff7f50;
   margin: 0 0 16px;
 }
 
 .user-project-card p {
-  color: #547980;
-  font-size: 16px;
+  color: var(--color-primary-light);
+  font-size: clamp(14px, 0.85rem + 0.125vw, 16px);
   margin: 0 0 16px;
 }
 
@@ -322,12 +321,10 @@
 }
 
 .role-specific-info h4 {
-	font-size: 16px;
-	font-weight: 700;
-  color: #033649;
+	font-size: clamp(16px, 0.975rem + 0.125vw, 18px);
+	font-weight: 600;
+  color: #ff7f50;
   margin: 0 0 16px;
-  border-bottom: 1px solid #f3f4f6;
-  padding-bottom: 8px;
 }
 
 .role-specific-info ul.assignees-list {
@@ -338,7 +335,7 @@
 
 .assignees-list li {
   font-size: 16px;
-  color: #547980;
+  color: var(--color-primary-light);
   padding-bottom: 8px;
 }
 
@@ -381,7 +378,6 @@
 .slider-nav-btn {
   background-color: #f3f4f6;
   color: #033649;
-  border: 1px solid #033649;
   border-radius: 50%;
   width: 32px;
   height: 32px;
@@ -394,9 +390,7 @@
 }
 
 .slider-nav-btn:hover {
-  background-color: #033649;
-  color: #ffffff;
-  border-color: #033649;
+  background-color: #ff7f50;
 }
 
 .slider-dots {
@@ -419,7 +413,7 @@
 }
 
 .dot.active {
-  background-color: #BD1550;
+  background-color: #ff7f50;
   transform: scale(1.2);
 }
 

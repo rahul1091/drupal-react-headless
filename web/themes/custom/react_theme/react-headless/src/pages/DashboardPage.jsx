@@ -56,7 +56,7 @@ export default function DashboardPage() {
 				<DashboardInfo />
       </div>
 
-			<h2 className="dashboard-project-section-title">View & Manage Active Tasks in Projects</h2>
+			<h2 className="dashboard-project-section-title">{t("dashboard.viewManageTasks")}</h2>
 			<div className="project-task-wrapper">
 				<div className="dashboard-tasks-nav">
 					<div className="tasks-nav-info">

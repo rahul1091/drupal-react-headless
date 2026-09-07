@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { getTaskById, updateTask } from "../../api/client";
 import "../../css/index.css";
+import { useTranslation } from "react-i18next";
 
 export default function EditTask() {
+	const { t } = useTranslation();
   const navigate = useNavigate();
   const { id } = useParams();
   const location = useLocation();
@@ -113,7 +115,7 @@ export default function EditTask() {
               className="btn-secondary"
               onClick={() => navigate("/tasks")}
             >
-              Back to Tasks
+              {t("task.backToTask")}
             </button>
           </div>
         </div>
@@ -126,14 +128,14 @@ export default function EditTask() {
       <div className="form-card">
         <div className="form-header">
           <div>
-            <h2>Edit Task</h2>
+            <h2>{t("task.editTask")}</h2>
             <p className="form-subtitle">
-              Fields marked <span className="required">*</span> are required.
+              <span className="required">*</span> {t("common.requiredFields")}
             </p>
 						{assignedTo?.name && (
 							<p className="edit-task-assigned-to">
 								{" "}
-								Task is assigned to <strong>{assignedTo.fullname}</strong>.
+								{t("task.taskAssignedTo")} <strong>{assignedTo.fullname}</strong>.
 							</p>
 						)}
           </div>
@@ -143,7 +145,7 @@ export default function EditTask() {
             onClick={() => navigate("/tasks")}
             disabled={isSubmitting}
           >
-            <span aria-hidden="true">&larr;</span> Back to Tasks
+            <span aria-hidden="true">&larr;</span> {t("task.backToTask")}
           </button>
         </div>
 
@@ -151,7 +153,7 @@ export default function EditTask() {
           {/* Title */}
           <div className="form-group">
             <label htmlFor="title">
-              Title <span className="required">*</span>
+              {t("common.title")} <span className="required">*</span>
             </label>
             <input
               type="text"
@@ -160,7 +162,7 @@ export default function EditTask() {
               value={formData.title}
               onChange={handleInputChange}
               required
-              placeholder="Enter task title"
+              placeholder={t("task.enterTitle")}
               disabled={isSubmitting}
             />
           </div>
@@ -169,7 +171,7 @@ export default function EditTask() {
           <div className="form-group">
             <div className="form-label-row">
               <label htmlFor="description">
-                Description <span className="required">*</span>
+                {t("common.description")} <span className="required">*</span>
               </label>
               <span className="char-count">
                 {formData.description.length} characters
@@ -182,7 +184,7 @@ export default function EditTask() {
               onChange={handleInputChange}
               rows="4"
               required
-              placeholder="Enter detailed description"
+              placeholder={t("task.enterDescription")}
               disabled={isSubmitting}
             />
           </div>
@@ -191,7 +193,7 @@ export default function EditTask() {
           <div className="form-row form-row--3col">
             <div className="form-group">
               <label htmlFor="due_date">
-                Due Date <span className="required">*</span>
+                {t("task.dueDate")} <span className="required">*</span>
               </label>
               <input
                 type="date"
@@ -206,7 +208,7 @@ export default function EditTask() {
 
             <div className="form-group">
               <label htmlFor="severity">
-                Severity <span className="required">*</span>
+                {t("common.severity")} <span className="required">*</span>
               </label>
               <select
                 id="severity"
@@ -216,16 +218,16 @@ export default function EditTask() {
                 required
                 disabled={isSubmitting}
               >
-                <option value="low">Low</option>
-                <option value="medium">Medium</option>
-                <option value="high">High</option>
-                <option value="critical">Critical</option>
+                <option value="low">{t("severity.low")}</option>
+                <option value="medium">{t("severity.medium")}</option>
+                <option value="high">{t("severity.high")}</option>
+                <option value="critical">{t("severity.critical")}</option>
               </select>
             </div>
 
             <div className="form-group">
               <label htmlFor="status">
-                Status <span className="required">*</span>
+                {t("common.status")} <span className="required">*</span>
               </label>
               <select
                 id="status"
@@ -235,10 +237,10 @@ export default function EditTask() {
                 required
                 disabled={isSubmitting}
               >
-                <option value="open">Open</option>
-                <option value="in_progress">In Progress</option>
-                <option value="completed">Completed</option>
-                <option value="cancelled">Cancelled</option>
+                <option value="open">{t("status.open")}</option>
+                <option value="in_progress">{t("status.inProgress")}</option>
+                <option value="completed">{t("status.completed")}</option>
+                <option value="cancelled">{t("status.cancelled")}</option>
               </select>
             </div>
           </div>
@@ -250,7 +252,7 @@ export default function EditTask() {
               className="btn-primary"
               disabled={isSubmitting}
             >
-              {isSubmitting ? "Saving..." : "Save Changes"}
+              {isSubmitting ? t("common.saving") : t("common.saveChanges")}
             </button>
             <button
               type="button"
@@ -258,7 +260,7 @@ export default function EditTask() {
               onClick={() => navigate("/tasks")}
               disabled={isSubmitting}
             >
-              Cancel
+              {t("common.cancel")}
             </button>
           </div>
         </form>

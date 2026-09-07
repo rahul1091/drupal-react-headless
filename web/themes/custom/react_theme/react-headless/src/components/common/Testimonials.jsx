@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getTestimonials } from "../../api/client";
 import "../../css/index.css";
+import { useTranslation } from "react-i18next";
 
 const stripHtml = (html) => {
   if (typeof window === "undefined") return html.replace(/<[^>]*>?/gm, "");
@@ -9,6 +10,7 @@ const stripHtml = (html) => {
 };
 
 export default function Testimonials() {
+	const { t } = useTranslation();
   const [testimonials, setTestimonials] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -35,7 +37,7 @@ export default function Testimonials() {
 
   return (
     <div className="testimonials-container">
-      <h2>Client Testimonials</h2>
+      <h2>{t("client.clientTestimonialTitle")}</h2>
 
       <div className="slider-wrapper">
         <button className="nav-btn prev-btn" onClick={handlePrev} aria-label="Previous Slide">

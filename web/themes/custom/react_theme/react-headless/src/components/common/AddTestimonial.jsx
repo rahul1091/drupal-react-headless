@@ -97,7 +97,7 @@ export default function AddTestimonial() {
 					{/* Client name */}
           <div className="form-group">
             <label htmlFor="client_name">
-              Client Name <span className="required">*</span>
+              {t("project.clientName")} <span className="required">*</span>
             </label>
             <input
               type="text"
@@ -106,7 +106,7 @@ export default function AddTestimonial() {
               value={formData.client_name}
               onChange={handleInputChange}
               required
-              placeholder="Enter client name"
+              placeholder={t("project.clientNamePlaceholder")}
               disabled={isSubmitting}
             />
           </div>

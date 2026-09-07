@@ -137,7 +137,7 @@ export default function RegisterPage() {
           {/* User Type */}
           <div className="form-group">
             <label className="form-label" htmlFor="usertype">
-              User Type
+              {t("authentication.userType")}
             </label>
 
             <select
@@ -148,7 +148,7 @@ export default function RegisterPage() {
               onChange={handleChange}
               disabled={loading}
             >
-              <option value="">Select User Type</option>
+              <option value="">{t("authentication.selectUserType")}</option>
               <option value="administrator">Administrator</option>
 							<option value="manager">Manager</option>
               <option value="client">Client</option>
@@ -160,7 +160,7 @@ export default function RegisterPage() {
           {formData.usertype && (
             <div className="form-group">
               <label className="form-label" htmlFor="securityCode">
-                Security Code
+                {t("authentication.securityCode")}
               </label>
 
               <input
@@ -171,13 +171,11 @@ export default function RegisterPage() {
                 value={formData.securityCode}
                 onChange={handleChange}
                 maxLength={4}
-                placeholder="Enter 4 digit security code"
+                placeholder={t("authentication.securityCodePlaceholder")}
                 disabled={loading}
               />
 
-              <small className="form-hint">
-                Enter the security code assigned for the selected user type.
-              </small>
+              <small className="form-hint">{t("authentication.securityCodeHint")}</small>
             </div>
           )}
 

@@ -3,8 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { getUsers } from "../../api/client";
 import "../../css/index.css";
+import { useTranslation } from "react-i18next";
 
 export default function UserList() {
+	const { t } = useTranslation();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -102,7 +104,7 @@ export default function UserList() {
       <div className="form-card-wrapper">
         <div className="userlist-header">
           <div className="userlist-text-wrapper">
-            <h1 className="userlist-title">User List</h1>
+            <h1 className="userlist-title">{t("dashboard.userList")}</h1>
             <p className="userlist-count">
               Showing {filteredAndSortedUsers.length} of {users.length} users
             </p>
@@ -113,7 +115,7 @@ export default function UserList() {
               <input
                 type="text"
                 className="search-input"
-                placeholder="Search by name or email..."
+                placeholder={t("user.search")}
                 value={searchTerm}
                 onChange={handleSearchChange}
               />
@@ -121,7 +123,7 @@ export default function UserList() {
 
             <div className="userlist-filter">
               <label htmlFor="role-select" className="filter-label">
-                Filter Role:
+                {t("user.filterRole")}:
               </label>
               <select
                 id="role-select"
@@ -129,7 +131,7 @@ export default function UserList() {
                 value={selectedRole}
                 onChange={handleRoleChange}
               >
-                <option value="ALL">All Roles</option>
+                <option value="ALL">{t("user.allRole")}</option>
                 {roles.map((role) => (
                   <option key={role} value={role}>
                     {role}
@@ -143,16 +145,16 @@ export default function UserList() {
         <div className="userlist-content">
           <div className="userlist-row userlist-header-row">
             <strong className="col-uid">UID</strong>
-            <strong className="col-fullname">Full Name</strong>
-            <strong className="col-username">Username</strong>
-            <strong className="col-email">Email</strong>
-            <strong className="col-role">Role</strong>
-            <strong className="col-created">Created</strong>
-            <strong className="col-last-login">Last Login</strong>
+            <strong className="col-fullname">{t("user.fullname")}</strong>
+            <strong className="col-username">{t("user.username")}</strong>
+            <strong className="col-email">{t("user.email")}</strong>
+            <strong className="col-role">{t("user.role")}</strong>
+            <strong className="col-created">{t("user.created")}</strong>
+            <strong className="col-last-login">{t("user.lastLogin")}</strong>
           </div>
 
           {currentUsers.length === 0 ? (
-            <div className="no-users">No matching users found.</div>
+            <div className="no-users">{t("user.noUsersFound")}</div>
           ) : (
             currentUsers.map((user) => (
               <div

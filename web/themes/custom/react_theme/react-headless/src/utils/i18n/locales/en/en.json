@@ -22,6 +22,11 @@
 		"login": "Login",
     "logOut": "Log Out",
     "loggingOut": "Logging Out...",
+		"userType" : "User Type",
+		"selectUserType": "Select User Type",
+		"securityCode": "Security Code",
+		"securityCodePlaceholder" : "Enter 4 digit security code",
+		"securityCodeHint" : "Enter the security code assigned for the selected user type.",
     "register": "Register",
     "createAccount": "Create Account",
     "createNewAccount": "Create New Account",
@@ -32,16 +37,24 @@
     "passwordRequirement": "Must be 8+ chars with uppercase, lowercase, and a number."
   },
 
-  "user": {
-    "user": "User",
-    "superAdmin": "Super Admin",
-    "userInformation": "User Account Information",
-    "userId": "User ID",
-    "username": "Username",
-    "email": "Email",
-    "role": "User Role",
-    "accountCreated": "Account Created"
-  },
+	"user": {
+		"user": "User",
+		"superAdmin": "Super Admin",
+		"userInformation": "User Account Information",
+		"userId": "User ID",
+		"username": "Username",
+		"name": "Name",
+		"email": "Email",
+		"role": "Role",
+		"accountCreated": "Account Created",
+		"search": "Search by Name or Email",
+		"filterRole": "Filter Role",
+		"allRole": "All Roles",
+		"fullname": "Full Name",
+		"created": "Created",
+		"lastLogin": "Last Login",
+		"noUsersFound": "No matching users found."
+	},
 
   "dashboard": {
     "description": "Manage your account and explore active topics & current tasks.",
@@ -49,8 +62,29 @@
     "projectTracker": "Project Tracker",
     "projectTrackerDescription": "View and manage all current tasks.",
     "viewTaskList": "View Task List",
-    "readMore": "Read More...",
-    "noTopicsFound": "No Topics Found."
+    "readMore": "Read More",
+		"readLess": "Read Less",
+    "noTopicsFound": "No Topics Found.",
+		"projectDetails": "Project Details",
+		"projectDetailsText": "View and manage all projects across the organization",
+		"projectDetailsButton": "View Project Details",
+		"userList": "User List",
+		"userListText": "View all users in the system",
+		"userListButton": "View User List",
+		"topicList": "Topic List",
+		"topicListText": "Add new topics in the system",
+		"topicListButton": "Add New Topic",
+		"testimonialList": "Testimonial List",
+		"testimonialListText": "Add new testimonials shared by clients",
+		"testimonialListButton": "Add New Testimonial",
+		"viewManageTasks" : "View & Manage Active Tasks in Projects",
+		"projectInformation": "Project Information",
+		"noProjectsAssigned": "No projects assigned",
+		"pointOfContact": "Point of Contact",
+		"location": "Location",
+		"duration": "Duration",
+		"taskAssignees": "Task Assignees / Team",
+		"noAssigneesTeam": "No assignees working on tasks in this project"
   },
 
   "topic": {
@@ -71,23 +105,76 @@
     "yes": "Yes"
   },
 
+	"project" : {
+		"projectListTitle": "Project List",
+		"projectCount": "View all available projects",
+		"addProjectButton": "Add Project",
+		"addProjectTitle": "Add New Project",
+		"projectName": "Project Name",
+		"projectNamePlaceholder": "Enter Project Name",
+		"projectCode": "Project Code",
+		"projectCodePlaceholder": "Enter Project Code",
+		"projectLabel": "Project",
+		"clientName": "Client Name",
+		"clientNamePlaceholder": "Enter Client Name",
+		"clientAddress": "Client Address",
+		"clientAddressPlaceholder": "Enter Client Address",
+		"clientCity": "Client City",
+		"clientCityPlaceholder": "Enter Client City",
+		"clientCountry": "Client Country",
+		"clientCountryPlaceholder": "Enter Client Country",
+		"clientPOC": "Client POC",
+		"clientManager": "Client Manager",
+		"clientPOCEmail": "Client POC Email",
+		"clientBudget": "Client Budget",
+		"clientBudgetPlaceholder": "Enter Client Budget",
+		"projectManager": "Project Manager",
+		"projectStartDate": "Start Date",
+		"projectEndDate": "End Date",
+		"projectCreated": "Created",
+		"projectDescription": "Project Description",
+		"projectDescriptionPlaceholder": "Enter detailed project description",
+		"backToProjects": "Back to Projects"
+	},
+
+	"client" : {
+		"clientListTitle": "Client List",
+		"clientTestimonialTitle": "Client Testimonials"
+	},
+
 	"testimonial": {
 		"addTestimonial": "Add Testimonial",
 		"enterTestimonial": "Enter testimonial title",
 		"saveTestimonial": "Save Testimonial"
 	},
 
-  "task": {
-    "createTask": "Create New Project Tracker Task",
-    "title": "Title",
-    "description": "Description",
-    "assignTo": "Assign To",
-    "selectUser": "Select a user",
-    "enterTitle": "Enter task title",
-    "enterDescription": "Enter detailed description",
-    "dueDate": "Due Date",
-    "saveTask": "Save Task"
-  },
+	"task": {
+		"createTask": "Create New Project Tracker Task",
+		"title": "Title",
+		"description": "Description",
+		"selectProject": "Select Project",
+		"loadingProject": "Loading Projects",
+		"assignTo": "Assign To",
+		"selectUser": "Select a user",
+		"enterTitle": "Enter task title",
+		"enterDescription": "Enter detailed description",
+		"dueLabel": "Due",
+		"dueDate": "Due Date",
+		"saveTask": "Save Task",
+		"taskScopeAdmin": "Showing all tasks across all users",
+		"taskScopeUser": "Showing tasks assigned to you",
+		"addTaskButton": "Add Task",
+		"taskProjectFilter": "Filter by Project",
+		"allProjects": "All Projects",
+		"noProjects": "No Projects Available",
+		"noActiveTasks": "No Active Tasks Found",
+		"noTasks": "No Tasks",
+		"createdBy": "Created By",
+		"assignedTo": "Assigned To",
+		"editTask": "Edit Task",
+		"backToTask": "Back to Tasks",
+		"taskAssignedTo": "Task is assigned to"
+	},
 
   "status": {
     "open": "Open",
@@ -119,7 +206,8 @@
     "close": "Close",
     "backToDashboard": "Back to Dashboard",
     "backToTasks": "Back to Tasks",
-    "saving": "Saving..."
+    "saving": "Saving",
+		"saveChanges": "Save Changes"
   },
 
   "footer": {

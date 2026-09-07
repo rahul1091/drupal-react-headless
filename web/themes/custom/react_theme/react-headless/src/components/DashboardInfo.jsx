@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { userDashboard } from "../api/client";
 import "../css/index.css";
+import { useTranslation } from "react-i18next";
 
 export default function DashboardInfo() {
+	const { t } = useTranslation();
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -52,30 +54,30 @@ export default function DashboardInfo() {
         {project.project_name} ({project.project_code})
       </h3>
       <p>
-        <strong>Client:</strong> {project.client_name}
+        <strong>{t("project.clientName")}:</strong> {project.client_name}
       </p>
       <p>
-        <strong>Location:</strong> {project.client_city},{" "}
+        <strong>{t("dashboard.location")}:</strong> {project.client_city},{" "}
         {project.client_country}
       </p>
       <p>
-        <strong>Duration:</strong> {project.start_date} to {project.end_date}
+        <strong>{t("dashboard.duration")}:</strong> {project.start_date} to {project.end_date}
       </p>
 
       {isManager && (
         <>
           <div className="role-specific-info">
-            <h4>Client Manager</h4>
+            <h4>{t("project.clientManager")}</h4>
             <p>
-              <strong>Name:</strong> {project.client_poc || "N/A"}
+              <strong>{t("user.name")}:</strong> {project.client_poc || "N/A"}
             </p>
             <p>
-              <strong>Email:</strong> {project.client_poc_email || "N/A"}
+              <strong>{t("user.email")}:</strong> {project.client_poc_email || "N/A"}
             </p>
           </div>
 
           <div className="role-specific-info">
-            <h4>Task Assignees / Team</h4>
+            <h4>{t("dashboard.taskAssignees")}</h4>
             {project.task_assignees?.length > 0 ? (
               <ul className="assignees-list">
                 {project.task_assignees.map((assignee) => (
@@ -85,7 +87,7 @@ export default function DashboardInfo() {
                 ))}
               </ul>
             ) : (
-              <p>No assignees working on tasks in this project.</p>
+              <p>{t("dashboard.noAssigneesTeam")}</p>
             )}
           </div>
         </>
@@ -93,24 +95,24 @@ export default function DashboardInfo() {
 
       {isEngineer && (
         <div className="role-specific-info">
-          <h4>Project Manager</h4>
+          <h4>{t("project.projectManager")}</h4>
           <p>
-            <strong>Name:</strong> {project.manager_name || "N/A"}
+            <strong>{t("user.name")}:</strong> {project.manager_name || "N/A"}
           </p>
           <p>
-            <strong>Email:</strong> {project.manager_email || "N/A"}
+            <strong>{t("user.email")}:</strong> {project.manager_email || "N/A"}
           </p>
         </div>
       )}
 
       {isClient && (
         <div className="role-specific-info">
-          <h4>Point of Contact</h4>
+          <h4>{t("dashboard.pointOfContact")}</h4>
           <p>
-            <strong>Name:</strong> {project.project_poc || "N/A"}
+            <strong>{t("user.name")}:</strong> {project.project_poc || "N/A"}
           </p>
           <p>
-            <strong>Email:</strong> {project.project_poc_email || "N/A"}
+            <strong>{t("user.email")}:</strong> {project.project_poc_email || "N/A"}
           </p>
         </div>
       )}
@@ -121,63 +123,63 @@ export default function DashboardInfo() {
     <div className="admin-dashboard-container">
       <div className="dashboard-projects-info">
         <div className="projects-nav-info">
-          <h2>Project Details</h2>
-          <p>View and manage all projects across the organization</p>
+          <h2>{t("dashboard.projectDetails")}</h2>
+          <p>{t("dashboard.projectDetailsText")}</p>
         </div>
         <button
           type="button"
           className="btn-admin add-project-btn"
           onClick={() => navigate("/projects")}
         >
-          View Project Details
+          {t("dashboard.projectDetailsButton")}
         </button>
       </div>
       <div className="dashboard-user-list">
         <div className="user-list-info">
-          <h2>User List</h2>
-          <p>View and manage all users in the system</p>
+          <h2>{t("dashboard.userList")}</h2>
+          <p>{t("dashboard.userListText")}</p>
         </div>
         <button
           type="button"
           className="btn-admin user-list-btn"
           onClick={() => navigate("/user-list")}
         >
-          View User List
+          {t("dashboard.userListButton")}
         </button>
       </div>
 			<div className="dashboard-topic-list">
         <div className="topic-list-info">
-          <h2>Topic List</h2>
-          <p>Add new topics in the system</p>
+          <h2>{t("dashboard.topicList")}</h2>
+          <p>{t("dashboard.topicListText")}</p>
         </div>
         <button
           type="button"
           className="btn-admin topic-list-btn"
           onClick={() => navigate("/add-topic")}
         >
-          Add New Topic
+          {t("dashboard.topicListButton")}
         </button>
       </div>
 			<div className="dashboard-testimonial-list">
 				<div className="testimonial-list-info">
-          <h2>Testimonial List</h2>
-          <p>Add new testimonials shared by clients</p>
+          <h2>{t("dashboard.testimonialList")}</h2>
+          <p>{t("dashboard.testimonialListText")}</p>
         </div>
         <button
           type="button"
           className="btn-admin testimonial-list-btn"
           onClick={() => navigate("/add-testimonial")}
         >
-          Add New Testimonial
+          {t("dashboard.testimonialListButton")}
         </button>
 			</div>
     </div>
   ) : (
     <div className="user-dashboard-container">
       <div className="user-projects-section">
-        <h2>Project Information</h2>
+        <h2>{t("dashboard.projectInformation")}</h2>
         {!project_data || project_data.length === 0 ? (
-          <p>No projects assigned.</p>
+          <p>{t("dashboard.noProjectsAssigned")}</p>
         ) : project_data.length === 1 ? (
           <div className="user-project-grid">
             {renderProjectCard(project_data[0])}
