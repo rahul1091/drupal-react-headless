@@ -19,7 +19,7 @@ export default function DashboardPage() {
       <div className="dashboard-header">
         <div>
           <h1>{t("app.welcomeBack")} {displayName}! 👋</h1>
-          <p>{t("dashboard.description")}</p>
+          <h6>{t("dashboard.description")}</h6>
         </div>
       </div>
 
@@ -56,7 +56,7 @@ export default function DashboardPage() {
 				<DashboardInfo />
       </div>
 
-			<h2 className="dashboard-project-section-title">View & Manage Active Tasks in Projects</h2>
+			<h2 className="dashboard-project-section-title">{t("dashboard.viewManageTasks")}</h2>
 			<div className="project-task-wrapper">
 				<div className="dashboard-tasks-nav">
 					<div className="tasks-nav-info">

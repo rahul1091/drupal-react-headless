@@ -118,7 +118,7 @@ export default function CreateTask() {
 					{/* Project Name */}
           <div className="form-group">
             <label htmlFor="project_name">
-              Project Name <span className="required">*</span>
+              {t("project.projectName")} <span className="required">*</span>
             </label>
             <select
               id="project_name"
@@ -129,7 +129,7 @@ export default function CreateTask() {
               disabled={isSubmitting || projectsLoading || !!projectsError}
             >
               <option value="" disabled>
-                {projectsLoading ? 'Loading Projects' : 'Select Project'}
+                {projectsLoading ? t('task.loadingProject') : t('task.selectProject')}
               </option>
               {projects.map((p) => (
                 <option key={p.project_id} value={p.project_id}>
@@ -252,7 +252,7 @@ export default function CreateTask() {
               className="btn-primary"
               disabled={isSubmitting}
             >
-              {isSubmitting ? t("saving") : t("task.saveTask")}
+              {isSubmitting ? t("common.saving") : t("task.saveTask")}
             </button>
             <button
               type="button"

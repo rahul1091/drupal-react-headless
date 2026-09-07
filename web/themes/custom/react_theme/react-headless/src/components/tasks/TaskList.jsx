@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { getTasks } from "../../api/client";
 import "../../css/index.css";
+import { useTranslation } from "react-i18next";
 
 const COLUMNS = [
   { key: "open", label: "Open" },
@@ -12,6 +13,7 @@ const COLUMNS = [
 ];
 
 export default function TaskList() {
+	const { t } = useTranslation();
   const [tasks, setTasks] = useState([]);
   const [projects, setProjects] = useState([]);
   const [selectedProject, setSelectedProject] = useState("all");
@@ -147,11 +149,11 @@ export default function TaskList() {
       <div className="tasklist-container">
         <div className="tasklist-header">
           <div>
-            <h1>Task List ({filteredTasks.length})</h1>
+            <h1>{t("navigation.tasks")} ({filteredTasks.length})</h1>
             <p className="tasklist-scope">
               {isAdmin
-                ? "Showing all tasks across all users."
-                : "Showing tasks assigned to you."}
+                ? t("task.taskScopeAdmin")
+                : t("task.taskScopeUser")}
             </p>
           </div>
           {!isClient && (
@@ -159,7 +161,7 @@ export default function TaskList() {
               className="btn-admin add-task-btn"
               onClick={() => navigate("/create-task")}
             >
-              + Add Task
+              + {t("task.addTaskButton")}
             </button>
           )}
         </div>
@@ -167,13 +169,13 @@ export default function TaskList() {
         {/* Project Filter Controls */}
         {!isLoading && !error && (
           <div className="tasklist-filter-bar">
-            <label htmlFor="project-filter">Filter by Project:</label>
+            <label htmlFor="project-filter">{t("task.taskProjectFilter")}:</label>
             {projects.length === 0 ? (
               <span
                 className="no-project-assigned-text"
                 style={{ fontWeight: "500", marginLeft: "8px" }}
               >
-                No Projects Available
+                {t("task.noProjects")}
               </span>
             ) : (
               <select
@@ -181,7 +183,7 @@ export default function TaskList() {
                 value={selectedProject}
                 onChange={(e) => setSelectedProject(e.target.value)}
               >
-                <option value="all">All Projects</option>
+                <option value="all">{t("task.allProjects")}</option>
                 {projects.map((proj) => (
                   <option key={proj.id || proj.name} value={proj.name}>
                     {proj.name}
@@ -198,7 +200,7 @@ export default function TaskList() {
         {!isLoading && !error && (
           <div className="tasklist-body">
             {filteredTasks.length === 0 ? (
-              <div className="no-tasks">No Active Tasks Found</div>
+              <div className="no-tasks">{t("task.noActiveTasks")}</div>
             ) : (
               <div className="task-board">
                 {COLUMNS.map((col) => {
@@ -223,7 +225,7 @@ export default function TaskList() {
 
                       <div className="task-column__cards">
                         {colTasks.length === 0 ? (
-                          <div className="task-column__empty">No Tasks</div>
+                          <div className="task-column__empty">{t("task.noTasks")}</div>
                         ) : (
                           colTasks.map((task) => {
                             const taskId = task.node_id || task.task_id;
@@ -243,7 +245,7 @@ export default function TaskList() {
                                 <div className="task-card-people">
                                   {task.created_by?.name && (
                                     <p className="task-meta">
-                                      Created by{" "}
+                                      {t("task.createdBy")}{" "}
                                       <strong>
                                         {task.created_by.fullname ||
                                           task.created_by.name}
@@ -252,7 +254,7 @@ export default function TaskList() {
                                   )}
                                   {!isEngineer && task.assigned_to?.name && (
                                     <p className="task-meta">
-                                      Assigned to{" "}
+                                      {t("task.assignedTo")}{" "}
                                       <strong>
                                         {task.assigned_to.fullname ||
                                           task.assigned_to.name}
@@ -262,10 +264,10 @@ export default function TaskList() {
                                 </div>
                                 <div className="task-card-footer">
                                   <span className="task-due-date">
-                                    📅 Due: {task.due_date || "N/A"}
+                                    📅 {t("task.dueLabel")}: {task.due_date || "N/A"}
                                   </span>
                                   <span className="task-severity">
-                                    Severity:{" "}
+                                    {t("common.severity")}:{" "}
                                     <span
                                       className={`badge severity-${(
                                         task.severity || ""
@@ -285,7 +287,7 @@ export default function TaskList() {
                                       })
                                     }
                                   >
-                                    Edit Task
+                                    {t("task.editTask")}
                                   </button>
                                 )}
                               </div>

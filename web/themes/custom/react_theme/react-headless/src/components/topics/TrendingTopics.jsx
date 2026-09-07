@@ -12,6 +12,7 @@ const stripHtml = (html) => {
 
 // Sub-component to manage individual card expansion state
 function TopicCard({ topic }) {
+	const { t } = useTranslation();
   const [isExpanded, setIsExpanded] = useState(false);
   const cleanDescription = stripHtml(topic.description);
   
@@ -32,7 +33,7 @@ function TopicCard({ topic }) {
 						className="trending-read-more" 
 						onClick={() => setIsExpanded(!isExpanded)}
 					>
-						{isExpanded ? "Read Less" : "Read More"}
+						{isExpanded ? t("dashboard.readLess") : t("dashboard.readMore")}
 					</button>
 				)}
 			</div>
@@ -91,7 +92,7 @@ function TrendingTopics() {
 
   return (
     <div className="trending-topics-container">
-      <h2 className="trending-topics-heading">Trending Topics</h2>
+      <h2 className="trending-topics-heading">{t("dashboard.trendingTopics")}</h2>
       <div className="topics-wrapper">
         {topics.map((topic, index) => (
           <TopicCard key={topic.id || index} topic={topic} />

@@ -22,6 +22,11 @@
 		"login": "Anmelden",
     "logOut": "Abmelden",
     "loggingOut": "Abmeldung läuft...",
+		"userType" : "Benutzertyp",
+		"selectUserType": "Benutzertyp auswählen",
+		"securityCode": "Sicherheitscode",
+		"securityCodePlaceholder" : "4-stelligen Sicherheitscode eingeben",
+		"securityCodeHint" : "Geben Sie den für den ausgewählten Benutzertyp zugewiesenen Sicherheitscode ein.",
     "register": "Registrieren",
     "createAccount": "Konto erstellen",
     "createNewAccount": "Neues Konto erstellen",
@@ -32,16 +37,24 @@
     "passwordRequirement": "Mindestens 8 Zeichen mit Großbuchstaben, Kleinbuchstaben und einer Zahl."
   },
 
-  "user": {
-    "user": "Benutzer",
-    "superAdmin": "Superadministrator",
-    "userInformation": "Benutzerkontoinformationen",
-    "userId": "Benutzer-ID",
-    "username": "Benutzername",
-    "email": "E-Mail",
-    "role": "Benutzerrolle",
-    "accountCreated": "Konto erstellt"
-  },
+	"user": {
+		"user": "Benutzer",
+		"superAdmin": "Superadministrator",
+		"userInformation": "Benutzerkontoinformationen",
+		"userId": "Benutzer-ID",
+		"username": "Benutzername",
+		"name": "Name",
+		"email": "E-Mail",
+		"role": "Rolle",
+		"accountCreated": "Konto erstellt",
+		"search": "Nach Name oder E-Mail suchen",
+		"filterRole": "Rolle filtern",
+		"allRole": "Alle Rollen",
+		"fullname": "Vollständiger Name",
+		"created": "Erstellt",
+		"lastLogin": "Letzte Anmeldung",
+		"noUsersFound": "Keine passenden Benutzer gefunden."
+	},
 
   "dashboard": {
     "description": "Verwalten Sie Ihr Konto und entdecken Sie aktive Themen sowie aktuelle Aufgaben.",
@@ -49,8 +62,29 @@
     "projectTracker": "Projekt-Tracker",
     "projectTrackerDescription": "Alle aktuellen Aufgaben anzeigen und verwalten.",
     "viewTaskList": "Aufgabenliste anzeigen",
-    "readMore": "Mehr lesen...",
-    "noTopicsFound": "Keine Themen Gefunden."
+    "readMore": "Mehr lesen",
+		"readLess": "Weniger anzeigen",
+    "noTopicsFound": "Keine Themen Gefunden.",
+		"projectDetails": "Projektdetails",
+		"projectDetailsText": "Alle Projekte in der Organisation anzeigen und verwalten",
+		"projectDetailsButton": "Projektdetails anzeigen",
+		"userList": "Benutzerliste",
+		"userListText": "Alle Benutzer im System anzeigen",
+		"userListButton": "Benutzerliste anzeigen",
+		"topicList": "Themenliste",
+		"topicListText": "Neue Themen im System hinzufügen",
+		"topicListButton": "Neues Thema hinzufügen",
+		"testimonialList": "Referenzliste",
+		"testimonialListText": "Neue von Kunden geteilte Referenzen hinzufügen",
+		"testimonialListButton": "Neue Referenz hinzufügen",
+		"viewManageTasks": "Aktive Aufgaben in Projekten anzeigen und verwalten",
+		"projectInformation": "Projektinformationen",
+		"noProjectsAssigned": "Keine Projekte zugewiesen",
+		"pointOfContact": "Ansprechpartner",
+		"location": "Standort",
+		"duration": "Dauer",
+		"taskAssignees": "Aufgabenzugewiesene / Team",
+		"noAssigneesTeam": "Keine Aufgabenzugewiesenen arbeiten an diesem Projekt"
   },
 
   "topic": {
@@ -71,26 +105,78 @@
     "yes": "Ja"
   },
 
+	"project": {
+		"projectListTitle": "Projektliste",
+		"projectCount": "Alle verfügbaren Projekte anzeigen",
+		"addProjectButton": "Projekt hinzufügen",
+		"addProjectTitle": "Neues Projekt hinzufügen",
+		"projectName": "Projektname",
+		"projectNamePlaceholder": "Projektname eingeben",
+		"projectCode": "Projektcode",
+		"projectCodePlaceholder": "Projektcode eingeben",
+		"projectLabel": "Projekt",
+		"clientName": "Kundenname",
+		"clientNamePlaceholder": "Kundennamen eingeben",
+		"clientAddress": "Kundenadresse",
+		"clientAddressPlaceholder": "Kundenadresse eingeben",
+		"clientCity": "Kundenstadt",
+		"clientCityPlaceholder": "Kundenstadt eingeben",
+		"clientCountry": "Kundenland",
+		"clientCountryPlaceholder": "Kundenland eingeben",
+		"clientPOC": "Kundenansprechpartner",
+		"clientManager": "Kundenmanager",
+		"clientPOCEmail": "E-Mail des Kundenansprechpartners",
+		"clientBudget": "Kundenbudget",
+		"clientBudgetPlaceholder": "Kundenbudget eingeben",
+		"projectManager": "Projektmanager",
+		"projectStartDate": "Startdatum",
+		"projectEndDate": "Enddatum",
+		"projectCreated": "Erstellt",
+		"projectDescription": "Projektbeschreibung",
+		"projectDescriptionPlaceholder": "Detaillierte Projektbeschreibung eingeben",
+		"backToProjects": "Zurück zu den Projekten"
+	},
+
+	"client" : {
+		"clientListTitle": "Kundenliste",
+		"clientTestimonialTitle": "Kundenstimmen"
+	},
+
 	"testimonial": {
 		"addTestimonial": "Testimonial hinzufügen",
 		"enterTestimonial": "Testimonial eingeben",
 		"saveTestimonial": "Testimonial speichern"
 	},
 
-  "task": {
-    "createTask": "Neue Projekt-Tracker-Aufgabe erstellen",
-    "title": "Titel",
-    "description": "Beschreibung",
-    "assignTo": "Zuweisen an",
-    "selectUser": "Benutzer auswählen",
-    "enterTitle": "Aufgabentitel eingeben",
-    "enterDescription": "Detaillierte Beschreibung eingeben",
-    "dueDate": "Fälligkeitsdatum",
-    "saveTask": "Aufgabe speichern"
-  },
+	"task": {
+		"createTask": "Neue Projekt-Tracker-Aufgabe erstellen",
+		"title": "Titel",
+		"description": "Beschreibung",
+		"selectProject": "Projekt auswählen",
+		"loadingProject": "Projekte laden",
+		"assignTo": "Zuweisen an",
+		"selectUser": "Benutzer auswählen",
+		"enterTitle": "Aufgabentitel eingeben",
+		"enterDescription": "Detaillierte Beschreibung eingeben",
+		"dueLabel": "Fällig",
+		"dueDate": "Fälligkeitsdatum",
+		"saveTask": "Aufgabe speichern",
+		"taskScopeAdmin": "Alle Aufgaben aller Benutzer anzeigen",
+		"taskScopeUser": "Ihnen zugewiesene Aufgaben anzeigen",
+		"addTaskButton": "Aufgabe hinzufügen",
+		"taskProjectFilter": "Nach Projekt filtern",
+		"allProjects": "Alle Projekte",
+		"noProjects": "Keine Projekte verfügbar",
+		"noActiveTasks": "Keine aktiven Aufgaben gefunden",
+		"noTasks": "Keine Aufgaben",
+		"createdBy": "Erstellt von",
+		"assignedTo": "Zugewiesen an",
+		"editTask": "Aufgabe bearbeiten",
+		"backToTask": "Zurück zu den Aufgaben",
+		"taskAssignedTo": "Aufgabe ist zugewiesen an"
+	},
 
   "status": {
-    "title": "Status",
     "open": "Offen",
     "inProgress": "In Bearbeitung",
     "completed": "Abgeschlossen",
@@ -98,7 +184,6 @@
   },
 
   "severity": {
-    "title": "Schwere",
     "low": "Niedrig",
     "medium": "Mittel",
     "high": "Hoch",
@@ -121,7 +206,8 @@
     "close": "Schließen",
     "backToDashboard": "Zurück zum Dashboard",
     "backToTasks": "Zurück zu den Aufgaben",
-    "saving": "Speichern..."
+    "saving": "Speichern",
+		"saveChanges": "Änderungen speichern"
   },
 
   "footer": {

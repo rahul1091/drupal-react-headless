@@ -3,8 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { getProjectDetails } from "../../api/client";
 import "../../css/index.css";
+import { useTranslation } from "react-i18next";
 
 export default function ProjectList() {
+	const { t } = useTranslation();
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -81,9 +83,9 @@ export default function ProjectList() {
     <div className="form-card-wrapper">
       <div className="form-header">
         <div>
-          <h1 className="form-title">Project List</h1>
+          <h1 className="form-title">{t("project.projectListTitle")}</h1>
           <p className="project-count">
-            View all available projects: {projects.length}
+            {t("project.projectCount")}: {projects.length}
           </p>
         </div>
 
@@ -91,7 +93,7 @@ export default function ProjectList() {
           className="btn-admin add-project-btn"
           onClick={() => navigate("/add-project")}
         >
-          + Add Project
+          + {t("project.addProjectButton")}
         </button>
       </div>
 
@@ -104,7 +106,7 @@ export default function ProjectList() {
             >
               <div className="project-card-header">
                 <div className="project-heading">
-                  <p className="project-label">Project</p>
+                  <p className="project-label">{t("project.projectLabel")}</p>
                   <h2 className="project-title">
                     {project.project_details.title}
                   </h2>
@@ -117,28 +119,28 @@ export default function ProjectList() {
 
 							<div className="project-summary">
 								<div className="project-info-item">
-                  <p className="project-info-label">Client Name</p>
+                  <p className="project-info-label">{t("project.clientName")}</p>
                   <p className="project-info-value">
                     {project.client_details.client_name}
                   </p>
                 </div>
 
                 <div className="project-info-item">
-                  <p className="project-info-label">Client Address</p>
+                  <p className="project-info-label">{t("project.clientAddress")}</p>
                   <p className="project-info-value">
                     {project.client_details.client_address}
                   </p>
                 </div>
 
                 <div className="project-info-item">
-                  <p className="project-info-label">Client City</p>
+                  <p className="project-info-label">{t("project.clientCity")}</p>
                   <p className="project-info-value">
                     {project.client_details.client_city}
                   </p>
                 </div>
 
                 <div className="project-info-item">
-                  <p className="project-info-label">Client Country</p>
+                  <p className="project-info-label">{t("project.clientCountry")}</p>
                   <p className="project-info-value">
                     {project.client_details.client_country}
                   </p>
@@ -147,21 +149,21 @@ export default function ProjectList() {
 
 							<div className="project-summary">
                 <div className="project-info-item">
-                  <p className="project-info-label">Client POC</p>
+                  <p className="project-info-label">{t("project.clientPOC")}</p>
                   <p className="project-info-value">
                     {project.client_details.client_poc.fullname}
                   </p>
                 </div>
 
                 <div className="project-info-item">
-                  <p className="project-info-label">Client POC Email</p>
+                  <p className="project-info-label">{t("project.clientPOCEmail")}</p>
                   <p className="project-info-value">
                     {project.client_details.client_poc.mail}
                   </p>
                 </div>
 
                 <div className="project-info-item">
-                  <p className="project-info-label">Client Budget</p>
+                  <p className="project-info-label">{t("project.clientBudget")}</p>
                   <p className="project-info-value project-budget">
                     {formatBudget(project.client_details.client_budget)}
                   </p>
@@ -170,28 +172,28 @@ export default function ProjectList() {
 
               <div className="project-summary">
                 <div className="project-info-item">
-                  <p className="project-info-label">Project Manager</p>
+                  <p className="project-info-label">{t("project.projectManager")}</p>
                   <p className="project-info-value">
                     {project.project_details.project_manager?.fullname}
                   </p>
                 </div>
 
                 <div className="project-info-item">
-                  <p className="project-info-label">Start Date</p>
+                  <p className="project-info-label">{t("project.projectStartDate")}</p>
                   <p className="project-info-value">
                     {project.project_details.start_date}
                   </p>
                 </div>
 
                 <div className="project-info-item">
-                  <p className="project-info-label">End Date</p>
+                  <p className="project-info-label">{t("project.projectEndDate")}</p>
                   <p className="project-info-value">
                     {project.project_details.end_date}
                   </p>
                 </div>
 
 								<div className="project-info-item">
-                  <p className="project-info-label">Created</p>
+                  <p className="project-info-label">{t("project.projectCreated")}</p>
                   <p className="project-info-value project-created">
                     {project.created}
                   </p>
@@ -200,7 +202,7 @@ export default function ProjectList() {
 
               <div className="project-description">
                 <div className="project-info-item">
-                  <p className="project-info-label">Description</p>
+                  <p className="project-info-label">{t("project.projectDescription")}</p>
                   <p className="project-info-value">
                     {project.project_details.description}
                   </p>
