@@ -30,17 +30,15 @@
 }
 
 .dashboard-header h1 {
-  margin: 0 0 8px 0;
-  font-size: var(--font-size-5xl);
+  margin: 0 0 12px 0;
   font-weight: var(--font-weight-bold);
   color: var(--color-text-dark);
   line-height: var(--line-height-normal);
 }
 
-.dashboard-header p {
+.dashboard-header h6 {
   margin: 0;
-  font-size: var(--font-size-md);
-  color: var(--color-text-secondary);
+  color: var(--color-secondary);
 }
 
 /* ── CONTENT GRID ───────────────────────────────────– */
@@ -49,14 +47,14 @@
   display: grid;
   grid-template-columns: 1fr 2fr;
   gap: 24px;
-  margin-bottom: 32px;
+  margin-bottom: 40px;
 }
 
 
 /* ── USER INFO CARD ─────────────────────────────────– */
 
 .userinfo-card {
-  background-color: var(--color-bg-primary);
+  background: linear-gradient(135deg, #0a192f 0%, #112240 50%, #233554 100%);
   border-radius: var(--radius-md);
   border: 1px solid #547980;
   padding: 24px;
@@ -65,19 +63,38 @@
 }
 
 .card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   margin-bottom: 20px;
-  padding-bottom: 12px;
+  padding-bottom: 16px;
   border-bottom: 1px solid var(--color-border-primary);
 }
 
 .card-header h2 {
-  font-size: var(--font-size-xl);
+  font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-semibold);
   margin: 0;
-  color: var(--color-text-primary);
+  color: var(--color-primary-light);
+}
+
+.user-info-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.info-row {
+	display: flex;
+	justify-content: space-between;
+	font-size: var(--font-size-lg);
+}
+
+.info-label {
+	color: var(--color-primary-light);
+	font-weight: 500;
+}
+
+.info-value {
+	font-weight: 500;
+	color: #fbbf24;
 }
 
 .add-topic-btn {
@@ -158,31 +175,6 @@
   text-decoration: underline;
 }
 
-/* ── USER INFO BODY ────────────────────────────────– */
-
-.user-info-body {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.info-row {
-	display: flex;
-	justify-content: space-between;
-	font-size: 14px;
-	padding-bottom: 8px;
-	border-bottom: 1px solid #f9fafb;
-}
-
-.info-label {
-	color: #6b7280;
-}
-
-.info-value {
-	font-weight: 600;
-	color: #111827;
-}
-
 /* ── DASHBOARD GRIDS ────────────────────────────────– */
 
 /* Admin Project Details on Dashboard */
@@ -203,7 +195,6 @@
   gap: 12px;
   padding: 16px 24px;
   background: linear-gradient(135deg, #0a192f 0%, #112240 50%, #233554 100%);
-  border: 1px solid #e5e7eb;
   border-left: 4px solid #c1121f;
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
@@ -435,18 +426,12 @@
 /* --- DASHBOARD PROJECT SECTION --- */
 
 h2.dashboard-project-section-title {
-	font-size: 20px;
-	font-weight: 600;
 	color: #033649;
-	margin: 0;
+	margin: 0 0 32px;
 }
 
 .project-task-wrapper {
-	display: flex;
-	flex-direction: row;
-	gap: 5%;
-	align-items: center;
-	margin-bottom: 32px;
+	margin-bottom: 40px;
 }
 
 .dashboard-tasks-nav {
@@ -454,27 +439,25 @@ h2.dashboard-project-section-title {
 	align-items: center;
 	justify-content: space-between;
 	gap: 16px;
-	margin-top: 24px;
 	padding: 20px 24px;
-	background: #ffffff;
-	border: 1px solid #e5e7eb;
-	border-left: 4px solid #2563eb;
+	background: linear-gradient(135deg, #0a192f 0%, #112240 50%, #233554 100%);
+  border-left: 4px solid #c1121f;
 	border-radius: 8px;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 	width: 50%;
 }
 
 .tasks-nav-info h2 {
-	margin: 0 0 3px;
-	font-size: 16px;
+	margin: 0 0 12px;
+	font-size: 18px;
 	font-weight: 600;
-	color: #111827;
+	color: #f8fafc;
 }
 
 .tasks-nav-info p {
 	margin: 0;
-	font-size: 13px;
-	color: #6b7280;
+	font-size: 16px;
+	color: #fbbf24;
 }
 
 /* ── TRENDING SECTION ───────────────────────────────– */
@@ -498,8 +481,7 @@ h2.dashboard-project-section-title {
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
-	border-top: 1px solid #542437;
-	padding-top: 16px;
+	padding-top: 8px;
 }
 
 .trending-topic-cards {
@@ -568,12 +550,6 @@ h2.dashboard-project-section-title {
   .dashboard-content-grid {
     grid-template-columns: 1fr;
   }
-
-	.project-task-wrapper {
-		flex-direction: column;
-		align-items: normal;
-		gap: 0;
-	}
 
 	.dashboard-tasks-nav {
 		width: unset;
@@ -678,14 +654,14 @@ h2.dashboard-project-section-title {
 }
 
 @media (max-width: 480px) {
+	.info-row  {
+		font-size: var(--font-size-base);
+	}
+
   .dashboard-container,
   .userdashboard-container,
   .trending-topics-container {
     padding: 20px;
-  }
-
-  .dashboard-header h1 {
-    font-size: var(--font-size-4xl);
   }
 
   .dashboard-topic-card {

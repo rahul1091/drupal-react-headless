@@ -19,7 +19,7 @@ export default function DashboardPage() {
       <div className="dashboard-header">
         <div>
           <h1>{t("app.welcomeBack")} {displayName}! 👋</h1>
-          <p>{t("dashboard.description")}</p>
+          <h6>{t("dashboard.description")}</h6>
         </div>
       </div>
 
