@@ -65,7 +65,7 @@ export default function DashboardInfo() {
       </p>
 
       {isManager && (
-        <>
+        <div className="manager-project-info">
           <div className="role-specific-info">
             <h4>{t("project.clientManager")}</h4>
             <p>
@@ -90,7 +90,7 @@ export default function DashboardInfo() {
               <p>{t("dashboard.noAssigneesTeam")}</p>
             )}
           </div>
-        </>
+        </div>
       )}
 
       {isEngineer && (

@@ -312,8 +312,13 @@
   margin: 0;
 }
 
+.manager-project-info {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+}
+
 .role-specific-info {
-  margin-bottom: 16px;
+  margin-bottom: 0;
 }
 
 .role-specific-info:last-child {
@@ -328,8 +333,8 @@
 }
 
 .role-specific-info ul.assignees-list {
-  list-style-type: disc;
-  padding-left: 16px;
+  list-style-type: none;
+  padding-left: 0;
   margin: 0;
 }
 
@@ -615,6 +620,15 @@ h2.dashboard-project-section-title {
 
   .admin-dashboard-container {
 		grid-template-columns: auto;
+	}
+
+	.manager-project-info {
+		grid-template-columns: auto;
+		gap: 16px;
+	}
+
+	.role-specific-info h4 {
+		margin-bottom: 12px;
 	}
 
   .trending-topics-heading {
