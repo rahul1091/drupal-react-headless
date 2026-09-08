@@ -175,7 +175,7 @@ export default function RegisterPage() {
                 disabled={loading}
               />
 
-              <small className="form-hint">{t("authentication.securityCodeHint")}</small>
+              <p className="form-hint">{t("authentication.securityCodeHint")}</p>
             </div>
           )}
 
@@ -244,9 +244,7 @@ export default function RegisterPage() {
               autoComplete="new-password"
               disabled={loading}
             />
-            <small className="form-hint">
-              {t("authentication.passwordRequirement")}
-            </small>
+            <p className="form-hint">{t("authentication.passwordRequirement")}</p>
           </div>
 
           {/* Submit */}

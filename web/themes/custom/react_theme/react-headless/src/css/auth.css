@@ -15,26 +15,39 @@
 
 .login-card,
 .register-card {
-  background: var(--color-bg-primary);
+  background: linear-gradient(135deg, #1A2980, #26D0CE);
   padding: 40px;
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-xl);
   width: 100%;
-  max-width: 560px;
+  max-width: 512px;
 }
 
 .login-card h1,
 .register-card h1 {
   margin: 0 0 8px;
   font-size: var(--font-size-3xl);
-  color: var(--color-text-primary);
+  color: #FFFFFF;
 }
 
 .login-card p,
 .register-card p {
   margin: 0 0 24px;
-  font-size: var(--font-size-base);
-  color: var(--color-text-secondary);
+  font-size: var(--font-size-lg);
+  color: #E0F7FA;
+}
+
+.login-card .form-group .form-label,
+.register-card .form-group .form-label {
+	color: #E0F7FA;
+}
+
+p.form-hint {
+	color: #FFF;
+	font-size: var(--font-size-base);
+	line-height: var(--line-height-normal);
+	margin-top: 8px;
+	margin-bottom: 0;
 }
 
 /* ── FORM STYLES ────────────────────────────────────– */
@@ -183,9 +196,9 @@
 
 .btn-login {
   width: 100%;
-  padding: 8px 16px;
+  padding: 10px 16px;
   font-size: var(--font-size-base);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-bold);
   border-radius: var(--radius-base);
   cursor: pointer;
   transition: background-color var(--transition-normal), border-color var(--transition-normal);
@@ -193,9 +206,8 @@
 }
 
 .btn-sign-in {
-  background-color: var(--color-primary);
-  color: var(--color-text-inverse);
-  border: 2px solid var(--color-primary);
+  background-color: #0A192F;
+  color: #E0F7FA;
   margin-top: 16px;
 }
 
@@ -205,9 +217,8 @@
 }
 
 .btn-login-register {
-  background-color: var(--color-primary-light);
-  color: #374151;
-  border: 2px solid #374151;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #1A2980;
 }
 
 .btn-login-register:hover {
@@ -218,19 +229,19 @@
   width: 100%;
   padding: 10px 16px;
   font-size: var(--font-size-base);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-bold);
   border-radius: var(--radius-base);
   cursor: pointer;
-  transition: background-color var(--transition-normal);
+  transition: background-color var(--transition-normal), border-color var(--transition-normal);
   box-sizing: border-box;
-  margin-top: 8px;
-  background-color: #74C69D;
-  color: #16213E;
-  border: 2px solid #16213E;
+  background-color: #0A192F;
+  color: #E0F7FA;
+  margin-top: 16px;
 }
 
 .btn-register:hover {
-  background-color: #95D5B2;
+  background-color: var(--color-primary-hover);
+  color: var(--color-primary);
 }
 
 .btn-primary {
@@ -282,8 +293,8 @@
 
 .auth-divider span {
   padding: 0 10px;
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
+  color: #FFFFFF;
+  font-size: var(--font-size-base);
   font-weight: var(--font-weight-medium);
 }
 
@@ -292,8 +303,9 @@
 .auth-footer {
   margin-top: 24px;
   text-align: center;
-  font-size: var(--font-size-base);
-  color: var(--color-text-secondary);
+  font-size: var(--font-size-lg);
+	font-weight: var(--font-weight-semibold);
+  color: #E0F7FA;
 }
 
 .auth-link {
