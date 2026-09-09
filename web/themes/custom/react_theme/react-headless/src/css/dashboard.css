@@ -210,7 +210,6 @@
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.15s ease;
-	border: 1px solid #003049;
 }
 
 .add-project-btn {
