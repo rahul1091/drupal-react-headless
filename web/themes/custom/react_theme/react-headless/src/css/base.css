@@ -105,11 +105,15 @@ h6 {
 }
 
 p {
-  font-family: var(--font-family);
+  font-family: var(--font-family-body);
   font-size: clamp(14px, 0.85rem + 0.125vw, 16px);
   font-weight: var(--font-weight-normal);
   line-height: var(--line-height-loose);
   margin: 0;
+}
+
+span {
+	font-family: var(--font-family-body);
 }
 
 strong {
@@ -117,6 +121,7 @@ strong {
 }
 
 a {
+	font-family: var(--font-family);
   color: var(--color-info);
   text-decoration: none;
   transition: color var(--transition-fast);
@@ -171,7 +176,7 @@ th {
 /* ── FORMS ────────────────────────────────────────– */
 
 button {
-  font-family: inherit;
+  font-family: var(--font-family);
   cursor: pointer;
   border: none;
   background: none;
