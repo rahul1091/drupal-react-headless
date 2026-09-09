@@ -26,7 +26,7 @@ function ProtectedRoute({ children }: RouteProps) {
 	if (loading) {
 		return (
 			<div className="loading-center">
-				<span className="spinner spinner-lg" />
+				<span className="spinner" />
 			</div>
 		);
 	}
@@ -41,7 +41,7 @@ function AdminRoute({ children }: RouteProps) {
 	if (loading) {
 		return (
 			<div className="loading-center">
-				<span className="spinner spinner-lg" />
+				<span className="spinner" />
 			</div>
 		);
 	}
