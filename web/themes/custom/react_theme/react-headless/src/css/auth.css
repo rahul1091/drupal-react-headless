@@ -217,12 +217,13 @@ p.form-hint {
 }
 
 .btn-login-register {
-  background-color: rgba(255, 255, 255, 0.9);
-  color: #1A2980;
+	background-color: var(--color-severity-low-text);
+	color: var(--color-text-inverse);
 }
 
 .btn-login-register:hover {
-  background-color: #C5E0DC;
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
 }
 
 .btn-register {
@@ -309,7 +310,7 @@ p.form-hint {
 }
 
 .auth-link {
-  color: var(--color-info);
+  color: var(--color-primary);
   font-weight: var(--font-weight-semibold);
   text-decoration: none;
 }

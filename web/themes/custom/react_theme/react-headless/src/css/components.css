@@ -530,7 +530,7 @@
 .read-more-btn {
 	background: none;
 	border: none;
-	color: #490A3D;
+	color: #0B2E59;
 	font-size: 14px;
 	font-weight: 600;
 	cursor: pointer;
@@ -540,7 +540,7 @@
 }
 
 .read-more-btn:hover {
-	color: #1d4ed8;
+	color: #490A3D;
 }
 
 /* Modal Styling */
@@ -550,7 +550,7 @@
 	left: 0;
 	width: 100vw;
 	height: 100vh;
-	background-color: rgba(0, 0, 0, 0.5);
+	background-color: rgb(17, 24, 39, 0.85);
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -559,11 +559,11 @@
 }
 
 .modal-content {
-	background-color: #ffffff;
+	background: linear-gradient(120deg, #E8E5FF 0%, #E0F8F6 100%);
 	border-radius: 8px;
 	box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 	width: 100%;
-	max-width: 600px;
+	max-width: 720px;
 	max-height: 85vh;
 	padding: 24px;
 	position: relative;
@@ -578,41 +578,41 @@
 	background: none;
 	border: none;
 	font-size: 24px;
-	color: #9ca3af;
+	color: var(--color-text-primary);
 	cursor: pointer;
 	line-height: 1;
 }
 
 .modal-close-btn:hover {
-	color: #374151;
+	color: var(--color-severity-critical-text);
 }
 
 .modal-title {
-	font-size: 22px;
+	font-size: 24px;
 	font-weight: 700;
-	color: #111827;
-	margin: 0 0 4px 0;
+	color: var(--color-primary);
+	margin: 0 0 8px 0;
 	padding-right: 24px;
 }
 
 .modal-subheading {
-	font-size: 15px;
+	font-size: 18px;
 	font-weight: 600;
-	color: #4b5563;
+	color: var(--color-primary);
 	margin: 0;
 }
 
 .modal-divider {
 	border: 0;
-	border-top: 1px solid #e5e7eb;
+	border-top: 1px solid #490A3D;
 	margin: 16px 0;
 }
 
 .modal-body {
 	overflow-y: auto;
-	font-size: 15px;
+	font-size: 16px;
 	line-height: 1.6;
-	color: #374151;
+	color: var(--color-text-primary);
 }
 
 .modal-body p {
@@ -630,18 +630,18 @@
 }
 
 .modal-action-btn {
-	background-color: #e5e7eb;
-	color: #1f2937;
+	background-color: var(--color-severity-critical-text);
+	color: var(--color-primary-light);
 	border: none;
 	padding: 8px 16px;
 	border-radius: 4px;
 	font-size: 14px;
-	font-weight: 600;
+	font-weight: 700;
 	cursor: pointer;
 }
 
 .modal-action-btn:hover {
-	background-color: #d1d5db;
+	background-color: var(--color-text-primary);
 }
 
 /* --- CLIENT LIST --- */
