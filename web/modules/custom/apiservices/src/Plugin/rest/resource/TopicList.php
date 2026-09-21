@@ -74,7 +74,7 @@ class TopicList extends ResourceBase
 
 			$project_nodes = Node::loadMultiple($project_nids);
 
-			$project_list_data = [];
+			$topic_list_data = [];
 
 			foreach ($project_nodes as $node) {
 				if ($node->hasTranslation($langcode)) {
@@ -85,7 +85,7 @@ class TopicList extends ResourceBase
 				$topic_image = $topic_fid ? File::load($topic_fid) : NULL;
 				$image_url = $topic_image ? \Drupal::service('file_url_generator')->generateAbsoluteString($topic_image->getFileUri()) : '';
 
-				$project_list_data[] = [
+				$topic_list_data[] = [
 					'id' => $node->id(),
 					'title' => $node->getTitle(),
 					'subheading' => $node->get('field_sub_heading')->value ?? '',
@@ -99,7 +99,7 @@ class TopicList extends ResourceBase
 				'status' => 'Success',
 				'message' => 'Topic List',
 				'language' => $langcode,
-				'result' => $project_list_data,
+				'result' => $topic_list_data,
 			]);
 		} catch (\Exception $exception) {
 			return $this->exception_error_msg($exception->getMessage());

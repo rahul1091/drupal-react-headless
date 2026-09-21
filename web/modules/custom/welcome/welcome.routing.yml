@@ -1,0 +1,7 @@
+welcome.welcome:
+    path: '/welcome'
+    defaults:
+        _controller: '\Drupal\welcome\Controller\WelcomeController::welcome'
+        _title: 'Drupal + React Headless CMS'
+    requirements: 
+        _permission: 'access content'
